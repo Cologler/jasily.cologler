@@ -1,0 +1,7 @@
+/*/*/Bin
+/*/*/obj
+*.suo
+/desktop.ini
+/*/packages/*
+
+!/*/packages/repositories.config
