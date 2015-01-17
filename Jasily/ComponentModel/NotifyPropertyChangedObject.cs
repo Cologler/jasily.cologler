@@ -8,22 +8,26 @@ namespace System.ComponentModel
 {
     public class NotifyPropertyChangedObject : INotifyPropertyChanged
     {
-        public void SetPropertyRef<T>(ref T property, T newValue, string propertyName)
+        public bool SetPropertyRef<T>(ref T property, T newValue, string propertyName)
         {
             if ((property == null && newValue == null) || (property != null && property.Equals(newValue)))
-                return;
+                return false;
 
             property = newValue;
             PropertyChanged.Fire(this, propertyName);
+
+            return true;
         }
-        public void SetPropertyRef<T>(ref T property, T newValue, params string[] propertyNames)
+        public bool SetPropertyRef<T>(ref T property, T newValue, params string[] propertyNames)
         {
             if ((property == null && newValue == null) || (property != null && property.Equals(newValue)))
-                return;
+                return false;
             
             property = newValue;
             foreach (var propertyName in propertyNames)
                 PropertyChanged.Fire(this, propertyName);
+
+            return true;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
