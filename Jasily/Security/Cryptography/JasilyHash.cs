@@ -11,7 +11,7 @@ namespace System.Security.Cryptography
     {
         public static string ConverterToHashString(this byte[] hashBytes)
         {
-            return BitConverter.ToString(hashBytes).Replace("-", "").ToUpper();
+            return BitConverter.ToString(hashBytes).Replace("-", "");
         }
 
         public static string ComputeHashString(this HashAlgorithm hash, byte[] buffer)
