@@ -10,6 +10,8 @@ namespace System.Data.Torrent
 {
     public sealed class TorrentInfo
     {
+        IBencodingDictionary InnerDictionary;
+
         public TorrentInfo(string filepath)
         {
             using (var stream = File.OpenRead(filepath))
@@ -23,18 +25,14 @@ namespace System.Data.Torrent
 
         private void Init(Stream torrentStream)
         {
-            Bencoding b = null;
-
             try
             {
-                b = new Bencoding(torrentStream);
-
-                var bytes = b.Content["info"].OriginBytes;
-                InfoHash = SHA1.Create().ComputeHashString(b.Content["info"].OriginBytes);
+                InnerDictionary = (IBencodingDictionary)Bencoding.Parse(torrentStream);
             }
             catch (Exception) { throw new ArgumentException("非法的 torrent 文件"); }
 
-            
+            var bytes = InnerDictionary.Value["info"].OriginBytes();
+            InfoHash = SHA1.Create().ComputeHashString(bytes);
         }
 
         public string InfoHash { get; private set; }

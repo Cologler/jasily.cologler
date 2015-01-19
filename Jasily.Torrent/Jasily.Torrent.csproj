@@ -40,8 +40,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\Torrent\Bencoding.cs" />
-    <Compile Include="Data\Torrent\BencodingObject.cs" />
+    <Compile Include="Data\Torrent\BencodingDictionary.cs" />
+    <Compile Include="Data\Torrent\BencodingDigit.cs" />
+    <Compile Include="Data\Torrent\BencodingList.cs" />
     <Compile Include="Data\Torrent\BencodingObjectType.cs" />
+    <Compile Include="Data\Torrent\BencodingString.cs" />
+    <Compile Include="Data\Torrent\IBencodingObject.cs" />
     <Compile Include="Data\Torrent\TorrentInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
