@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace System.Test
+namespace System.Test.Performance
 {
     public sealed class JasilyPerformanceTest
     {
@@ -17,11 +17,11 @@ namespace System.Test
         JasilyPerformanceTest(int listenId)
         {
             ListenId = listenId;
-            Init();
+            Initialize();
         }
 
         [Conditional("DEBUG")]
-        private void Init()
+        private void Initialize()
         {
             Watcher = new Stopwatch();
         }
