@@ -18,7 +18,27 @@ namespace System.IO
         {
             if (items.Count() <= 1)
                 return items.All(z => type.IsMatch(z));
-            return type.HasFlag(FileSystemTestType.Multiple) && items.All(z => type.IsMatch(z));
+
+            switch (type)
+            {
+                case FileSystemTestType.None:
+                case FileSystemTestType.File:
+                case FileSystemTestType.Directory:
+                case FileSystemTestType.Single:
+                    return false;
+
+                case FileSystemTestType.MultipleFile:
+                    return items.All(z => File.Exists(z));
+
+                case FileSystemTestType.MultipleDirectory:
+                    return items.All(z => Directory.Exists(z));
+
+                case FileSystemTestType.Multiple:
+                    return items.All(z => File.Exists(z) || Directory.Exists(z));
+
+                default:
+                    return false;
+            }
         }
 
         public static IEnumerable<string> Filter(this FileSystemTestType type, IEnumerable<string> items)
