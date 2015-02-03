@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,7 +9,7 @@ namespace System.ComponentModel
 {
     public class NotifyPropertyChangedObject : INotifyPropertyChanged
     {
-        public bool SetPropertyRef<T>(ref T property, T newValue, string propertyName)
+        public bool SetPropertyRef<T>(ref T property, T newValue, [CallerMemberName] string propertyName = null)
         {
             if ((property == null && newValue == null) || (property != null && property.Equals(newValue)))
                 return false;

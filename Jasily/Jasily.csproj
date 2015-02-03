@@ -46,10 +46,13 @@
     <Compile Include="IO\MemoryTributary.cs" />
     <Compile Include="IO\MergeReadonlyStream.cs" />
     <Compile Include="JasilyEvent.cs" />
+    <Compile Include="JasilyString.cs" />
     <Compile Include="JasilyThrow.cs" />
+    <Compile Include="JasilyWeakReference.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\Cryptography\CRC32.cs" />
     <Compile Include="Security\Cryptography\CRC32CryptoServiceProvider.cs" />
+    <Compile Include="Security\Cryptography\HashType.cs" />
     <Compile Include="Security\Cryptography\JasilyHash.cs" />
   </ItemGroup>
   <ItemGroup>
