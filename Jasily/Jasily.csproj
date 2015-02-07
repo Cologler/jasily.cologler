@@ -43,7 +43,10 @@
     <Compile Include="Collections\Generic\JasilyDictionary.cs" />
     <Compile Include="Collections\Generic\NameValuePair.cs" />
     <Compile Include="Collections\ObjectModel\ObservableCollectionGroup.cs" />
+    <Compile Include="ComponentModel\JasilyViewModel.cs" />
     <Compile Include="ComponentModel\NotifyPropertyChangedObject.cs" />
+    <Compile Include="IO\FileSystemTest.cs" />
+    <Compile Include="IO\FileSystemTestType.cs" />
     <Compile Include="IO\MemoryTributary.cs" />
     <Compile Include="IO\MergeReadonlyStream.cs" />
     <Compile Include="JasilyEvent.cs" />
