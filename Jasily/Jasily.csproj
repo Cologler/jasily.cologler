@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collections\Generic\IJasilyTryGetValue.cs" />
     <Compile Include="Collections\Generic\JasilyDictionary.cs" />
     <Compile Include="Collections\Generic\NameValuePair.cs" />
     <Compile Include="Collections\ObjectModel\ObservableCollectionGroup.cs" />
@@ -54,6 +55,7 @@
     <Compile Include="Security\Cryptography\CRC32CryptoServiceProvider.cs" />
     <Compile Include="Security\Cryptography\HashType.cs" />
     <Compile Include="Security\Cryptography\JasilyHash.cs" />
+    <Compile Include="Text\JasilyPinYin.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Threading\Tasks\" />

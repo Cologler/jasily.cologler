@@ -6,10 +6,15 @@ using System.Threading.Tasks;
 
 namespace System.Collections.Generic
 {
-    public static class JasilyDictionary
+    public interface IJasilyTryGetValue<TKey, TValue>
+    {
+        bool TryGetValue(TKey key, out TValue value);
+    }
+
+    public static class IJasilyTryGetValueEM
     {
         public static TValue GetValueOrDefault<TKey, TValue>(
-            this IReadOnlyDictionary<TKey, TValue> obj, TKey key,
+            this IJasilyTryGetValue<TKey, TValue> obj, TKey key,
             TValue defaultValue = default(TValue))
         {
             TValue r = default(TValue);
@@ -20,7 +25,7 @@ namespace System.Collections.Generic
                 return defaultValue;
         }
         public static TResult GetValueOrDefault<TKey, TValue, TResult>(
-            this IReadOnlyDictionary<TKey, TValue> obj, TKey key,
+            this IJasilyTryGetValue<TKey, TValue> obj, TKey key,
             Func<TValue, TResult> selector,
             TResult defaultValue = default(TResult))
         {
