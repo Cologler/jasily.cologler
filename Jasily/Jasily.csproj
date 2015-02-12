@@ -65,11 +65,10 @@
     <Compile Include="Security\Cryptography\HashType.cs" />
     <Compile Include="Security\Cryptography\JasilyHash.cs" />
     <Compile Include="Text\JasilyPinYin.cs" />
+    <Compile Include="Threading\Tasks\JasilyTask.cs" />
     <Compile Include="Windows\JasilyVisibility.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Threading\Tasks\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
