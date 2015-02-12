@@ -53,6 +53,7 @@
     <Compile Include="IO\MergeReadonlyStream.cs" />
     <Compile Include="JasilyByte.cs" />
     <Compile Include="JasilyEvent.cs" />
+    <Compile Include="JasilyException.cs" />
     <Compile Include="JasilyNumber.cs" />
     <Compile Include="JasilyString.cs" />
     <Compile Include="JasilyThrow.cs" />
