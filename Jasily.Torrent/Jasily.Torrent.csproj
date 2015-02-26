@@ -39,6 +39,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\Magnet\IMagnetElementHash.cs" />
+    <Compile Include="Data\Magnet\IMagnetElement.cs" />
+    <Compile Include="Data\Magnet\MagnetElementHash.cs" />
+    <Compile Include="Data\Magnet\MagnetLink.cs" />
     <Compile Include="Data\Torrent\Bencoding.cs" />
     <Compile Include="Data\Torrent\BencodingDictionary.cs" />
     <Compile Include="Data\Torrent\BencodingDigit.cs" />
@@ -55,6 +59,7 @@
       <Name>Jasily</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

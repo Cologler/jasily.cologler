@@ -29,8 +29,10 @@ namespace System.Security.Cryptography
                     return SHA512.Create();
 
                 case HashType.SHA1:
-                default:
                     return SHA1.Create();
+
+                default:
+                    throw new NotSupportedException("not support hash algorithm :" + hash.ToString());
             }
         }
 

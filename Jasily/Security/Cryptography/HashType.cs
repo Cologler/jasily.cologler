@@ -18,6 +18,8 @@ namespace System.Security.Cryptography
 
         SHA384,
 
-        SHA512
+        SHA512,
+
+        BitTorrentInfoHash
     }
 }
