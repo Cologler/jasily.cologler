@@ -22,6 +22,7 @@ namespace System.Linq
         {
             return source.ToList(token).ToArray();
         }
+
         /// <summary>
         /// 根据指定的键选择器函数，从 System.Collections.Generic.IEnumerable&lt;T&gt; 创建一个 System.Collections.Generic.Dictionary&lt;TKey, TValue&gt;。
         /// </summary>
@@ -118,6 +119,7 @@ namespace System.Linq
             }
             return result;
         }
+        
         /// <summary>
         /// 从 System.Collections.Generic.IEnumerable&lt;T&gt; 创建一个 System.Collections.Generic.List&lt;T&gt;。
         /// </summary>
@@ -135,6 +137,32 @@ namespace System.Linq
                 result.Add(item);
             }
             return result;
+        }
+
+        /// <summary>
+        /// 从 System.Collections.Generic.IEnumerable&lt;T&gt; 创建指定步长的多个 System.Collections.Generic.IEnumerable&lt;T&gt;
+        /// </summary>
+        /// <typeparam name="TSource">source 中的元素的类型。</typeparam>
+        /// <param name="source">要从其创建多个 System.Collections.Generic.IEnumerable&lt;T&gt; 的 System.Collections.Generic.IEnumerable&lt;T&gt;。</param>
+        /// <param name="chunkSize">步长</param>
+        /// <returns></returns>
+        public static IEnumerable<IEnumerable<TSource>> Split<TSource>(this IEnumerable<TSource> source, int chunkSize)
+        {
+            return Split(source, source.Count(), chunkSize);
+        }
+
+        /// <summary>
+        /// 从 System.Collections.Generic.IEnumerable&lt;T&gt; 创建指定步长的多个 System.Collections.Generic.IEnumerable&lt;T&gt;
+        /// </summary>
+        /// <typeparam name="TSource">source 中的元素的类型。</typeparam>
+        /// <param name="source">要从其创建多个 System.Collections.Generic.IEnumerable&lt;T&gt; 的 System.Collections.Generic.IEnumerable&lt;T&gt;。</param>
+        /// <param name="chunkSize">步长</param>
+        /// <param name="count">source 元素中的数量。使用此参数有助于提高性能。</param>
+        /// <returns></returns>
+        public static IEnumerable<IEnumerable<TSource>> Split<TSource>(this IEnumerable<TSource> source, int chunkSize, int count)
+        {
+            var len = count / chunkSize + (count % chunkSize != 0 ? 1 : 0);
+            return Enumerable.Range(0, len).Select(i => source.Skip(i * chunkSize).Take(chunkSize));
         }
     }
 }
