@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jasily.Torrent", "Jasily.To
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jasily.Client", "Jasily.Client\Jasily.Client.csproj", "{8AAA99FE-A2AB-48FF-8BB1-2C0F0F0E65A5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jasily.WPF", "Jasily.WPF\Jasily.WPF.csproj", "{D0D312C8-A48F-4FA3-A679-983BB033E849}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jasily.Shared", "Jasily.Shared\Jasily.Shared.csproj", "{A54BDA2A-32D4-498A-9F41-26E95EC471C0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{8AAA99FE-A2AB-48FF-8BB1-2C0F0F0E65A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8AAA99FE-A2AB-48FF-8BB1-2C0F0F0E65A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8AAA99FE-A2AB-48FF-8BB1-2C0F0F0E65A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0D312C8-A48F-4FA3-A679-983BB033E849}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0D312C8-A48F-4FA3-A679-983BB033E849}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0D312C8-A48F-4FA3-A679-983BB033E849}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0D312C8-A48F-4FA3-A679-983BB033E849}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A54BDA2A-32D4-498A-9F41-26E95EC471C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A54BDA2A-32D4-498A-9F41-26E95EC471C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A54BDA2A-32D4-498A-9F41-26E95EC471C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A54BDA2A-32D4-498A-9F41-26E95EC471C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
