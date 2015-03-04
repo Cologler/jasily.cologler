@@ -50,6 +50,7 @@
     <Compile Include="Data\Torrent\BencodingObjectType.cs" />
     <Compile Include="Data\Torrent\BencodingString.cs" />
     <Compile Include="Data\Torrent\IBencodingObject.cs" />
+    <Compile Include="Data\Torrent\TorrentFileInfo.cs" />
     <Compile Include="Data\Torrent\TorrentInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
