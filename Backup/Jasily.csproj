@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B0F1F865-FA1F-4D3D-92F6-73E147E0D52B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>System</RootNamespace>
+    <AssemblyName>Jasily</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFrameworkProfile>Profile2</TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Collections\Generic\IJasilyTryGetValue.cs" />
+    <Compile Include="Collections\Generic\JasilyDictionary.cs" />
+    <Compile Include="Collections\Generic\NameValuePair.cs" />
+    <Compile Include="Collections\ObjectModel\ObservableCollectionGroup.cs" />
+    <Compile Include="ComponentModel\JasilyViewModel.cs" />
+    <Compile Include="ComponentModel\NotifyPropertyChangedObject.cs" />
+    <Compile Include="IO\FileSystemTest.cs" />
+    <Compile Include="IO\FileSystemTestType.cs" />
+    <Compile Include="IO\JasilyStream.cs" />
+    <Compile Include="IO\MemoryTributary.cs" />
+    <Compile Include="IO\MergeReadonlyStream.cs" />
+    <Compile Include="JasilyByte.cs" />
+    <Compile Include="JasilyEvent.cs" />
+    <Compile Include="JasilyException.cs" />
+    <Compile Include="JasilyNumber.cs" />
+    <Compile Include="JasilyString.cs" />
+    <Compile Include="JasilyThrow.cs" />
+    <Compile Include="JasilyWeakReference.cs" />
+    <Compile Include="Linq\JasilyLinq.cs" />
+    <Compile Include="Net\JasilyWebRequest.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Security\Cryptography\CRC32.cs" />
+    <Compile Include="Security\Cryptography\CRC32CryptoServiceProvider.cs" />
+    <Compile Include="Security\Cryptography\HashType.cs" />
+    <Compile Include="Security\Cryptography\JasilyHash.cs" />
+    <Compile Include="Text\JasilyPinYin.cs" />
+    <Compile Include="Threading\Tasks\JasilyTask.cs" />
+    <Compile Include="Windows\JasilyVisibility.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

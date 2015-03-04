@@ -43,9 +43,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Jasily\Jasily.csproj">
-      <Project>{b0f1f865-fa1f-4d3d-92f6-73e147e0d52b}</Project>
-      <Name>Jasily</Name>
+    <ProjectReference Include="..\Jasily.Core\Jasily.Core.csproj">
+      <Project>{8442e8e7-d515-4481-8a36-71711b1fbf79}</Project>
+      <Name>Jasily.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
