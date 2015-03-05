@@ -13,7 +13,7 @@ namespace System.Text
         IJasilyTryGetValue<char, JasilyPinYin.Pinyin>
     {
         private Dictionary<UInt32, string> InnerData;
-
+        
         public JasilyPinYin(string Uni2Pinyin)
         {
             InnerData = new Dictionary<UInt32, string>();
