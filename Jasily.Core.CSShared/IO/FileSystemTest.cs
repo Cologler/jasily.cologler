@@ -64,10 +64,15 @@ namespace System.IO
 
                 case FileSystemTestType.Any:
                     return true;
-
-                default:
-                    return false;
             }
+
+            if (type.HasFlag(FileSystemTestType.MultipleDirectory) && items.All(z => IsDirectoryExists(z)))
+                return true;
+
+            if (type.HasFlag(FileSystemTestType.MultipleFile) && items.All(z => IsFileExists(z)))
+                return true;
+
+            return false;
         }
 
         public static IEnumerable<string> Filter(this FileSystemTestType type, IEnumerable<string> items)

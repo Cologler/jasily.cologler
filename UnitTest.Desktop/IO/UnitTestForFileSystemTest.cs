@@ -109,6 +109,16 @@ namespace UnitTest.Desktop.IO
             Assert.IsTrue(!FileSystemTestType.Single.IsMatch(folders));
             Assert.IsTrue(!FileSystemTestType.Single.IsMatch(filesAndFolders1));
             Assert.IsTrue(!FileSystemTestType.Single.IsMatch(filesAndFolders2));
+
+            Assert.IsTrue(!(FileSystemTestType.File | FileSystemTestType.Directory | FileSystemTestType.MultipleDirectory).IsMatch(notExists));
+            Assert.IsTrue((FileSystemTestType.File | FileSystemTestType.Directory | FileSystemTestType.MultipleDirectory).IsMatch(file1));
+            Assert.IsTrue((FileSystemTestType.File | FileSystemTestType.Directory | FileSystemTestType.MultipleDirectory).IsMatch(file2));
+            Assert.IsTrue((FileSystemTestType.File | FileSystemTestType.Directory | FileSystemTestType.MultipleDirectory).IsMatch(folder1));
+            Assert.IsTrue((FileSystemTestType.File | FileSystemTestType.Directory | FileSystemTestType.MultipleDirectory).IsMatch(folder2));
+            Assert.IsTrue(!(FileSystemTestType.File | FileSystemTestType.Directory | FileSystemTestType.MultipleDirectory).IsMatch(files));
+            Assert.IsTrue((FileSystemTestType.File | FileSystemTestType.Directory | FileSystemTestType.MultipleDirectory).IsMatch(folders));
+            Assert.IsTrue(!(FileSystemTestType.File | FileSystemTestType.Directory | FileSystemTestType.MultipleDirectory).IsMatch(filesAndFolders1));
+            Assert.IsTrue(!(FileSystemTestType.File | FileSystemTestType.Directory | FileSystemTestType.MultipleDirectory).IsMatch(filesAndFolders2));
         }
     }
 }
