@@ -8,10 +8,36 @@ namespace System.IO
 {
     public static class FileSystemTest
     {
+        private readonly static Func<string, bool> DefaultFileExists;
+        private readonly static Func<string, bool> DefaultDirectoryExists;
+
+        public static Func<string, bool> FileExistsFunc;
+        public static Func<string, bool> DirectoryExistsFunc;
+
+        static FileSystemTest()
+        {
+            DefaultFileExists = (path) => File.Exists(path);
+            DefaultDirectoryExists = (path) => Directory.Exists(path);
+
+            FileExistsFunc = DefaultFileExists;
+            DirectoryExistsFunc = DefaultDirectoryExists;
+        }
+
+        private static bool IsFileExists(string item)
+        {
+            return (FileExistsFunc ?? DefaultFileExists)(item);
+        }
+
+        private static bool IsDirectoryExists(string item)
+        {
+            return (DirectoryExistsFunc ?? DefaultDirectoryExists)(item);
+        }
+
         public static bool IsMatch(this FileSystemTestType type, string item)
         {
-            return (type.HasFlag(FileSystemTestType.File) && File.Exists(item)) ||
-                   (type.HasFlag(FileSystemTestType.Directory) && Directory.Exists(item));
+            return (type.HasFlag(FileSystemTestType.File) && IsFileExists(item)) ||
+                   (type.HasFlag(FileSystemTestType.Directory) && IsDirectoryExists(item)) ||
+                   type == FileSystemTestType.Any;
         }
 
         public static bool IsMatch(this FileSystemTestType type, IEnumerable<string> items)
@@ -28,13 +54,16 @@ namespace System.IO
                     return false;
 
                 case FileSystemTestType.MultipleFile:
-                    return items.All(z => File.Exists(z));
+                    return items.All(z => IsFileExists(z));
 
                 case FileSystemTestType.MultipleDirectory:
-                    return items.All(z => Directory.Exists(z));
+                    return items.All(z => IsDirectoryExists(z));
 
                 case FileSystemTestType.Multiple:
-                    return items.All(z => File.Exists(z) || Directory.Exists(z));
+                    return items.All(z => IsFileExists(z) || IsDirectoryExists(z));
+
+                case FileSystemTestType.Any:
+                    return true;
 
                 default:
                     return false;

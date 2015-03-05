@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jasily.Core.CSShared", "Jas
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jasily.Core", "Jasily.Core\Jasily.Core.csproj", "{8442E8E7-D515-4481-8A36-71711B1FBF79}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest.Desktop", "UnitTest.Desktop\UnitTest.Desktop.csproj", "{7C7F7A7C-DE6E-41AD-AB33-8BDE112AD029}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{8442E8E7-D515-4481-8A36-71711B1FBF79}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8442E8E7-D515-4481-8A36-71711B1FBF79}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8442E8E7-D515-4481-8A36-71711B1FBF79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C7F7A7C-DE6E-41AD-AB33-8BDE112AD029}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C7F7A7C-DE6E-41AD-AB33-8BDE112AD029}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C7F7A7C-DE6E-41AD-AB33-8BDE112AD029}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C7F7A7C-DE6E-41AD-AB33-8BDE112AD029}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

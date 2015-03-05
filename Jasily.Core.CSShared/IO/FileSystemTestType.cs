@@ -42,6 +42,11 @@ namespace System.IO
         /// <summary>
         /// 00001111
         /// </summary>
-        Multiple = 15
+        Multiple = 15,
+
+        /// <summary>
+        /// 11111111
+        /// </summary>
+        Any = 255
     }
 }
