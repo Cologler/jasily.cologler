@@ -148,7 +148,7 @@ namespace System.Linq
         /// <returns></returns>
         public static IEnumerable<IEnumerable<TSource>> Split<TSource>(this IEnumerable<TSource> source, int chunkSize)
         {
-            return Split(source, source.Count(), chunkSize);
+            return Split(source, chunkSize, source.Count());
         }
 
         /// <summary>
