@@ -41,6 +41,12 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Jasily.Core.CSShared\IO\FileSystemTest.cs">
+      <Link>IO\FileSystemTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Jasily.Core.CSShared\IO\FileSystemTestType.cs">
+      <Link>IO\FileSystemTestType.cs</Link>
+    </Compile>
     <Compile Include="..\Jasily.Core.CSShared\Security\Cryptography\CRC32.cs">
       <Link>Security\Cryptography\CRC32.cs</Link>
     </Compile>
