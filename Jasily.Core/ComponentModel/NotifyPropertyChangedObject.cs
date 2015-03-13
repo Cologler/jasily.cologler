@@ -1,17 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace System.ComponentModel
 {
     public class NotifyPropertyChangedObject : INotifyPropertyChanged
     {
+        object SyncRootForEndRefresh = new object();
+        List<string> RegisteredPropertyForEndRefresh;
+
+        public NotifyPropertyChangedObject()
+        {
+            RegisteredPropertyForEndRefresh = new List<string>();
+        }
+
+        /// <summary>
+        /// please always use for background thread.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="propertySelector"></param>
+        public void RegisterForEndRefresh<T>(Expression<Func<T, object>> propertySelector)
+        {
+            if (typeof(T).FullName != this.GetType().FullName)
+                throw new NotSupportedException("type of source in propertySelector must be current type.");
+
+            lock (SyncRootForEndRefresh)
+                RegisteredPropertyForEndRefresh.Add(propertySelector.ParsePathFromPropertySelector());
+        }
+
+        public void EndRefresh()
+        {
+            lock (SyncRootForEndRefresh)
+            {
+                this.NotifyPropertyChanged(this.RegisteredPropertyForEndRefresh);
+                this.RegisteredPropertyForEndRefresh.Clear();
+            }
+        }
+
         public bool SetPropertyRef<T>(ref T property, T newValue, [CallerMemberName] string propertyName = null)
         {
-            if ((property == null && newValue == null) || (property != null && property.Equals(newValue)))
+            if (property.NormalEquals(newValue))
             {
                 return false;
             }
@@ -24,7 +52,7 @@ namespace System.ComponentModel
         }
         public bool SetPropertyRef<T>(ref T property, T newValue, params string[] propertyNames)
         {
-            if ((property == null && newValue == null) || (property != null && property.Equals(newValue)))
+            if (property.NormalEquals(newValue))
             {
                 return false;
             }

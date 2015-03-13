@@ -32,13 +32,19 @@ namespace UnitTest.Desktop.ComponentModel
             instance.Name = "1";
             Assert.AreEqual(instance.Name, "1");
             Assert.IsTrue(instance.LastChangedPropertyName.Count == 0);
+
+            instance._name = "6";
+            instance.RegisterForEndRefresh<NotifyPropertyChangedObjectInstance>(z => z.Name);
+            instance.EndRefresh();
+            Assert.IsTrue(instance.LastChangedPropertyName.Count == 1);
+            Assert.IsTrue(instance.LastChangedPropertyName[0] == "Name");
         }
 
         public class NotifyPropertyChangedObjectInstance : NotifyPropertyChangedObject
         {
             public List<string> LastChangedPropertyName;
 
-            private string _name;
+            public string _name;
 
             public NotifyPropertyChangedObjectInstance()
             {

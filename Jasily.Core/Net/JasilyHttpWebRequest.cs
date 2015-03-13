@@ -3,9 +3,8 @@ using System.Threading.Tasks;
 
 namespace System.Net
 {
-    public static class JasilyWebRequest
+    public static class JasilyHttpWebRequest
     {
-#if WINDOWS_PHONE
         /// <summary>
         /// 异常信息与 request 的 BeginGetRequestStream, EndGetRequestStream 相同。
         /// </summary>
@@ -53,16 +52,5 @@ namespace System.Net
 
             return await task.Task;
         }
-
-        public static async Task<WebResponse> SendAsync(this HttpWebRequest request, byte[] bytes)
-        {
-            using (var ms = bytes.ToMemoryStream())
-            {
-                request.ContentLength = bytes.Length;
-                ms.CopyTo(await request.GetRequestStreamAsync());
-                return await request.GetResponseAsync();
-            }
-        }
-#endif
     }
 }

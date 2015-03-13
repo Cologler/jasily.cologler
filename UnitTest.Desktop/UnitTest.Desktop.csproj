@@ -55,10 +55,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Jasily.Core.CSShared\Jasily.Core.CSShared.csproj">
-      <Project>{72bd2a0c-9d31-462e-9460-8453450fc1b2}</Project>
-      <Name>Jasily.Core.CSShared</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Jasily.Core.Desktop\Jasily.Core.Desktop.csproj">
       <Project>{e90943e3-39c3-4649-9fe7-17096cbcd95e}</Project>
       <Name>Jasily.Core.Desktop</Name>
