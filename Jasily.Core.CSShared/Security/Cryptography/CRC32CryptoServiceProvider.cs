@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace System.Security.Cryptography
 {
     public sealed class CRC32CryptoServiceProvider : CRC32
