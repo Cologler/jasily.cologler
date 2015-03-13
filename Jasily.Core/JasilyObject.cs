@@ -9,7 +9,9 @@ namespace System
     public static class JasilyObject
     {
         /// <summary>
-        /// if both were not null, using Equals() to check if they equals.
+        /// if both are not null, using Equals() to check if they equals.
+        /// <para/>
+        /// both are null, return true.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="obj"></param>
@@ -17,7 +19,7 @@ namespace System
         /// <returns></returns>
         public static bool NormalEquals<T>(this T obj, T other)
         {
-            return !((obj == null && other == null) || (obj != null && obj.Equals(other)));
+            return (obj == null && other == null) || (obj != null && obj.Equals(other));
         }
     }
 }

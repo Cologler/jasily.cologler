@@ -28,12 +28,21 @@ namespace System.ComponentModel
                 RegisteredPropertyForEndRefresh.Add(propertySelector.ParsePathFromPropertySelector());
         }
 
+        /// <summary>
+        /// run on UI thread
+        /// </summary>
         public void EndRefresh()
         {
-            lock (SyncRootForEndRefresh)
+            if (this.RegisteredPropertyForEndRefresh.Count > 0)
             {
-                this.NotifyPropertyChanged(this.RegisteredPropertyForEndRefresh);
-                this.RegisteredPropertyForEndRefresh.Clear();
+                lock (SyncRootForEndRefresh)
+                {
+                    if (this.RegisteredPropertyForEndRefresh.Count > 0)
+                    {
+                        this.NotifyPropertyChanged(this.RegisteredPropertyForEndRefresh);
+                        this.RegisteredPropertyForEndRefresh.Clear();
+                    }
+                }
             }
         }
 
