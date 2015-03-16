@@ -50,6 +50,7 @@
     <Compile Include="Security\Cryptography\JasilyHash.cs" />
     <Compile Include="Windows\JasilyDispatcher.cs" />
     <Compile Include="Windows\JasilyVisibility.cs" />
+    <Compile Include="Windows\Media\Animation\JasilyStoryboard.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
