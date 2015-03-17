@@ -53,6 +53,7 @@
     <Compile Include="JasilyObject.cs" />
     <Compile Include="JasilyString.cs" />
     <Compile Include="JasilyThrow.cs" />
+    <Compile Include="AnyUsing.cs" />
     <Compile Include="Linq\Expressions\JasilyExpression.cs" />
     <Compile Include="Linq\JasilyLinq.cs" />
     <Compile Include="Net\JasilyHttpWebRequest.cs" />
