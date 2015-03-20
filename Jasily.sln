@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jasily.Test", "Jasily.Test\Jasily.Test.csproj", "{8366BDEB-FEDB-4919-B679-565A46DE085C}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jasily.Torrent", "Jasily.Torrent\Jasily.Torrent.csproj", "{632C5DA2-2328-434D-925F-1F73191DB221}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jasily.Cache", "Jasily.Cache\Jasily.Cache.csproj", "{3E7587E5-324A-4CF1-A511-446BF30F9D8A}"
@@ -31,14 +29,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8366BDEB-FEDB-4919-B679-565A46DE085C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8366BDEB-FEDB-4919-B679-565A46DE085C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8366BDEB-FEDB-4919-B679-565A46DE085C}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{8366BDEB-FEDB-4919-B679-565A46DE085C}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{8366BDEB-FEDB-4919-B679-565A46DE085C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8366BDEB-FEDB-4919-B679-565A46DE085C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8366BDEB-FEDB-4919-B679-565A46DE085C}.Release|ARM.ActiveCfg = Release|Any CPU
-		{8366BDEB-FEDB-4919-B679-565A46DE085C}.Release|x86.ActiveCfg = Release|Any CPU
 		{632C5DA2-2328-434D-925F-1F73191DB221}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{632C5DA2-2328-434D-925F-1F73191DB221}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{632C5DA2-2328-434D-925F-1F73191DB221}.Debug|ARM.ActiveCfg = Debug|Any CPU

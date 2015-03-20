@@ -3,7 +3,7 @@ using System.IO;
 using System.Net.Sockets;
 using System.Threading;
 
-namespace System.Net
+namespace System.Net.Sockets
 {
 #if WINDOWS_PHONE_80
     /// <summary>
@@ -21,18 +21,20 @@ namespace System.Net
 
         public NetworkStream(Socket socket, FileAccess access)
         {
-            if (socket == null)
+            _socket = socket.ThrowIfNull("socket");
+
+            if (_socket.ProtocolType != ProtocolType.Tcp)
             {
-                throw new ArgumentNullException("socket");
-            }
-            if (!socket.Connected)
-            {
-                throw new IOException("Socket is not connected");
+                throw new ArgumentException("socket protocol type must be tcp.");
             }
 
-            _socket = socket;
-            _readable = (access & FileAccess.Read) == FileAccess.Read;
-            _writeable = (access & FileAccess.Write) == FileAccess.Write;
+            if (!_socket.Connected)
+            {
+                throw new IOException("socket is not connected");
+            }
+
+            _readable = access.HasFlag(FileAccess.Read);
+            _writeable = access.HasFlag(FileAccess.Write);
         }
 
         public override bool CanRead
@@ -53,28 +55,31 @@ namespace System.Net
         public override int Read(byte[] buffer, int offset, int size)
         {
             ValidatePas(buffer, offset, size);
-            if (!_readable)
+
+            if (!this.CanRead)
             {
-                throw new InvalidOperationException();
+                throw new InvalidOperationException("stream can not read.");
             }
 
-            var args = new SocketAsyncEventArgs();
-            var eventWaitHandle = new AutoResetEvent(false);
             var socketError = SocketError.Success;
             var readCount = 0;
+            
+            using (var waiter = new ManualResetEventSlim())
+            {
+                var args = new SocketAsyncEventArgs();                
 
-            args.SetBuffer(buffer, offset, size);
-            args.Completed += (ss, ee) =>
-                {
-                    socketError = ee.SocketError;
-                    readCount = ee.BytesTransferred;
-                    eventWaitHandle.Set();
-                };
+                args.SetBuffer(buffer, offset, size);
+                args.Completed += (ss, ee) =>
+                    {
+                        socketError = ee.SocketError;
+                        readCount = ee.BytesTransferred;
+                        waiter.Set();
+                    };
 
-            _socket.ReceiveAsync(args);
-            eventWaitHandle.WaitOne();
+                _socket.ReceiveAsync(args);
+                waiter.Wait();
+            }
 
-            eventWaitHandle.Close();
             if (socketError != SocketError.Success)
             {
                 throw new SocketException((int)socketError);
@@ -86,26 +91,27 @@ namespace System.Net
         public override void Write(byte[] buffer, int offset, int size)
         {
             ValidatePas(buffer, offset, size);
-            if (!_writeable)
+
+            if (!this.CanWrite)
             {
-                throw new InvalidOperationException();
+                throw new InvalidOperationException("stream can not write.");
             }
 
             var args = new SocketAsyncEventArgs();
-            var eventWaitHandle = new AutoResetEvent(false);
+            var waiter = new AutoResetEvent(false);
             var socketError = SocketError.Success;
 
             args.SetBuffer(buffer, offset, size);
             args.Completed += (ss, ee) =>
             {
                 socketError = ee.SocketError;
-                eventWaitHandle.Set();
+                waiter.Set();
             };
 
             _socket.SendAsync(args);
-            eventWaitHandle.WaitOne();
+            waiter.WaitOne();
 
-            eventWaitHandle.Close();
+            waiter.Close();
             if (socketError != SocketError.Success)
             {
                 throw new SocketException((int)socketError);
