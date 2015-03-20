@@ -45,6 +45,7 @@
     <Compile Include="ComponentModel\JasilyViewModel.cs" />
     <Compile Include="ComponentModel\NotifyPropertyChangedObject.cs" />
     <Compile Include="IO\JasilyStream.cs" />
+    <Compile Include="IO\JasilyStringReader.cs" />
     <Compile Include="IO\MemoryTributary.cs" />
     <Compile Include="IO\MergeReadonlyStream.cs" />
     <Compile Include="JasilyByte.cs" />
@@ -53,7 +54,7 @@
     <Compile Include="JasilyObject.cs" />
     <Compile Include="JasilyString.cs" />
     <Compile Include="JasilyThrow.cs" />
-    <Compile Include="AnyUsing.cs" />
+    <Compile Include="UsingAny.cs" />
     <Compile Include="Linq\Expressions\JasilyExpression.cs" />
     <Compile Include="Linq\JasilyLinq.cs" />
     <Compile Include="Net\JasilyHttpWebRequest.cs" />

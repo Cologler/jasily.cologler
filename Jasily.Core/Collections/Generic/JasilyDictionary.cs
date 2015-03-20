@@ -10,6 +10,7 @@ namespace System.Collections.Generic
             TValue r;
             return obj.TryGetValue(key, out r) ? r : defaultValue;
         }
+
         public static TResult GetValueOrDefault<TKey, TValue, TResult>(
             this IReadOnlyDictionary<TKey, TValue> obj, TKey key,
             Func<TValue, TResult> selector,

@@ -43,6 +43,7 @@
     <Compile Include="IO\FileSystemTest.cs" />
     <Compile Include="IO\FileSystemTestType.cs" />
     <Compile Include="JasilyWeakReference.cs" />
+    <Compile Include="Net\NetworkStream.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\Cryptography\CRC32.cs" />
     <Compile Include="Security\Cryptography\CRC32CryptoServiceProvider.cs" />
