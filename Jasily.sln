@@ -21,8 +21,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jasily.Core.WP80", "Jasily.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jasily.Core.WP81", "Jasily.Core.WP81\Jasily.Core.WP81.csproj", "{6C92ACF0-A2B7-4738-8B6D-20C3BECBEAFD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jasily.Server", "Jasily.Server\Jasily.Server.csproj", "{50958B70-1978-465E-8E9B-86576EF1F31F}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -113,14 +111,6 @@ Global
 		{6C92ACF0-A2B7-4738-8B6D-20C3BECBEAFD}.Release|ARM.Build.0 = Release|ARM
 		{6C92ACF0-A2B7-4738-8B6D-20C3BECBEAFD}.Release|x86.ActiveCfg = Release|x86
 		{6C92ACF0-A2B7-4738-8B6D-20C3BECBEAFD}.Release|x86.Build.0 = Release|x86
-		{50958B70-1978-465E-8E9B-86576EF1F31F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{50958B70-1978-465E-8E9B-86576EF1F31F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{50958B70-1978-465E-8E9B-86576EF1F31F}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{50958B70-1978-465E-8E9B-86576EF1F31F}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{50958B70-1978-465E-8E9B-86576EF1F31F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{50958B70-1978-465E-8E9B-86576EF1F31F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{50958B70-1978-465E-8E9B-86576EF1F31F}.Release|ARM.ActiveCfg = Release|Any CPU
-		{50958B70-1978-465E-8E9B-86576EF1F31F}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

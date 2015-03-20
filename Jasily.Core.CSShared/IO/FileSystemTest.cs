@@ -22,12 +22,18 @@ namespace System.IO
 
         private static bool IsFileExists(string item)
         {
-            return (FileExistsFunc ?? DefaultFileExists)(item);
+            if (item == null)
+                return false;
+            else
+                return (FileExistsFunc ?? DefaultFileExists)(item);
         }
 
         private static bool IsDirectoryExists(string item)
         {
-            return (DirectoryExistsFunc ?? DefaultDirectoryExists)(item);
+            if (item == null)
+                return false;
+            else
+                return (DirectoryExistsFunc ?? DefaultDirectoryExists)(item);
         }
 
         public static bool IsMatch(this FileSystemTestType type, string item)
