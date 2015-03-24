@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading;
 
 namespace System.Text
 {
@@ -9,11 +10,17 @@ namespace System.Text
         IJasilyTryGetValue<char, JasilyPinYin.Pinyin[]>,
         IJasilyTryGetValue<char, JasilyPinYin.Pinyin>
     {
-        private Dictionary<UInt32, string> InnerData;
+        Lazy<Dictionary<uint, string>> InnerLazyData;
         
         public JasilyPinYin(string Uni2Pinyin)
         {
-            InnerData = new Dictionary<UInt32, string>();
+            var factory = new Func<Dictionary<uint, string>>(() => Init(Uni2Pinyin));
+            InnerLazyData = new Lazy<Dictionary<uint, string>>(factory, LazyThreadSafetyMode.ExecutionAndPublication);
+        }
+
+        private static Dictionary<uint, string> Init(string Uni2Pinyin)
+        {
+            var innerData = new Dictionary<UInt32, string>();
             string line = null;
             string[] lines = null;
 
@@ -24,29 +31,28 @@ namespace System.Text
                     if (!line.StartsWith("#"))
                     {
                         lines = line.Split('\t');
-                        InnerData.Add(UInt32.Parse(lines[0], NumberStyles.HexNumber), line);
+                        innerData.Add(UInt32.Parse(lines[0], NumberStyles.HexNumber), line);
                     }
                 }
             }
+
+            return innerData;
         }
 
         public bool IsChineseChar(char ch)
         {
-            return InnerData.ContainsKey(ch);
+            return InnerLazyData.Value.ContainsKey(ch);
         }
 
         public Pinyin this[char ch]
         {
-            get
-            {
-                return ((IJasilyTryGetValue<char, JasilyPinYin.Pinyin>)this).GetValueOrDefault(ch);
-            }
+            get { return JasilyIJasilyTryGetValue.GetValueOrDefault<char, JasilyPinYin.Pinyin>(this, ch); }
         }
 
         public bool TryGetPinYin(char ch, out Pinyin[] pinyins)
         {
             string r = null;
-            if (InnerData.TryGetValue(ch, out r))
+            if (InnerLazyData.Value.TryGetValue(ch, out r))
             {
                 pinyins = Selector(r);
                 return true;

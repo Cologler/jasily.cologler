@@ -6,7 +6,7 @@ namespace System.Collections.Generic
         bool TryGetValue(TKey key, out TValue value);
     }
 
-    public static class IJasilyTryGetValueEM
+    public static class JasilyIJasilyTryGetValue
     {
         public static TValue GetValueOrDefault<TKey, TValue>(
             this IJasilyTryGetValue<TKey, TValue> obj, TKey key,
@@ -19,6 +19,8 @@ namespace System.Collections.Generic
             else
                 return defaultValue;
         }
+
+
         public static TResult GetValueOrDefault<TKey, TValue, TResult>(
             this IJasilyTryGetValue<TKey, TValue> obj, TKey key,
             Func<TValue, TResult> selector,
