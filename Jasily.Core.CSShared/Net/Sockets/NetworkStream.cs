@@ -61,31 +61,33 @@ namespace System.Net.Sockets
                 throw new InvalidOperationException("stream can not read.");
             }
 
-            var socketError = SocketError.Success;
-            var readCount = 0;
-            
             using (var waiter = new ManualResetEventSlim())
             {
-                var args = new SocketAsyncEventArgs();                
+                using (var args = new SocketAsyncEventArgs())
+                {
+                    var readCount = 0;
 
-                args.SetBuffer(buffer, offset, size);
-                args.Completed += (ss, ee) =>
+                    EventHandler<SocketAsyncEventArgs> com = null;
+                    com = new EventHandler<SocketAsyncEventArgs>((ss, ee) =>
                     {
-                        socketError = ee.SocketError;
-                        readCount = ee.BytesTransferred;
+                        args.Completed -= com;
                         waiter.Set();
-                    };
+                    });
+                    args.Completed += com;
 
-                _socket.ReceiveAsync(args);
-                waiter.Wait();
+                    args.SetBuffer(buffer, offset, size);
+
+                    if (_socket.ReceiveAsync(args))
+                        waiter.Wait();
+
+                    if (args.SocketError != SocketError.Success)
+                    {
+                        throw new SocketException((int)args.SocketError);
+                    }
+
+                    return readCount;
+                }
             }
-
-            if (socketError != SocketError.Success)
-            {
-                throw new SocketException((int)socketError);
-            }
-
-            return readCount;
         }
 
         public override void Write(byte[] buffer, int offset, int size)
@@ -97,24 +99,28 @@ namespace System.Net.Sockets
                 throw new InvalidOperationException("stream can not write.");
             }
 
-            var args = new SocketAsyncEventArgs();
-            var waiter = new AutoResetEvent(false);
-            var socketError = SocketError.Success;
-
-            args.SetBuffer(buffer, offset, size);
-            args.Completed += (ss, ee) =>
+            using (var waiter = new ManualResetEventSlim())
             {
-                socketError = ee.SocketError;
-                waiter.Set();
-            };
+                using (var args = new SocketAsyncEventArgs())
+                {
+                    EventHandler<SocketAsyncEventArgs> com = null;
+                    com = new EventHandler<SocketAsyncEventArgs>((ss, ee) =>
+                    {
+                        args.Completed -= com;
+                        waiter.Set();
+                    });
+                    args.Completed += com;
 
-            _socket.SendAsync(args);
-            waiter.WaitOne();
+                    args.SetBuffer(buffer, offset, size);
 
-            waiter.Close();
-            if (socketError != SocketError.Success)
-            {
-                throw new SocketException((int)socketError);
+                    if (_socket.SendAsync(args))
+                        waiter.Wait();
+
+                    if (args.SocketError != SocketError.Success)
+                    {
+                        throw new SocketException((int)args.SocketError);
+                    }
+                }
             }
         }
 

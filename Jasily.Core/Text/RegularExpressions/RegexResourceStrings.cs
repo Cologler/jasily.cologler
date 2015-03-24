@@ -1,7 +1,7 @@
 ﻿
 namespace System.Text.RegularExpressions
 {
-    public static class RegexResourceString
+    public static class RegexResourceStrings
     {
         /// <summary>
         /// match url begin with any scheme

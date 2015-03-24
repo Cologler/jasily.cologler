@@ -83,11 +83,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\Jasily.Core.CSShared\Net\NetworkStream.cs">
-      <Link>Net\NetworkStream.cs</Link>
+    <Compile Include="..\Jasily.Core.CSShared\Net\Sockets\NetworkStream.cs">
+      <Link>Net\Sockets\NetworkStream.cs</Link>
     </Compile>
     <Compile Include="..\Jasily.Core.CSShared\Windows\Media\Animation\JasilyStoryboard.cs">
       <Link>Windows\Media\Animation\JasilyStoryboard.cs</Link>
+    </Compile>
+    <Compile Include="..\Jasily.Core.CSShared\Windows\Media\Animation\StoryboardFactory.cs">
+      <Link>Windows\Media\Animation\StoryboardFactory.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
