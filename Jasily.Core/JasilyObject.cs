@@ -16,5 +16,16 @@ namespace System
         {
             return (obj == null && other == null) || (obj != null && obj.Equals(other));
         }
+
+        /// <summary>
+        /// performance test can see: http://www.evernote.com/l/ALKIesUPaCJEv6WcQs1MqMeZN8hcMympy1U/, fast than 'as'
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static T As<T>(this T obj)
+        {
+            return obj;
+        }
     }
 }

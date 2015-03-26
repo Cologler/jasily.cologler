@@ -7,10 +7,10 @@ namespace System.Data.Torrent
     {
         internal const byte EndByte = 101;
 
-        public static IBencodingDictionary Parse(Stream torrentStream)
+        public static IBencodingObject Parse(Stream torrentStream)
         {
             using (var reader = new BinaryReader(torrentStream))
-                return (IBencodingDictionary)Parse(reader);
+                return (IBencodingObject)Parse(reader);
         }
 
         internal static IBencodingObject Parse(BinaryReader reader)

@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="ComponentModel\UnitTestForNotifyPropertyChangedObject.cs" />
     <Compile Include="IO\UnitTestForFileSystemTest.cs" />
+    <Compile Include="Performance\UnitTestForCodeTimer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

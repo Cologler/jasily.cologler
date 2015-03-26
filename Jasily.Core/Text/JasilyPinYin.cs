@@ -6,9 +6,7 @@ using System.Threading;
 
 namespace System.Text
 {
-    public class JasilyPinYin :
-        IJasilyTryGetValue<char, JasilyPinYin.Pinyin[]>,
-        IJasilyTryGetValue<char, JasilyPinYin.Pinyin>
+    public class JasilyPinYin : IJasilyTryGetValue<char, JasilyPinYin.Pinyin[]>, IJasilyTryGetValue<char, JasilyPinYin.Pinyin>
     {
         Lazy<Dictionary<uint, string>> InnerLazyData;
         
@@ -51,7 +49,8 @@ namespace System.Text
 
         public bool TryGetPinYin(char ch, out Pinyin[] pinyins)
         {
-            string r = null;
+            string r;
+
             if (InnerLazyData.Value.TryGetValue(ch, out r))
             {
                 pinyins = Selector(r);

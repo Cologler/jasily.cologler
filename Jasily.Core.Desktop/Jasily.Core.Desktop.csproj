@@ -47,6 +47,15 @@
     <Compile Include="..\Jasily.Core.CSShared\IO\FileSystemTestType.cs">
       <Link>IO\FileSystemTestType.cs</Link>
     </Compile>
+    <Compile Include="..\Jasily.Core.CSShared\Performance\CodeTimer.cs">
+      <Link>Performance\CodeTimer.cs</Link>
+    </Compile>
+    <Compile Include="..\Jasily.Core.CSShared\Performance\CodeTimerResult.cs">
+      <Link>Performance\CodeTimerResult.cs</Link>
+    </Compile>
+    <Compile Include="..\Jasily.Core.CSShared\Performance\JasilyPerformanceTest.cs">
+      <Link>Performance\JasilyPerformanceTest.cs</Link>
+    </Compile>
     <Compile Include="..\Jasily.Core.CSShared\Security\Cryptography\CRC32.cs">
       <Link>Security\Cryptography\CRC32.cs</Link>
     </Compile>
