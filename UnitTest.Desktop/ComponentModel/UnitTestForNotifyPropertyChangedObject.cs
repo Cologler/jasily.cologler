@@ -31,6 +31,7 @@ namespace UnitTest.Desktop.ComponentModel
 
             instance._name = "6";
             instance.RegisterForEndRefresh<NotifyPropertyChangedObjectInstance>(z => z.Name);
+            Assert.IsTrue(instance.LastChangedPropertyName.Count == 0);
             instance.EndRefresh();
             Assert.IsTrue(instance.LastChangedPropertyName.Count == 1);
             Assert.IsTrue(instance.LastChangedPropertyName[0] == "Name");

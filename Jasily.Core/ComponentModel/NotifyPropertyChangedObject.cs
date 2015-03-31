@@ -15,7 +15,7 @@ namespace System.ComponentModel
         }
 
         /// <summary>
-        /// please always use for background thread.
+        /// please always call on background thread.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="propertySelector"></param>
@@ -25,11 +25,11 @@ namespace System.ComponentModel
                 throw new NotSupportedException("type of source in propertySelector must be current type.");
 
             lock (SyncRootForEndRefresh)
-                RegisteredPropertyForEndRefresh.Add(propertySelector.ParsePathFromPropertySelector());
+                RegisteredPropertyForEndRefresh.Add(propertySelector.PropertySelector());
         }
 
         /// <summary>
-        /// run on UI thread
+        /// please always call on UI thread. the method will call PropertyChanged for each Registered property.
         /// </summary>
         public void EndRefresh()
         {
