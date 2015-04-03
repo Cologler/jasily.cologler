@@ -55,6 +55,7 @@
     <Compile Include="JasilyString.cs" />
     <Compile Include="JasilyThrow.cs" />
     <Compile Include="JasilyWeakReference.cs" />
+    <Compile Include="IO\SeekableStringReader.cs" />
     <Compile Include="UsingAny.cs" />
     <Compile Include="Linq\Expressions\JasilyExpression.cs" />
     <Compile Include="Linq\JasilyLinq.cs" />
