@@ -15,5 +15,12 @@ namespace System.Windows
             return dispatcher.BeginInvoke(a, null);
         }
 #endif
+
+#if WINDOWS_PHONE_80
+        public static System.Windows.Threading.Dispatcher GetDispatcher()
+        {
+            return Deployment.Current.Dispatcher;
+        }
+#endif
     }
 }
