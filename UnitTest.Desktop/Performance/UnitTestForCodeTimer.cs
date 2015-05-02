@@ -23,11 +23,10 @@ namespace UnitTest.Desktop.Performance
             {
                 timer.Initialize();
                 var result = timer.Time(1, () => { });
-                Assert.Equals(result.CPUCycles, 0);
             }
 
-            Assert.Equals(CachedProcessPriorityClass, Process.GetCurrentProcess().PriorityClass);
-            Assert.Equals(CachedThreadPriority, Thread.CurrentThread.Priority);
+            Assert.AreEqual(CachedProcessPriorityClass, Process.GetCurrentProcess().PriorityClass);
+            Assert.AreEqual(CachedThreadPriority, Thread.CurrentThread.Priority);
         }
     }
 }
