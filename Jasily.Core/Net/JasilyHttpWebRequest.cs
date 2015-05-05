@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
 using System.Runtime.Serialization.Json;
+using System.Xml.Serialization;
 
 namespace System.Net
 {
@@ -53,7 +54,6 @@ namespace System.Net
 
             return await task.Task;
         }
-
 
         public static async Task<WebResult> GetResultAsync(this HttpWebRequest request)
         {
@@ -120,6 +120,11 @@ namespace System.Net
             return await request.SendAndGetResultAsync(input, AsJson<T>);
         }
 
+        public static async Task<WebResult<T>> SendAndGetResultAsXmlAsync<T>(this HttpWebRequest request, Stream input)
+        {
+            return await request.SendAndGetResultAsync(input, AsXml<T>);
+        }
+
         private static WebResult Return()
         {
             return new WebResult();
@@ -143,6 +148,11 @@ namespace System.Net
         private static T AsJson<T>(Stream input)
         {
             return input.JsonToObject<T>();
+        }
+
+        private static T AsXml<T>(Stream input)
+        {
+            return input.XmlToObject<T>();
         }
     }
 }

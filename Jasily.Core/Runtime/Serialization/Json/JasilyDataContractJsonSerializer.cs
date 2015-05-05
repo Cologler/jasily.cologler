@@ -33,5 +33,16 @@ namespace System.Runtime.Serialization.Json
         {
             return jsonDoc.JsonToObject<T>(Encoding.UTF8);
         }
+
+        public static string ObjectToJson(this object obj)
+        {
+            using (var ms = new MemoryStream())
+            {
+                DataContractJsonSerializer ser = new DataContractJsonSerializer(obj.GetType());
+                ser.WriteObject(ms, obj);
+                byte[] json = ms.ToArray();
+                return Encoding.UTF8.GetString(json, 0, json.Length);
+            }
+        }
     }
 }
