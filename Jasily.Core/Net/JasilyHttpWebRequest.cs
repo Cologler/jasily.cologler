@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
+using System.Runtime.Serialization.Json;
 
 namespace System.Net
 {
@@ -51,6 +52,97 @@ namespace System.Net
             }, null);
 
             return await task.Task;
+        }
+
+
+        public static async Task<WebResult> GetResultAsync(this HttpWebRequest request)
+        {
+            try
+            {
+                await request.GetResponseAsync();
+                return Return();
+            }
+            catch (WebException e)
+            {
+                return Return(e);
+            }
+        }
+
+        public static async Task<WebResult<T>> GetResultAsync<T>(this HttpWebRequest request, Func<Stream, T> selector)
+        {
+            try
+            {
+                using (var stream = (await request.GetResponseAsync()).GetResponseStream())
+                {
+                    return Return<T>(selector(stream));
+                }
+            }
+            catch (WebException e)
+            {
+                return Return<T>(e);
+            }
+        }
+
+        public static async Task<WebResult> SendAndGetResultAsync(this HttpWebRequest request, Stream input)
+        {
+            try
+            {
+                using (var stream = await request.GetRequestStreamAsync())
+                {
+                    await input.CopyToAsync(stream);
+                    return await request.GetResultAsync();
+                }
+            }
+            catch (WebException e)
+            {
+                return Return(e);
+            }
+        }
+
+        public static async Task<WebResult<T>> SendAndGetResultAsync<T>(this HttpWebRequest request, Stream input, Func<Stream, T> selector)
+        {
+            try
+            {
+                using (var stream = await request.GetRequestStreamAsync())
+                {
+                    await input.CopyToAsync(stream);
+                    return await request.GetResultAsync<T>(selector);
+                }
+            }
+            catch (WebException e)
+            {
+                return Return<T>(e);
+            }
+        }
+
+        public static async Task<WebResult<T>> SendAndGetResultAsJsonAsync<T>(this HttpWebRequest request, Stream input)
+        {
+            return await request.SendAndGetResultAsync(input, AsJson<T>);
+        }
+
+        private static WebResult Return()
+        {
+            return new WebResult();
+        }
+
+        private static WebResult Return(WebException e)
+        {
+            return new WebResult(e);
+        }
+
+        private static WebResult<T> Return<T>(T r)
+        {
+            return new WebResult<T>(r);
+        }
+
+        private static WebResult<T> Return<T>(WebException e)
+        {
+            return new WebResult<T>(e);
+        }
+
+        private static T AsJson<T>(Stream input)
+        {
+            return input.JsonToObject<T>();
         }
     }
 }
