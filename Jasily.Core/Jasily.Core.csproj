@@ -58,7 +58,7 @@
     <Compile Include="IO\SeekableStringReader.cs" />
     <Compile Include="Net\WebResult.cs" />
     <Compile Include="Runtime\Serialization\Json\JasilyDataContractJsonSerializer.cs" />
-    <Compile Include="UsingAny.cs" />
+    <Compile Include="UsingAnything.cs" />
     <Compile Include="Linq\Expressions\JasilyExpression.cs" />
     <Compile Include="Linq\JasilyLinq.cs" />
     <Compile Include="Net\JasilyHttpWebRequest.cs" />
