@@ -34,6 +34,7 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -72,6 +73,12 @@
     </Compile>
     <Compile Include="..\Jasily.Core.CSShared\Security\Cryptography\JasilyHash.cs">
       <Link>Security\Cryptography\JasilyHash.cs</Link>
+    </Compile>
+    <Compile Include="..\Jasily.Core.CSShared\Shell\ISingleInstanceApp.cs">
+      <Link>Shell\ISingleInstanceApp.cs</Link>
+    </Compile>
+    <Compile Include="..\Jasily.Core.CSShared\Shell\MicrosoftSingleInstanceProvider.cs">
+      <Link>Shell\MicrosoftSingleInstanceProvider.cs</Link>
     </Compile>
     <Compile Include="..\Jasily.Core.CSShared\Windows\JasilyDispatcher.cs">
       <Link>Windows\JasilyDispatcher.cs</Link>
