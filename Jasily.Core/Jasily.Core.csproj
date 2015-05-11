@@ -35,8 +35,10 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
+    <Folder Include="Reflection\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActivatorPro.cs" />
     <Compile Include="Collections\Generic\IJasilyTryGetValue.cs" />
     <Compile Include="Collections\Generic\JasilyDictionary.cs" />
     <Compile Include="Collections\Generic\NameValuePair.cs" />

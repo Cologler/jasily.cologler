@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Text;
 
 namespace System
 {
@@ -51,6 +52,17 @@ namespace System
 
 
             return text;
+        }
+
+        /// <summary>
+        /// use spliter to join texts. default value was '\r\n'
+        /// </summary>
+        /// <param name="texts"></param>
+        /// <param name="spliter"></param>
+        /// <returns></returns>
+        public static string AsLines(this IEnumerable<string> texts, string spliter = "\r\n")
+        {
+            return String.Join(spliter, texts);
         }
     }
 }

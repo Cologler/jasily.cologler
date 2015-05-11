@@ -1,4 +1,6 @@
 ﻿
+using System.Runtime.CompilerServices;
+
 namespace System
 {
     public static class JasilyObject
@@ -23,6 +25,8 @@ namespace System
         /// <typeparam name="T"></typeparam>
         /// <param name="obj"></param>
         /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [Obsolete("if not inline, should slow than 'as', wtf.")]
         public static T As<T>(this T obj)
         {
             return obj;
