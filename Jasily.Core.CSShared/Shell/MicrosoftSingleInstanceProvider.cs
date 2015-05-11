@@ -11,39 +11,39 @@ using System.Security;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
 
-/// ========================
-/// source from http://blogs.microsoft.co.il/blogs/arik/SingleInstance.cs.txt
-/// modified by cologler.
-/// alse see: http://codereview.stackexchange.com/questions/20871/single-instance-wpf-application
-/// ------------
-/// HOW TO USE
-/// ------------
-/// class App : Application, ISingleInstanceApp
-/// {
-///     protected override void OnStartup(StartupEventArgs e)
-///     {
-///         using (var p = new MicrosoftSingleInstanceProvider<App>(this))
-///         {
-///             if (p.InitializeAsFirstInstance("{3DD4E9C7-4084-4E46-A0FC-F8B4CD0D55A4}"))
-///             {
-///                 // current is first instance
-///             }
-///             else
-///             {
-///                 this.Shutdown();
-///             }
-///         }
-///     }
-///     
-///     protected override void OnExit(ExitEventArgs e)
-///     {
-///         if (p != null)
-///         {
-///             p.Dispose();
-///             p = null;
-///         }
-///     }
-///     
+// ========================
+// source from http://blogs.microsoft.co.il/blogs/arik/SingleInstance.cs.txt
+// modified by cologler.
+// alse see: http://codereview.stackexchange.com/questions/20871/single-instance-wpf-application
+// ------------
+// HOW TO USE
+// ------------
+// class App : Application, ISingleInstanceApp
+// {
+//     protected override void OnStartup(StartupEventArgs e)
+//     {
+//         using (var p = new MicrosoftSingleInstanceProvider<App>(this))
+//         {
+//             if (p.InitializeAsFirstInstance("{3DD4E9C7-4084-4E46-A0FC-F8B4CD0D55A4}"))
+//             {
+//                 // current is first instance
+//             }
+//             else
+//             {
+//                 this.Shutdown();
+//             }
+//         }
+//     }
+//     
+//     protected override void OnExit(ExitEventArgs e)
+//     {
+//         if (p != null)
+//         {
+//             p.Dispose();
+//             p = null;
+//         }
+//     }
+//     
 
 namespace System.Shell
 {
