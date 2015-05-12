@@ -83,6 +83,16 @@ namespace System.Net
             }
         }
 
+        public static async Task<WebResult<T>> GetResultAsJsonAsync<T>(this HttpWebRequest request)
+        {
+            return await request.GetResultAsync(AsJson<T>);
+        }
+
+        public static async Task<WebResult<T>> GetResultAsXmlAsync<T>(this HttpWebRequest request)
+        {
+            return await request.GetResultAsync(AsXml<T>);
+        }
+
         public static async Task<WebResult> SendAndGetResultAsync(this HttpWebRequest request, Stream input)
         {
             try
