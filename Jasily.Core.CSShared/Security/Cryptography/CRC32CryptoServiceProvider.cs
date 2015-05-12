@@ -24,12 +24,12 @@ namespace System.Security.Cryptography
         private static uint[] BuildCRC32Table(uint polynomial)
         {
             uint crc;
-            uint[] table = new uint[256];
+            var table = new uint[256];
 
-            for (int i = 0; i < 256; i++)
+            for (var i = 0; i < 256; i++)
             {
                 crc = (uint)i;
-                for (int j = 8; j > 0; j--)
+                for (var j = 8; j > 0; j--)
                 {
                     if ((crc & 1) == 1)
                         crc = (crc >> 1) ^ polynomial;
@@ -51,7 +51,7 @@ namespace System.Security.Cryptography
         protected override void HashCore(byte[] buffer, int offset, int count)
         {
             ulong ptr;
-            for (int i = offset; i < count; i++)
+            for (var i = offset; i < count; i++)
             {
                 ptr = (Crc32Value & 0xFF) ^ buffer[i];
                 Crc32Value >>= 8;
@@ -61,7 +61,7 @@ namespace System.Security.Cryptography
 
         protected override byte[] HashFinal()
         {
-            byte[] finalHash = new byte[4];
+            var finalHash = new byte[4];
             ulong finalCRC = Crc32Value ^ AllOnes;
 
             finalHash[3] = (byte)((finalCRC >> 0) & 0xFF);

@@ -12,7 +12,7 @@ namespace System.Runtime.Serialization.Json
         public static T JsonToObject<T>(this Stream stream)
         {
             var ser = new DataContractJsonSerializer(typeof(T));
-            T obj = (T)ser.ReadObject(stream);
+            var obj = (T)ser.ReadObject(stream);
             return obj;
         }
 
@@ -38,9 +38,9 @@ namespace System.Runtime.Serialization.Json
         {
             using (var ms = new MemoryStream())
             {
-                DataContractJsonSerializer ser = new DataContractJsonSerializer(obj.GetType());
+                var ser = new DataContractJsonSerializer(obj.GetType());
                 ser.WriteObject(ms, obj);
-                byte[] json = ms.ToArray();
+                var json = ms.ToArray();
                 return Encoding.UTF8.GetString(json, 0, json.Length);
             }
         }

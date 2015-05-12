@@ -26,7 +26,7 @@ namespace System.IO
         {
             SetLength(length);
             Position = length;
-            byte[] d = block;   //access block to prompt the allocation of memory
+            var d = block;   //access block to prompt the allocation of memory
             Position = 0;
         }
 
@@ -113,14 +113,14 @@ namespace System.IO
 
         public override int Read(byte[] buffer, int offset, int count)
         {
-            long lcount = (long)count;
+            var lcount = (long)count;
 
             if (lcount < 0)
             {
                 throw new ArgumentOutOfRangeException("count", lcount, "Number of bytes to copy cannot be negative.");
             }
 
-            long remaining = (length - Position);
+            var remaining = (length - Position);
             if (lcount > remaining)
                 lcount = remaining;
 
@@ -133,7 +133,7 @@ namespace System.IO
                 throw new ArgumentOutOfRangeException("offset", offset, "Destination offset cannot be negative.");
             }
 
-            int read = 0;
+            var read = 0;
             long copysize = 0;
             do
             {
@@ -175,7 +175,7 @@ namespace System.IO
 
         public override void Write(byte[] buffer, int offset, int count)
         {
-            long initialPosition = Position;
+            var initialPosition = Position;
             int copysize;
             try
             {
@@ -205,7 +205,7 @@ namespace System.IO
             if (Position >= length)
                 return -1;
 
-            byte b = block[blockOffset];
+            var b = block[blockOffset];
             Position++;
 
             return b;
@@ -246,9 +246,9 @@ namespace System.IO
         /// <returns>A byte[] containing the current data in the stream</returns>
         public byte[] ToArray()
         {
-            long firstposition = Position;
+            var firstposition = Position;
             Position = 0;
-            byte[] destination = new byte[Length];
+            var destination = new byte[Length];
             Read(destination, 0, (int)Length);
             Position = firstposition;
             return destination;
@@ -261,7 +261,7 @@ namespace System.IO
         /// <param name="length">The number of bytes to copy</param>
         public void ReadFrom(Stream source, long length)
         {
-            byte[] buffer = new byte[4096];
+            var buffer = new byte[4096];
             int read;
             do
             {
@@ -278,7 +278,7 @@ namespace System.IO
         /// <param name="destination">The stream to write the content of this stream to</param>
         public void WriteTo(Stream destination)
         {
-            long initialpos = Position;
+            var initialpos = Position;
             Position = 0;
             this.CopyTo(destination);
             Position = initialpos;

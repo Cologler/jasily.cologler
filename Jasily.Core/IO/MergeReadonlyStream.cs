@@ -64,7 +64,7 @@ namespace System.IO
 
         public override int Read(byte[] buffer, int offset, int count)
         {
-            int total = 0;
+            var total = 0;
 
             foreach (var i in InnerStreams)
             {

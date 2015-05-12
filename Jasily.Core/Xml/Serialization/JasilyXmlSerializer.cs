@@ -7,7 +7,7 @@ namespace System.Xml.Serialization
         public static T XmlToObject<T>(this System.IO.Stream stream)
         {
             var serializer = new System.Xml.Serialization.XmlSerializer(typeof(T));
-            T obj = (T)serializer.Deserialize(stream);
+            var obj = (T)serializer.Deserialize(stream);
             return obj;
         }
 

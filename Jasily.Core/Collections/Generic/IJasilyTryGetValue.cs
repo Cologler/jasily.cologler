@@ -12,7 +12,7 @@ namespace System.Collections.Generic
             this IJasilyTryGetValue<TKey, TValue> obj, TKey key,
             TValue defaultValue = default(TValue))
         {
-            TValue r = default(TValue);
+            var r = default(TValue);
 
             if (obj.TryGetValue(key, out r))
                 return r;
@@ -26,7 +26,7 @@ namespace System.Collections.Generic
             Func<TValue, TResult> selector,
             TResult defaultValue = default(TResult))
         {
-            TValue r = default(TValue);
+            var r = default(TValue);
 
             if (obj.TryGetValue(key, out r))
                 return selector(r);

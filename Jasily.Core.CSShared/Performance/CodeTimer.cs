@@ -40,23 +40,23 @@ namespace System.Performance
         {
             // 1.
             GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
-            int[] gcCounts = new int[GC.MaxGeneration + 1];
-            for (int i = 0; i <= GC.MaxGeneration; i++)
+            var gcCounts = new int[GC.MaxGeneration + 1];
+            for (var i = 0; i <= GC.MaxGeneration; i++)
             {
                 gcCounts[i] = GC.CollectionCount(i);
             }
 
             // 2.
-            Stopwatch watch = new Stopwatch();
+            var watch = new Stopwatch();
             watch.Start();
-            ulong cycleCount = GetCycleCount();
-            for (int i = 0; i < iteration; i++) action();
-            ulong cpuCycles = GetCycleCount() - cycleCount;
+            var cycleCount = GetCycleCount();
+            for (var i = 0; i < iteration; i++) action();
+            var cpuCycles = GetCycleCount() - cycleCount;
             watch.Stop();
 
             var gens = new [] { 0, 0, 0 };
 
-            for (int i = 0; i < 3; i++)
+            for (var i = 0; i < 3; i++)
             {
                 if (i <= GC.MaxGeneration)
                 {

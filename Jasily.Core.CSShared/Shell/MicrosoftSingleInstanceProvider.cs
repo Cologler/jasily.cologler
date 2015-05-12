@@ -134,9 +134,9 @@ namespace System.Shell
             commandLineArgs = GetCommandLineArgs(uniqueName);
 
             // Build unique application Id and the IPC channel name.
-            string applicationIdentifier = uniqueName + Environment.UserName;
+            var applicationIdentifier = uniqueName + Environment.UserName;
 
-            string channelName = String.Concat(applicationIdentifier, Delimiter, ChannelNameSuffix);
+            var channelName = String.Concat(applicationIdentifier, Delimiter, ChannelNameSuffix);
 
             // Create mutex based on unique application Id to check if this is the first instance of the application. 
             bool firstInstance;
@@ -194,10 +194,10 @@ namespace System.Shell
                 // As a workaround commandline arguments can be written to a shared location before 
                 // the app is launched and the app can obtain its commandline arguments from the 
                 // shared location               
-                string appFolderPath = Path.Combine(
+                var appFolderPath = Path.Combine(
                     Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), uniqueApplicationName);
 
-                string cmdLinePath = Path.Combine(appFolderPath, "cmdline.txt");
+                var cmdLinePath = Path.Combine(appFolderPath, "cmdline.txt");
                 if (File.Exists(cmdLinePath))
                 {
                     try
@@ -229,7 +229,7 @@ namespace System.Shell
         /// <param name="channelName">Application's IPC channel name.</param>
         private void CreateRemoteService(string channelName)
         {
-            BinaryServerFormatterSinkProvider serverProvider = new BinaryServerFormatterSinkProvider();
+            var serverProvider = new BinaryServerFormatterSinkProvider();
             serverProvider.TypeFilterLevel = TypeFilterLevel.Full;
             IDictionary props = new Dictionary<string, string>();
 
@@ -258,10 +258,10 @@ namespace System.Shell
         /// </param>
         private static void SignalFirstInstance(string channelName, string[] args)
         {
-            IpcClientChannel secondInstanceChannel = new IpcClientChannel();
+            var secondInstanceChannel = new IpcClientChannel();
             ChannelServices.RegisterChannel(secondInstanceChannel, true);
 
-            string remotingServiceUrl = IpcProtocol + channelName + "/" + RemoteServiceName;
+            var remotingServiceUrl = IpcProtocol + channelName + "/" + RemoteServiceName;
 
             // Obtain a reference to the remoting service exposed by the server i.e the first instance of the application
             var firstInstanceRemoteServiceReference = (MicrosoftSingleInstanceProvider)
@@ -301,10 +301,10 @@ namespace System.Shell
 
             public static string[] CommandLineToArgvW(string cmdLine)
             {
-                IntPtr argv = IntPtr.Zero;
+                var argv = IntPtr.Zero;
                 try
                 {
-                    int numArgs = 0;
+                    var numArgs = 0;
 
                     argv = _CommandLineToArgvW(cmdLine, out numArgs);
                     if (argv == IntPtr.Zero)
@@ -313,9 +313,9 @@ namespace System.Shell
                     }
                     var result = new string[numArgs];
 
-                    for (int i = 0; i < numArgs; i++)
+                    for (var i = 0; i < numArgs; i++)
                     {
-                        IntPtr currArg = Marshal.ReadIntPtr(argv, i * Marshal.SizeOf(typeof(IntPtr)));
+                        var currArg = Marshal.ReadIntPtr(argv, i * Marshal.SizeOf(typeof(IntPtr)));
                         result[i] = Marshal.PtrToStringUni(currArg);
                     }
 
@@ -324,7 +324,7 @@ namespace System.Shell
                 finally
                 {
 
-                    IntPtr p = _LocalFree(argv);
+                    var p = _LocalFree(argv);
                     // Otherwise LocalFree failed.
                     // Assert.AreEqual(IntPtr.Zero, p);
                 }
