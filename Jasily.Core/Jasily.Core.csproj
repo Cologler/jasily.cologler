@@ -46,6 +46,7 @@
     <Compile Include="ComponentModel\JasilyINotifyPropertyChanged.cs" />
     <Compile Include="ComponentModel\JasilyViewModel.cs" />
     <Compile Include="ComponentModel\NotifyPropertyChangedObject.cs" />
+    <Compile Include="Diagnostics\DebugPro.cs" />
     <Compile Include="IO\JasilyStream.cs" />
     <Compile Include="IO\JasilyStringReader.cs" />
     <Compile Include="IO\MemoryTributary.cs" />

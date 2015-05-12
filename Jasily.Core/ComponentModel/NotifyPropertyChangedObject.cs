@@ -6,12 +6,12 @@ namespace System.ComponentModel
 {
     public class NotifyPropertyChangedObject : INotifyPropertyChanged
     {
-        object SyncRootForEndRefresh = new object();
-        List<string> RegisteredPropertyForEndRefresh;
+        readonly object _syncRootForEndRefresh = new object();
+        readonly List<string> _registeredPropertyForEndRefresh;
 
         public NotifyPropertyChangedObject()
         {
-            RegisteredPropertyForEndRefresh = new List<string>();
+            _registeredPropertyForEndRefresh = new List<string>();
         }
 
         /// <summary>
@@ -24,8 +24,8 @@ namespace System.ComponentModel
             if (typeof(T).FullName != this.GetType().FullName)
                 throw new NotSupportedException("type of source in propertySelector must be current type.");
 
-            lock (SyncRootForEndRefresh)
-                RegisteredPropertyForEndRefresh.Add(propertySelector.PropertySelector());
+            lock (_syncRootForEndRefresh)
+                _registeredPropertyForEndRefresh.Add(propertySelector.PropertySelector());
         }
 
         /// <summary>
@@ -33,14 +33,14 @@ namespace System.ComponentModel
         /// </summary>
         public void EndRefresh()
         {
-            if (this.RegisteredPropertyForEndRefresh.Count > 0)
+            if (this._registeredPropertyForEndRefresh.Count > 0)
             {
-                lock (SyncRootForEndRefresh)
+                lock (_syncRootForEndRefresh)
                 {
-                    if (this.RegisteredPropertyForEndRefresh.Count > 0)
+                    if (this._registeredPropertyForEndRefresh.Count > 0)
                     {
-                        this.NotifyPropertyChanged(this.RegisteredPropertyForEndRefresh);
-                        this.RegisteredPropertyForEndRefresh.Clear();
+                        this.NotifyPropertyChanged(this._registeredPropertyForEndRefresh);
+                        this._registeredPropertyForEndRefresh.Clear();
                     }
                 }
             }

@@ -55,6 +55,14 @@ namespace System.Net
             return await task.Task;
         }
 
+        public static async Task SendAsync(this HttpWebRequest request, Stream input)
+        {
+            using (var stream = await request.GetRequestStreamAsync())
+            {
+                await input.CopyToAsync(stream);
+            }
+        }
+
         public static async Task<WebResult> GetResultAsync(this HttpWebRequest request)
         {
             try
@@ -97,11 +105,8 @@ namespace System.Net
         {
             try
             {
-                using (var stream = await request.GetRequestStreamAsync())
-                {
-                    await input.CopyToAsync(stream);
-                    return await request.GetResultAsync();
-                }
+                await request.SendAsync(input);
+                return await request.GetResultAsync();
             }
             catch (WebException e)
             {
@@ -113,11 +118,8 @@ namespace System.Net
         {
             try
             {
-                using (var stream = await request.GetRequestStreamAsync())
-                {
-                    await input.CopyToAsync(stream);
-                    return await request.GetResultAsync<T>(selector);
-                }
+                await request.SendAsync(input);
+                return await request.GetResultAsync<T>(selector);
             }
             catch (WebException e)
             {
