@@ -84,5 +84,10 @@ namespace System
             else
                 return def();
         }
+
+        public static T Cast<T>(this object obj)
+        {
+            return (T) obj;
+        }
     }
 }

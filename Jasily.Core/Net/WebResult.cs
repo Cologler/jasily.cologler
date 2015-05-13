@@ -10,18 +10,26 @@ namespace System.Net
     {
         public WebResult()
         {
-            IsSuccess = true;
+            Type = WebResultType.Succeed;
         }
 
         public WebResult(WebException e)
         {
-            IsSuccess = false;
-            Exception = e;
+            Type = WebResultType.WebException;
+            WebException = e;
         }
 
-        public bool IsSuccess { get; private set; }
+        public bool IsSuccess
+        {
+            get { return this.Type == WebResultType.Succeed; }
+        }
 
-        public WebException Exception { get; private set; }
+        public WebResultType Type { get; protected set; }
+
+        /// <summary>
+        /// return null if this.Type != WebResultType.WebException
+        /// </summary>
+        public WebException WebException { get; private set; }
     }
 
     public class WebResult<T> : WebResult
@@ -29,7 +37,7 @@ namespace System.Net
         public WebResult(T result)
             : base()
         {
-            Result = result;
+            this.Result = result;
         }
 
         public WebResult(WebException e)
@@ -38,5 +46,7 @@ namespace System.Net
         }
 
         public T Result { get; private set; }
+
+        public byte[] OriginBody { get; private set; }
     }
 }
