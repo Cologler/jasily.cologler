@@ -42,11 +42,13 @@
     <Compile Include="Collections\Generic\IJasilyTryGetValue.cs" />
     <Compile Include="Collections\Generic\JasilyDictionary.cs" />
     <Compile Include="Collections\Generic\NameValuePair.cs" />
+    <Compile Include="Collections\ObjectModel\JasilyCollection.cs" />
     <Compile Include="Collections\ObjectModel\ObservableCollectionGroup.cs" />
     <Compile Include="ComponentModel\JasilyINotifyPropertyChanged.cs" />
     <Compile Include="ComponentModel\JasilyViewModel.cs" />
     <Compile Include="ComponentModel\NotifyPropertyChangedObject.cs" />
     <Compile Include="Diagnostics\DebugPro.cs" />
+    <Compile Include="IBuilder.cs" />
     <Compile Include="ICloneable.cs" />
     <Compile Include="IO\JasilyStream.cs" />
     <Compile Include="IO\JasilyStringReader.cs" />
@@ -60,6 +62,7 @@
     <Compile Include="JasilyThrow.cs" />
     <Compile Include="JasilyWeakReference.cs" />
     <Compile Include="IO\SeekableStringReader.cs" />
+    <Compile Include="Net\HttpUriBuilder.cs" />
     <Compile Include="Net\WebResult.cs" />
     <Compile Include="Net\WebResultType.cs" />
     <Compile Include="Runtime\Serialization\Json\JasilyDataContractJsonSerializer.cs" />

@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
 using System.Runtime.Serialization.Json;
 using System.Xml.Serialization;
@@ -127,6 +128,11 @@ namespace System.Net
             }
         }
 
+        public static async Task<WebResult<string>> SendAndGetResultAsTextAsync(this HttpWebRequest request, Stream input)
+        {
+            return await request.SendAndGetResultAsync(input, AsText);
+        }
+
         public static async Task<WebResult<T>> SendAndGetResultAsJsonAsync<T>(this HttpWebRequest request, Stream input)
         {
             return await request.SendAndGetResultAsync(input, AsJson<T>);
@@ -165,6 +171,13 @@ namespace System.Net
         private static T AsXml<T>(Stream input)
         {
             return input.XmlToObject<T>();
+        }
+
+        private static string AsText(Stream input)
+        {
+            var text = input.ToArray().GetString();
+            Debug.WriteLineIf(true, text);
+            return text;
         }
     }
 }

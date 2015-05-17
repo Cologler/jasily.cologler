@@ -9,19 +9,22 @@ namespace System.Xml.Serialization
     {
         public static T XmlToObject<T>(this System.IO.Stream stream)
         {
+#if DEBUG
+            var bytes = stream.ToArray();
+            stream = bytes.ToMemoryStream();
+#endif
+
             try
             {
-#if DEBUG
-                var bytes = stream.ToArray();
-                Debug.WriteLineIf(true, bytes.GetString());
-                stream = bytes.ToMemoryStream();
-#endif
                 var serializer = new System.Xml.Serialization.XmlSerializer(typeof(T));
                 var obj = (T)serializer.Deserialize(stream);
                 return obj;
             }
             catch (Exception)
             {
+#if DEBUG
+                Debug.WriteLine("XmlToObject() failed: {0}", bytes.GetString());
+#endif
                 throw;
             }
         }
@@ -50,8 +53,7 @@ namespace System.Xml.Serialization
             {
                 var serializer = new System.Xml.Serialization.XmlSerializer(obj.GetType());
                 serializer.Serialize(ms, obj);
-                var xml = ms.ToArray();
-                return Encoding.UTF8.GetString(xml, 0, xml.Length);
+                return ms.ToArray().GetString();
             }
         }
     }
