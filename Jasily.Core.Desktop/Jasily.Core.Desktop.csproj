@@ -87,6 +87,7 @@
       <Link>Windows\JasilyVisibility.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Windows\Controls\JasilyValidation.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Jasily.Core\Jasily.Core.csproj">
