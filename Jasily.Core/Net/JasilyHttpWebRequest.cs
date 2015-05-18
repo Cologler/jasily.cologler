@@ -175,9 +175,7 @@ namespace System.Net
 
         private static string AsText(Stream input)
         {
-            var text = input.ToArray().GetString();
-            Debug.WriteLineIf(true, text);
-            return text;
+            return input.ToArray().GetString();
         }
     }
 }
