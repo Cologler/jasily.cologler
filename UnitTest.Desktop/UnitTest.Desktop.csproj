@@ -50,6 +50,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Attributes\UnitTestForCloneableAttribute.cs" />
     <Compile Include="ComponentModel\UnitTestForNotifyPropertyChangedObject.cs" />
     <Compile Include="IO\UnitTestForFileSystemTest.cs" />
     <Compile Include="Linq\Expressions\UnitTestForJasilyExpression.cs" />

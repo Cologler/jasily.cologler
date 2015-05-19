@@ -1,8 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace System.Attributes
 {
+    /// <summary>
+    /// 设置指定的属性或字段需要被克隆
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Field | AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
     public class CloneableAttribute : Attribute
     {
@@ -10,7 +14,7 @@ namespace System.Attributes
         {
             var type = typeof (T);
             var fields = type.GetRuntimeFields();
-            foreach (var fieldInfo in fields)
+            foreach (var fieldInfo in fields.Where(z => !z.IsStatic))
             {
                 var attr = fieldInfo.GetCustomAttribute<CloneableAttribute>();
                 if (attr != null)
@@ -19,7 +23,7 @@ namespace System.Attributes
                 }
             }
             var properties = type.GetRuntimeProperties();
-            foreach (var propertyInfo in properties)
+            foreach (var propertyInfo in properties.Where(z => z.CanRead && z.CanWrite))
             {
                 var attr = propertyInfo.GetCustomAttribute<CloneableAttribute>();
                 if (attr != null)
