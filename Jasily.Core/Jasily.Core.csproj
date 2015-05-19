@@ -39,6 +39,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActivatorPro.cs" />
+    <Compile Include="Attributes\CloneableAttribute.cs" />
     <Compile Include="Collections\Generic\IJasilyTryGetValue.cs" />
     <Compile Include="Collections\Generic\JasilyDictionary.cs" />
     <Compile Include="Collections\Generic\NameValuePair.cs" />
