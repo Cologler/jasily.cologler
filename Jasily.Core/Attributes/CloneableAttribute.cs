@@ -5,7 +5,7 @@ using System.Reflection;
 namespace System.Attributes
 {
     /// <summary>
-    /// 设置指定的属性或字段需要被克隆
+    /// 设置指定的属性或字段需要被浅表克隆
     /// </summary>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Field | AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
     public class CloneableAttribute : Attribute

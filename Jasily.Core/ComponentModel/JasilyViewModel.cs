@@ -7,11 +7,17 @@ namespace System.ComponentModel
 
     public class JasilyViewModel<TSource> : JasilyViewModel
     {
+        private TSource _source;
+
         public JasilyViewModel(TSource source)
         {
             Source = source;
         }
 
-        public TSource Source { get; private set; }
+        public TSource Source
+        {
+            get { return _source; }
+            set { SetPropertyRef(ref _source, value); }
+        }
     }
 }
