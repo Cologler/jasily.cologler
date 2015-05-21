@@ -57,6 +57,7 @@
     <Compile Include="IO\MemoryTributary.cs" />
     <Compile Include="IO\MergeReadonlyStream.cs" />
     <Compile Include="JasilyByte.cs" />
+    <Compile Include="JasilyChar.cs" />
     <Compile Include="JasilyEvent.cs" />
     <Compile Include="JasilyException.cs" />
     <Compile Include="JasilyObject.cs" />

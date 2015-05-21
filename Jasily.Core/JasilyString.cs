@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace System
@@ -63,6 +64,18 @@ namespace System
         public static string AsLines(this IEnumerable<string> texts, string spliter = "\r\n")
         {
             return String.Join(spliter, texts);
+        }
+
+        /// <summary>
+        /// repeat this like ( string * int ) in python
+        /// </summary>
+        /// <param name="str"></param>
+        /// <param name="count"></param>
+        /// <exception cref="System.ArgumentOutOfRangeException">count &lt; 0</exception>
+        /// <returns></returns>
+        public static string Repeat(this string str, int count)
+        {
+            return str == null ? null : string.Concat(Enumerable.Repeat(str, count));
         }
     }
 }
