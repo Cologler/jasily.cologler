@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ namespace System.Net
 
         public WebResult(WebException e)
         {
+            if (e == null) throw new ArgumentNullException("e");
             Type = WebResultType.WebException;
             WebException = e;
         }
@@ -37,6 +39,8 @@ namespace System.Net
         public WebResult(T result)
             : base()
         {
+            Debug.Assert(result != null, "if result is null, you should use WebResult, not WebResult<T>");
+
             this.Result = result;
         }
 
@@ -46,6 +50,18 @@ namespace System.Net
         }
 
         public T Result { get; private set; }
+
+        /// <summary>
+        /// throw System.Net.WebException if this.WebException not null.
+        /// </summary>
+        /// <exception cref="System.Net.WebException"></exception>
+        /// <returns></returns>
+        public T GetResultOrThrow()
+        {
+            if (this.WebException != null)
+                throw this.WebException;
+            return Result;
+        }
 
         public byte[] OriginBody { get; private set; }
     }

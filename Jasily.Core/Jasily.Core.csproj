@@ -66,6 +66,7 @@
     <Compile Include="JasilyWeakReference.cs" />
     <Compile Include="IO\SeekableStringReader.cs" />
     <Compile Include="Net\HttpUriBuilder.cs" />
+    <Compile Include="Net\JasilyWebResult.cs" />
     <Compile Include="Net\WebResult.cs" />
     <Compile Include="Net\WebResultType.cs" />
     <Compile Include="Runtime\Serialization\Json\JasilyDataContractJsonSerializer.cs" />

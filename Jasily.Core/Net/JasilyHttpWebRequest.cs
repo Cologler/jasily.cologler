@@ -92,6 +92,11 @@ namespace System.Net
             }
         }
 
+        public static async Task<WebResult<byte[]>> GetResultAsBytesAsync(this HttpWebRequest request)
+        {
+            return await request.GetResultAsync(AsBytes);
+        }
+
         public static async Task<WebResult<T>> GetResultAsJsonAsync<T>(this HttpWebRequest request)
         {
             return await request.GetResultAsync(AsJson<T>);
@@ -113,6 +118,11 @@ namespace System.Net
             {
                 return Return(e);
             }
+        }
+
+        public static async Task<WebResult<byte[]>> SendAndGetResultAsBytesAsync(this HttpWebRequest request, Stream input)
+        {
+            return await request.SendAndGetResultAsync(input, AsBytes);
         }
 
         public static async Task<WebResult<T>> SendAndGetResultAsync<T>(this HttpWebRequest request, Stream input, Func<Stream, T> selector)
@@ -176,6 +186,11 @@ namespace System.Net
         private static string AsText(Stream input)
         {
             return input.ToArray().GetString();
+        }
+
+        private static byte[] AsBytes(Stream input)
+        {
+            return input.ToArray();
         }
     }
 }
