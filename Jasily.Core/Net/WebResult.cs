@@ -9,14 +9,49 @@ namespace System.Net
 {
     public class WebResult
     {
-        public WebResult()
+        /// <summary>
+        /// maybe null if not contain response.
+        /// </summary>
+        public WebResponse Response { get; private set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <exception cref="System.ArgumentNullException">if response is null.</exception>
+        /// <param name="response"></param>
+        public WebResult(WebResponse response)
         {
+            if (response == null) throw new ArgumentNullException("response");
+            
             Type = WebResultType.Succeed;
+            Response = response;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="response"></param>
+        /// <exception cref="System.ArgumentNullException">if response or e is null.</exception>
+        /// <param name="e"></param>
+        public WebResult(WebResponse response, WebException e)
+        {
+            if (response == null) throw new ArgumentNullException("response");
+            if (e == null) throw new ArgumentNullException("e");
+
+            Type = WebResultType.WebException;
+            Response = response;
+            WebException = e;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <exception cref="System.ArgumentNullException">if e is null.</exception>
+        /// <param name="e"></param>
         public WebResult(WebException e)
         {
             if (e == null) throw new ArgumentNullException("e");
+
             Type = WebResultType.WebException;
             WebException = e;
         }
@@ -36,12 +71,17 @@ namespace System.Net
 
     public class WebResult<T> : WebResult
     {
-        public WebResult(T result)
-            : base()
+        public WebResult(WebResponse response, T result)
+            : base(response)
         {
-            Debug.Assert(result != null, "if result is null, you should use WebResult, not WebResult<T>");
+            Debug.Assert(result != null, "if result is null, you should use WebResult, not WebResult<T>.");
 
             this.Result = result;
+        }
+
+        public WebResult(WebResponse response, WebException e)
+            : base(response, e)
+        {
         }
 
         public WebResult(WebException e)
@@ -60,9 +100,8 @@ namespace System.Net
         {
             if (this.WebException != null)
                 throw this.WebException;
+
             return Result;
         }
-
-        public byte[] OriginBody { get; private set; }
     }
 }

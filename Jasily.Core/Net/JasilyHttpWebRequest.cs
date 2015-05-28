@@ -68,27 +68,29 @@ namespace System.Net
         {
             try
             {
-                await request.GetResponseAsync();
-                return Return();
+                return new WebResult(await request.GetResponseAsync());
             }
             catch (WebException e)
             {
-                return Return(e);
+                return new WebResult(e);
             }
         }
 
         public static async Task<WebResult<T>> GetResultAsync<T>(this HttpWebRequest request, Func<Stream, T> selector)
         {
+            WebResponse response = null;
+
             try
             {
-                using (var stream = (await request.GetResponseAsync()).GetResponseStream())
+                response = await request.GetResponseAsync();
+                using (var stream = response.GetResponseStream())
                 {
-                    return Return<T>(selector(stream));
+                    return new WebResult<T>(response, selector(stream));
                 }
             }
             catch (WebException e)
             {
-                return Return<T>(e);
+                return new WebResult<T>(response, e);
             }
         }
 
@@ -97,27 +99,18 @@ namespace System.Net
             return await request.GetResultAsync(AsBytes);
         }
 
-        public static async Task<WebResult<T>> GetResultAsJsonAsync<T>(this HttpWebRequest request)
-        {
-            return await request.GetResultAsync(AsJson<T>);
-        }
-
-        public static async Task<WebResult<T>> GetResultAsXmlAsync<T>(this HttpWebRequest request)
-        {
-            return await request.GetResultAsync(AsXml<T>);
-        }
-
         public static async Task<WebResult> SendAndGetResultAsync(this HttpWebRequest request, Stream input)
         {
             try
             {
                 await request.SendAsync(input);
-                return await request.GetResultAsync();
             }
             catch (WebException e)
             {
-                return Return(e);
+                return new WebResult(e);
             }
+
+            return await request.GetResultAsync();
         }
 
         public static async Task<WebResult<byte[]>> SendAndGetResultAsBytesAsync(this HttpWebRequest request, Stream input)
@@ -134,58 +127,8 @@ namespace System.Net
             }
             catch (WebException e)
             {
-                return Return<T>(e);
+                return new WebResult<T>(e);
             }
-        }
-
-        public static async Task<WebResult<string>> SendAndGetResultAsTextAsync(this HttpWebRequest request, Stream input)
-        {
-            return await request.SendAndGetResultAsync(input, AsText);
-        }
-
-        public static async Task<WebResult<T>> SendAndGetResultAsJsonAsync<T>(this HttpWebRequest request, Stream input)
-        {
-            return await request.SendAndGetResultAsync(input, AsJson<T>);
-        }
-
-        public static async Task<WebResult<T>> SendAndGetResultAsXmlAsync<T>(this HttpWebRequest request, Stream input)
-        {
-            return await request.SendAndGetResultAsync(input, AsXml<T>);
-        }
-
-        private static WebResult Return()
-        {
-            return new WebResult();
-        }
-
-        private static WebResult Return(WebException e)
-        {
-            return new WebResult(e);
-        }
-
-        private static WebResult<T> Return<T>(T r)
-        {
-            return new WebResult<T>(r);
-        }
-
-        private static WebResult<T> Return<T>(WebException e)
-        {
-            return new WebResult<T>(e);
-        }
-
-        private static T AsJson<T>(Stream input)
-        {
-            return input.JsonToObject<T>();
-        }
-
-        private static T AsXml<T>(Stream input)
-        {
-            return input.XmlToObject<T>();
-        }
-
-        private static string AsText(Stream input)
-        {
-            return input.ToArray().GetString();
         }
 
         private static byte[] AsBytes(Stream input)

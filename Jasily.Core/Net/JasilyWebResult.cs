@@ -10,7 +10,7 @@ namespace System.Net
         {
             try
             {
-                return new WebResult<string>(webResult.GetResultOrThrow().GetString());
+                return new WebResult<string>(webResult.Response, webResult.GetResultOrThrow().GetString());
             }
             catch (WebException e)
             {
@@ -22,7 +22,7 @@ namespace System.Net
         {
             try
             {
-                return new WebResult<T>(webResult.GetResultOrThrow().XmlToObject<T>());
+                return new WebResult<T>(webResult.Response, webResult.GetResultOrThrow().XmlToObject<T>());
             }
             catch (WebException e)
             {
@@ -34,7 +34,7 @@ namespace System.Net
         {
             try
             {
-                return new WebResult<T>(webResult.GetResultOrThrow().JsonToObject<T>());
+                return new WebResult<T>(webResult.Response, webResult.GetResultOrThrow().JsonToObject<T>());
             }
             catch (WebException e)
             {
@@ -46,7 +46,7 @@ namespace System.Net
         {
             try
             {
-                return new WebResult<TOut>(selector(webResult.GetResultOrThrow()));
+                return new WebResult<TOut>(webResult.Response, selector(webResult.GetResultOrThrow()));
             }
             catch (WebException e)
             {
