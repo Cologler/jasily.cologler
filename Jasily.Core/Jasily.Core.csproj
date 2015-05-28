@@ -42,6 +42,7 @@
     <Compile Include="Attributes\CloneableAttribute.cs" />
     <Compile Include="Collections\Generic\IJasilyTryGetValue.cs" />
     <Compile Include="Collections\Generic\JasilyDictionary.cs" />
+    <Compile Include="Collections\Generic\JasilyICollection.cs" />
     <Compile Include="Collections\Generic\NameValuePair.cs" />
     <Compile Include="Collections\ObjectModel\JasilyCollection.cs" />
     <Compile Include="Collections\ObjectModel\ObservableCollectionGroup.cs" />
