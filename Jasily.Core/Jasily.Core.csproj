@@ -50,6 +50,7 @@
     <Compile Include="ComponentModel\JasilyViewModel.cs" />
     <Compile Include="ComponentModel\NotifyPropertyChangedObject.cs" />
     <Compile Include="Diagnostics\DebugPro.cs" />
+    <Compile Include="EventArgs.cs" />
     <Compile Include="IBuilder.cs" />
     <Compile Include="ICloneable.cs" />
     <Compile Include="ICopy.cs" />
