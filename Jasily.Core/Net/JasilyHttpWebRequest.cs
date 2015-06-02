@@ -90,7 +90,10 @@ namespace System.Net
             }
             catch (WebException e)
             {
-                return new WebResult<T>(response, e);
+                if (response == null)
+                    return new WebResult<T>(e);
+                else
+                    return new WebResult<T>(response, e);
             }
         }
 
