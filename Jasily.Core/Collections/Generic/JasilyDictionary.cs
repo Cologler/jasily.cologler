@@ -19,5 +19,19 @@ namespace System.Collections.Generic
             TValue r;
             return obj.TryGetValue(key, out r) ? selector(r) : defaultValue;
         }
+
+        public static TValue GetValueOrSetDefault<TKey, TValue>(
+            this IDictionary<TKey, TValue> obj, TKey key,
+            Func<TValue> defaultValueFunc)
+        {
+            TValue r;
+
+            if (!obj.TryGetValue(key, out r))
+            {
+                obj.Add(key, r = defaultValueFunc());
+            }
+
+            return r;
+        }
     }
 }

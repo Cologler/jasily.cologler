@@ -14,12 +14,20 @@ namespace System.Windows
         {
             return dispatcher.BeginInvoke(a, null);
         }
+        public static System.Windows.Threading.DispatcherOperation BeginInvoke<T>(this System.Windows.Threading.Dispatcher dispatcher, Action<T> a, T arg)
+        {
+            return dispatcher.BeginInvoke(a, arg);
+        }
+        public static System.Windows.Threading.DispatcherOperation BeginInvoke<T1, T2>(this System.Windows.Threading.Dispatcher dispatcher, Action<T1, T2> a, T1 arg1, T2 arg2)
+        {
+            return dispatcher.BeginInvoke(a, arg1, arg2);
+        }
 
         /// <summary>
         /// get UI dispatcher
         /// </summary>
         /// <returns></returns>
-        public static System.Windows.Threading.Dispatcher GetDispatcher()
+        public static System.Windows.Threading.Dispatcher GetUIDispatcher(this object obj)
         {
             return global::System.Windows.Application.Current.Dispatcher;
         }
