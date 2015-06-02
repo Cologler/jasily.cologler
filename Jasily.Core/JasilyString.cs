@@ -77,5 +77,29 @@ namespace System
         {
             return str == null ? null : string.Concat(Enumerable.Repeat(str, count));
         }
+
+        public static string FirstLine(this string source)
+        {
+            if (source == null)
+                return null;
+
+            var index = source.IndexOf('\n');
+
+            if (index == -1)
+            {
+                return source;
+            }
+            else
+            {
+                if (index > 0 && source[index - 1] == '\r')
+                {
+                    return source.Substring(0, index - 1);
+                }
+                else
+                {
+                    return source.Substring(0, index);
+                }
+            }
+        }
     }
 }
