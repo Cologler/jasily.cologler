@@ -14,9 +14,22 @@ namespace System.Windows
         {
             return dispatcher.BeginInvoke(a, null);
         }
+
+        /// <summary>
+        /// get UI dispatcher
+        /// </summary>
+        /// <returns></returns>
+        public static System.Windows.Threading.Dispatcher GetDispatcher()
+        {
+            return global::System.Windows.Application.Current.Dispatcher;
+        }
 #endif
 
 #if WINDOWS_PHONE_80
+        /// <summary>
+        /// get UI dispatcher
+        /// </summary>
+        /// <returns></returns>
         public static System.Windows.Threading.Dispatcher GetDispatcher()
         {
             return Deployment.Current.Dispatcher;
