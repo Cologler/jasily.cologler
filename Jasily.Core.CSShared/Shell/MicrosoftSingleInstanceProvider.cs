@@ -10,6 +10,7 @@ using System.Windows;
 using System.Security;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
+using System.Reflection;
 
 // ========================
 // source from http://blogs.microsoft.co.il/blogs/arik/SingleInstance.cs.txt
@@ -18,6 +19,7 @@ using System.ComponentModel;
 // ------------
 // HOW TO USE
 // ------------
+// [Guid("XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX")]
 // class App : Application, ISingleInstanceApp
 // {
 //     protected override void OnStartup(StartupEventArgs e)
@@ -55,6 +57,12 @@ namespace System.Shell
         public MicrosoftSingleInstanceProvider(TApplication app)
         {
             this.App = app.ThrowIfNull("app");
+        }
+
+        public bool InitializeAsFirstInstance()
+        {
+            var type = typeof (TApplication);
+            return base.InitializeAsFirstInstance(type.GUID.ToString());
         }
 
         public override void Callback(string[] args)
@@ -117,6 +125,8 @@ namespace System.Shell
 
         #endregion
 
+        public bool IsFirstInstance { get; private set; }
+
         public virtual void Callback(string[] args)
         {
 
@@ -143,10 +153,12 @@ namespace System.Shell
             singleInstanceMutex = new Mutex(true, applicationIdentifier, out firstInstance);
             if (firstInstance)
             {
+                IsFirstInstance = true;
                 CreateRemoteService(channelName);
             }
             else
             {
+                IsFirstInstance = false;
                 SignalFirstInstance(channelName, commandLineArgs);
             }
 
