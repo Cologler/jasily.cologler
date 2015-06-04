@@ -30,22 +30,6 @@ namespace System.Net
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="response"></param>
-        /// <exception cref="System.ArgumentNullException">if response or e is null.</exception>
-        /// <param name="e"></param>
-        public WebResult(WebResponse response, WebException e)
-        {
-            if (response == null) throw new ArgumentNullException("response");
-            if (e == null) throw new ArgumentNullException("e");
-
-            Type = WebResultType.WebException;
-            Response = response;
-            WebException = e;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
         /// <exception cref="System.ArgumentNullException">if e is null.</exception>
         /// <param name="e"></param>
         public WebResult(WebException e)
@@ -54,6 +38,7 @@ namespace System.Net
 
             Type = WebResultType.WebException;
             WebException = e;
+            Response = e.Response;
         }
 
         public bool IsSuccess
@@ -77,11 +62,6 @@ namespace System.Net
             Debug.Assert(result != null, "if result is null, you should use WebResult, not WebResult<T>.");
 
             this.Result = result;
-        }
-
-        public WebResult(WebResponse response, WebException e)
-            : base(response, e)
-        {
         }
 
         public WebResult(WebException e)

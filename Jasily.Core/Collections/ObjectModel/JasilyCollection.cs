@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace System.Collections.ObjectModel
 {
@@ -10,6 +11,11 @@ namespace System.Collections.ObjectModel
             {
                 self.Add(item);
             }
+        }
+
+        public static int Remove<T>(this Collection<T> self, IEnumerable<T> collection)
+        {
+            return collection.Count(self.Remove);
         }
     }
 }

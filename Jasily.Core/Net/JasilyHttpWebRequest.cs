@@ -78,11 +78,9 @@ namespace System.Net
 
         public static async Task<WebResult<T>> GetResultAsync<T>(this HttpWebRequest request, Func<Stream, T> selector)
         {
-            WebResponse response = null;
-
             try
             {
-                response = await request.GetResponseAsync();
+                var response = await request.GetResponseAsync();
                 using (var stream = response.GetResponseStream())
                 {
                     return new WebResult<T>(response, selector(stream));
@@ -90,10 +88,7 @@ namespace System.Net
             }
             catch (WebException e)
             {
-                if (response == null)
-                    return new WebResult<T>(e);
-                else
-                    return new WebResult<T>(response, e);
+                return new WebResult<T>(e);
             }
         }
 

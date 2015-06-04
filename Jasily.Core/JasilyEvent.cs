@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace System
 {
@@ -85,6 +86,19 @@ namespace System
                 foreach (var arg in args)
                     e(sender, arg);
             }
+        }
+
+        /// <summary>
+        /// if e != null, call e() with arg
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="e"></param>
+        /// <param name="sender"></param>
+        /// <param name="arg"></param>
+        public static async Task FireAsync<T>(this EventHandler<T> e, object sender, T arg)
+        {
+            if (e != null)
+                await Task.Run(() => e(sender, arg));
         }
     }
 }
