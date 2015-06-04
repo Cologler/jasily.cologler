@@ -1,6 +1,6 @@
 ﻿namespace System.Enums
 {
-    public enum ObjectOperationType
+    public enum ObjectChangedAction
     {
         Create,
 

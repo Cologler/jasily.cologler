@@ -1,6 +1,6 @@
 ﻿namespace System.Enums
 {
-    public enum PropertyOperationType
+    public enum PropertyChangedAction
     {
         Get,
 

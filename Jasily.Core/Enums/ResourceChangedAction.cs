@@ -1,6 +1,6 @@
 ﻿namespace System.Enums
 {
-    public enum ResourceOperationType
+    public enum ResourceChangedAction
     {
         Take,
 
