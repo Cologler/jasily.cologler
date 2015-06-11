@@ -8,6 +8,18 @@ namespace System.Collections.Generic
 
     public static class JasilyIJasilyTryGetValue
     {
+        public static TValue? GetValueOrNull<TKey, TValue>(this IJasilyTryGetValue<TKey, TValue> obj, TKey key)
+            where TValue : struct
+        {
+            TValue r;
+
+            if (obj.TryGetValue(key, out r))
+                return r;
+            else
+                return null;
+        }
+
+
         public static TValue GetValueOrDefault<TKey, TValue>(
             this IJasilyTryGetValue<TKey, TValue> obj, TKey key,
             TValue defaultValue = default(TValue))

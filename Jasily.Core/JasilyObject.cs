@@ -38,7 +38,7 @@ namespace System
         /// <typeparam name="T"></typeparam>
         /// <param name="obj"></param>
         /// <param name="action"></param>
-        public static void TypeOf<T>(this object obj, Action<T> action)
+        public static void IfType<T>(this object obj, Action<T> action)
             where T : class
         {
             var t = obj as T;
@@ -55,7 +55,7 @@ namespace System
         /// <param name="selector"></param>
         /// <param name="def"></param>
         /// <returns></returns>
-        public static TOut TypeOf<TIn, TOut>(this object obj, Func<TIn, TOut> selector, TOut def = default(TOut))
+        public static TOut IfType<TIn, TOut>(this object obj, Func<TIn, TOut> selector, TOut def = default(TOut))
             where TIn : class
         {
             var t = obj as TIn;
@@ -74,7 +74,7 @@ namespace System
         /// <param name="selector"></param>
         /// <param name="def"></param>
         /// <returns></returns>
-        public static TOut TypeOf<TIn, TOut>(this object obj, Func<TIn, TOut> selector, Func<TOut> def)
+        public static TOut IfType<TIn, TOut>(this object obj, Func<TIn, TOut> selector, Func<TOut> def)
             where TIn : class
         {
             var t = obj as TIn;

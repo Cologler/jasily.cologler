@@ -42,9 +42,9 @@ namespace System.Text
             return InnerLazyData.Value.ContainsKey(ch);
         }
 
-        public Pinyin this[char ch]
+        public Pinyin? this[char ch]
         {
-            get { return JasilyIJasilyTryGetValue.GetValueOrDefault<char, JasilyPinYin.Pinyin>(this, ch); }
+            get { return this.GetValueOrNull<char, JasilyPinYin.Pinyin>(ch); }
         }
 
         public bool TryGetPinYin(char ch, out Pinyin[] pinyins)
