@@ -13,21 +13,21 @@ namespace System.IO
 
         public MemoryTributary()
         {
-            Position = 0;
+            this.Position = 0;
         }
 
         public MemoryTributary(byte[] source)
         {
             this.Write(source, 0, source.Length);
-            Position = 0;
+            this.Position = 0;
         }
 
         public MemoryTributary(int length)
         {
-            SetLength(length);
-            Position = length;
-            var d = block;   //access block to prompt the allocation of memory
-            Position = 0;
+            this.SetLength(length);
+            this.Position = length;
+            var d = this.block;   //access block to prompt the allocation of memory
+            this.Position = 0;
         }
 
         #endregion
@@ -55,7 +55,7 @@ namespace System.IO
 
         public override long Length
         {
-            get { return length; }
+            get { return this.length; }
         }
 
         public override long Position { get; set; }
@@ -83,9 +83,9 @@ namespace System.IO
         {
             get
             {
-                while (blocks.Count <= blockId)
-                    blocks.Add(new byte[blockSize]);
-                return blocks[(int)blockId];
+                while (this.blocks.Count <= this.blockId)
+                    this.blocks.Add(new byte[this.blockSize]);
+                return this.blocks[(int) this.blockId];
             }
         }
         /// <summary>
@@ -93,14 +93,14 @@ namespace System.IO
         /// </summary>
         protected long blockId
         {
-            get { return Position / blockSize; }
+            get { return this.Position / this.blockSize; }
         }
         /// <summary>
         /// The offset of the byte currently addressed by Position, into the block that contains it
         /// </summary>
         protected long blockOffset
         {
-            get { return Position % blockSize; }
+            get { return this.Position % this.blockSize; }
         }
 
         #endregion
@@ -120,7 +120,7 @@ namespace System.IO
                 throw new ArgumentOutOfRangeException("count", lcount, "Number of bytes to copy cannot be negative.");
             }
 
-            var remaining = (length - Position);
+            var remaining = (this.length - this.Position);
             if (lcount > remaining)
                 lcount = remaining;
 
@@ -137,13 +137,13 @@ namespace System.IO
             long copysize = 0;
             do
             {
-                copysize = Math.Min(lcount, (blockSize - blockOffset));
-                Buffer.BlockCopy(block, (int)blockOffset, buffer, offset, (int)copysize);
+                copysize = Math.Min(lcount, (this.blockSize - this.blockOffset));
+                Buffer.BlockCopy(this.block, (int) this.blockOffset, buffer, offset, (int)copysize);
                 lcount -= copysize;
                 offset += (int)copysize;
 
                 read += (int)copysize;
-                Position += copysize;
+                this.Position += copysize;
 
             } while (lcount > 0);
 
@@ -156,72 +156,72 @@ namespace System.IO
             switch (origin)
             {
                 case SeekOrigin.Begin:
-                    Position = offset;
+                    this.Position = offset;
                     break;
                 case SeekOrigin.Current:
-                    Position += offset;
+                    this.Position += offset;
                     break;
                 case SeekOrigin.End:
-                    Position = Length - offset;
+                    this.Position = this.Length - offset;
                     break;
             }
-            return Position;
+            return this.Position;
         }
 
         public override void SetLength(long value)
         {
-            length = value;
+            this.length = value;
         }
 
         public override void Write(byte[] buffer, int offset, int count)
         {
-            var initialPosition = Position;
+            var initialPosition = this.Position;
             int copysize;
             try
             {
                 do
                 {
-                    copysize = Math.Min(count, (int)(blockSize - blockOffset));
+                    copysize = Math.Min(count, (int)(this.blockSize - this.blockOffset));
 
-                    EnsureCapacity(Position + copysize);
+                    this.EnsureCapacity(this.Position + copysize);
 
-                    Buffer.BlockCopy(buffer, (int)offset, block, (int)blockOffset, copysize);
+                    Buffer.BlockCopy(buffer, (int)offset, this.block, (int) this.blockOffset, copysize);
                     count -= copysize;
                     offset += copysize;
 
-                    Position += copysize;
+                    this.Position += copysize;
 
                 } while (count > 0);
             }
             catch (Exception e)
             {
-                Position = initialPosition;
+                this.Position = initialPosition;
                 throw e;
             }
         }
 
         public override int ReadByte()
         {
-            if (Position >= length)
+            if (this.Position >= this.length)
                 return -1;
 
-            var b = block[blockOffset];
-            Position++;
+            var b = this.block[this.blockOffset];
+            this.Position++;
 
             return b;
         }
 
         public override void WriteByte(byte value)
         {
-            EnsureCapacity(Position + 1);
-            block[blockOffset] = value;
-            Position++;
+            this.EnsureCapacity(this.Position + 1);
+            this.block[this.blockOffset] = value;
+            this.Position++;
         }
 
         protected void EnsureCapacity(long intended_length)
         {
-            if (intended_length > length)
-                length = (intended_length);
+            if (intended_length > this.length)
+                this.length = (intended_length);
         }
 
         #endregion
@@ -246,11 +246,11 @@ namespace System.IO
         /// <returns>A byte[] containing the current data in the stream</returns>
         public byte[] ToArray()
         {
-            var firstposition = Position;
-            Position = 0;
-            var destination = new byte[Length];
-            Read(destination, 0, (int)Length);
-            Position = firstposition;
+            var firstposition = this.Position;
+            this.Position = 0;
+            var destination = new byte[this.Length];
+            this.Read(destination, 0, (int) this.Length);
+            this.Position = firstposition;
             return destination;
         }
 
@@ -278,10 +278,10 @@ namespace System.IO
         /// <param name="destination">The stream to write the content of this stream to</param>
         public void WriteTo(Stream destination)
         {
-            var initialpos = Position;
-            Position = 0;
+            var initialpos = this.Position;
+            this.Position = 0;
             this.CopyTo(destination);
-            Position = initialpos;
+            this.Position = initialpos;
         }
 
         #endregion

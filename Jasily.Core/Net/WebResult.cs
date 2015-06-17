@@ -22,9 +22,9 @@ namespace System.Net
         public WebResult(WebResponse response)
         {
             if (response == null) throw new ArgumentNullException("response");
-            
-            Type = WebResultType.Succeed;
-            Response = response;
+
+            this.Type = WebResultType.Succeed;
+            this.Response = response;
         }
 
         /// <summary>
@@ -36,9 +36,9 @@ namespace System.Net
         {
             if (e == null) throw new ArgumentNullException("e");
 
-            Type = WebResultType.WebException;
-            WebException = e;
-            Response = e.Response;
+            this.Type = WebResultType.WebException;
+            this.WebException = e;
+            this.Response = e.Response;
         }
 
         public bool IsSuccess
@@ -81,7 +81,7 @@ namespace System.Net
             if (this.WebException != null)
                 throw this.WebException;
 
-            return Result;
+            return this.Result;
         }
     }
 }

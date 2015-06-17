@@ -15,7 +15,7 @@ namespace System.Collections.ObjectModel
 
         private CollectionChangedEventArgs(CollectionChangedAction action)
         {
-            Action = action;
+            this.Action = action;
         }
 
         /// <summary>

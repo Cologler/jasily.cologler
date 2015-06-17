@@ -9,24 +9,24 @@ namespace System.IO
 
         public MergeReadonlyStream(IEnumerable<Stream> source)
         {
-            InnerStreams = source.ToArray();
+            this.InnerStreams = source.ToArray();
 
-            if (InnerStreams.Any(z => z == null))
+            if (this.InnerStreams.Any(z => z == null))
                 throw new ArgumentNullException("some stream in source was null.");
         }
 
         public int StreamCount
         {
-            get { return InnerStreams.Length; }
+            get { return this.InnerStreams.Length; }
         }
 
         public override bool CanRead
         {
-            get { return InnerStreams.All(z => z.CanRead); }
+            get { return this.InnerStreams.All(z => z.CanRead); }
         }
         public override bool CanSeek
         {
-            get { return InnerStreams.All(z => z.CanSeek); }
+            get { return this.InnerStreams.All(z => z.CanSeek); }
         }
         public override bool CanWrite
         {
@@ -35,21 +35,21 @@ namespace System.IO
 
         public override void Flush()
         {
-            foreach (var stream in InnerStreams)
+            foreach (var stream in this.InnerStreams)
                 stream.Flush();
         }
 
         public override long Length
         {
-            get { return InnerStreams.Sum(z => z.Length); }
+            get { return this.InnerStreams.Sum(z => z.Length); }
         }
 
         public override long Position
         {
-            get { return InnerStreams.Sum(z => z.Position); }
+            get { return this.InnerStreams.Sum(z => z.Position); }
             set
             {
-                foreach (var i in InnerStreams)
+                foreach (var i in this.InnerStreams)
                 {
                     if (value <= 0)
                         i.Position = 0;
@@ -66,7 +66,7 @@ namespace System.IO
         {
             var total = 0;
 
-            foreach (var i in InnerStreams)
+            foreach (var i in this.InnerStreams)
             {
                 total += i.Read(buffer, offset + total, count - total);
 
@@ -133,7 +133,7 @@ namespace System.IO
 
             }
 
-            foreach (var i in InnerStreams)
+            foreach (var i in this.InnerStreams)
                 i.Dispose();
         }
     }

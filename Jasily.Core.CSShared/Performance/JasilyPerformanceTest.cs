@@ -14,27 +14,27 @@ namespace System.Test.Performance
 
         JasilyPerformanceTest(int listenId)
         {
-            Initialize();
+            this.Initialize();
         }
 
         [Conditional("DEBUG")]
         private void Initialize()
         {
-            Watcher = new Stopwatch();
+            this.Watcher = new Stopwatch();
         }
 
         [Conditional("DEBUG")]
         public void Start()
         {
-            Watcher.Start();
+            this.Watcher.Start();
         }
 
         [Conditional("DEBUG")]
         public void Next(string desc)
         {
-            var time = Last = Watcher.ElapsedMilliseconds - Last;
-            NextEvent.Fire(this, new JasilyPerformanceTestHitEventArgs(desc, time));
-            Watcher.Restart();
+            var time = this.Last = this.Watcher.ElapsedMilliseconds - this.Last;
+            this.NextEvent.Fire(this, new JasilyPerformanceTestHitEventArgs(desc, time));
+            this.Watcher.Restart();
         }
 
         public struct JasilyPerformanceTestHitEventArgs
@@ -44,18 +44,18 @@ namespace System.Test.Performance
 
             public JasilyPerformanceTestHitEventArgs(string desc, long milliseconds)
             {
-                _description = desc;
-                _milliseconds = milliseconds;
+                this._description = desc;
+                this._milliseconds = milliseconds;
             }
 
             public long Milliseconds
             {
-                get { return _milliseconds; }
+                get { return this._milliseconds; }
             }
 
             public string Description
             {
-                get { return _description; }
+                get { return this._description; }
             }
         }
     }

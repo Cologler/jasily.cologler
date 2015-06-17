@@ -18,27 +18,27 @@ namespace System.Performance
 
         public long TimeElapsed
         {
-            get { return _timeElapsed; }
+            get { return this._timeElapsed; }
         }
 
         public ulong CPUCycles
         {
-            get { return _cpuCycles; }
+            get { return this._cpuCycles; }
         }
 
         public int Generation0
         {
-            get { return _generation0; }
+            get { return this._generation0; }
         }
 
         public int Generation1
         {
-            get { return _generation1; }
+            get { return this._generation1; }
         }
 
         public int Generation2
         {
-            get { return _generation2; }
+            get { return this._generation2; }
         }
 
         internal CodeTimerResult(long timeElapsed, ulong cpuCycles, int generation0, int generation1, int generation2)

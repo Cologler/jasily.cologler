@@ -24,21 +24,21 @@ namespace System.IO
 
         public ClipboardMonitor(Window window)
         {
-            HandleSource = window;
+            this.HandleSource = window;
         }
 
         public void Begin()
         {
-            WindowHelper = new WindowInteropHelper(HandleSource);
+            this.WindowHelper = new WindowInteropHelper(this.HandleSource);
             AddClipboardFormatListener(this.WindowHelper.Handle);
 
-            HwndSource = HwndSource.FromHwnd(WindowHelper.Handle);
-            HwndSource.AddHook(WndProc);
+            this.HwndSource = HwndSource.FromHwnd(this.WindowHelper.Handle);
+            this.HwndSource.AddHook(this.WndProc);
         }
 
         public void Stop()
         {
-            HwndSource.RemoveHook(WndProc);
+            this.HwndSource.RemoveHook(this.WndProc);
 
             RemoveClipboardFormatListener(this.WindowHelper.Handle);
         }
@@ -47,7 +47,7 @@ namespace System.IO
         {
             if (msg == WM_CLIPBOARDUPDATE)
             {
-                ClipboardUpdated.Fire(this);
+                this.ClipboardUpdated.Fire(this);
             }
 
             return IntPtr.Zero;

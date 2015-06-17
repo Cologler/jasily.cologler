@@ -10,14 +10,14 @@ namespace System.Windows.Controls
         {
             if (node == null)
                 return true;
-
+            
             bool hasError = Validation.GetHasError(node);
 
             if (hasError)
             {
                 if (isFocusErrorControl)
                 {
-                    node.TypeOf<IInputElement, IInputElement>(Keyboard.Focus);
+                    node.IfType<IInputElement, IInputElement>(Keyboard.Focus);
                 }
 
                 return false;

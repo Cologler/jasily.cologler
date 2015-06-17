@@ -11,7 +11,7 @@ namespace System.ComponentModel
 
         public NotifyPropertyChangedObject()
         {
-            _registeredPropertyForEndRefresh = new List<string>();
+            this._registeredPropertyForEndRefresh = new List<string>();
         }
 
         /// <summary>
@@ -24,8 +24,8 @@ namespace System.ComponentModel
             if (typeof(T).FullName != this.GetType().FullName)
                 throw new NotSupportedException("type of source in propertySelector must be current type.");
 
-            lock (_syncRootForEndRefresh)
-                _registeredPropertyForEndRefresh.Add(propertySelector.PropertySelector());
+            lock (this._syncRootForEndRefresh)
+                this._registeredPropertyForEndRefresh.Add(propertySelector.PropertySelector());
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace System.ComponentModel
         {
             if (this._registeredPropertyForEndRefresh.Count > 0)
             {
-                lock (_syncRootForEndRefresh)
+                lock (this._syncRootForEndRefresh)
                 {
                     if (this._registeredPropertyForEndRefresh.Count > 0)
                     {
@@ -55,7 +55,7 @@ namespace System.ComponentModel
             else
             {
                 property = newValue;
-                NotifyPropertyChanged(propertyName);
+                this.NotifyPropertyChanged(propertyName);
                 return true;
             }
         }
@@ -68,22 +68,22 @@ namespace System.ComponentModel
             else
             {
                 property = newValue;
-                NotifyPropertyChanged(propertyNames);
+                this.NotifyPropertyChanged(propertyNames);
                 return true;
             }
         }
 
         protected virtual void NotifyPropertyChanged(string propertyName)
         {
-            PropertyChanged.Fire(this, propertyName);
+            this.PropertyChanged.Fire(this, propertyName);
         }
         protected virtual void NotifyPropertyChanged(params string[] propertyNames)
         {
-            PropertyChanged.Fire(this, propertyNames);
+            this.PropertyChanged.Fire(this, propertyNames);
         }
         protected virtual void NotifyPropertyChanged(IEnumerable<string> propertyNames)
         {
-            PropertyChanged.Fire(this, propertyNames);
+            this.PropertyChanged.Fire(this, propertyNames);
         }
         
         public event PropertyChangedEventHandler PropertyChanged;

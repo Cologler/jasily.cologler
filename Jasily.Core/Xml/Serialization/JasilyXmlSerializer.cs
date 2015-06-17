@@ -7,7 +7,7 @@ namespace System.Xml.Serialization
 {
     public static class JasilyXmlSerializer
     {
-        public static T XmlToObject<T>(this System.IO.Stream stream)
+        public static T XmlToObject<T>(this Stream stream)
         {
 #if DEBUG
             var bytes = stream.ToArray();
@@ -16,7 +16,7 @@ namespace System.Xml.Serialization
 
             try
             {
-                var serializer = new System.Xml.Serialization.XmlSerializer(typeof(T));
+                var serializer = new XmlSerializer(typeof(T));
                 var obj = (T)serializer.Deserialize(stream);
                 return obj;
             }
@@ -31,7 +31,7 @@ namespace System.Xml.Serialization
 
         public static T XmlToObject<T>(this byte[] bytes)
         {
-            using (var ms = new System.IO.MemoryStream(bytes))
+            using (var ms = new MemoryStream(bytes))
             {
                 return ms.XmlToObject<T>();
             }
@@ -51,7 +51,7 @@ namespace System.Xml.Serialization
         {
             using (var ms = new MemoryStream())
             {
-                var serializer = new System.Xml.Serialization.XmlSerializer(obj.GetType());
+                var serializer = new XmlSerializer(obj.GetType());
                 serializer.Serialize(ms, obj);
                 return ms.ToArray().GetString();
             }

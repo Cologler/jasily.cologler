@@ -19,8 +19,8 @@ namespace System.IO
         public SeekableStringReader(string s)
             : base(s)
         {
-            ReadedBuffer = new StringBuilder();
-            _stringLength = s.Length;
+            this.ReadedBuffer = new StringBuilder();
+            this._stringLength = s.Length;
         }
 
         public void Seek(int offset, SeekOrigin origin)
@@ -29,21 +29,21 @@ namespace System.IO
             {
                 case SeekOrigin.Begin:
                     while (offset < 0)
-                        offset += _stringLength;
+                        offset += this._stringLength;
 
-                    while (offset > _stringLength)
-                        offset -= _stringLength;
+                    while (offset > this._stringLength)
+                        offset -= this._stringLength;
 
-                    while (offset > ReadedBuffer.Length)
+                    while (offset > this.ReadedBuffer.Length)
                     {
-                        Read();
+                        this.Read();
                     }
 
-                    _position = offset;
+                    this._position = offset;
                     break;
 
                 case SeekOrigin.Current:
-                    this.Seek(offset + _position, SeekOrigin.Begin);
+                    this.Seek(offset + this._position, SeekOrigin.Begin);
                     break;
 
                 case SeekOrigin.End:
@@ -54,23 +54,23 @@ namespace System.IO
 
         public override int Read()
         {
-            if (ReadedBuffer.Length > _position)
+            if (this.ReadedBuffer.Length > this._position)
             {
-                return (int)ReadedBuffer[_position++];
+                return (int) this.ReadedBuffer[this._position++];
             }
             else
             {
-                return Append(base.Read());
+                return this.Append(base.Read());
             }
         }
 
         public override int Read(char[] buffer, int index, int count)
         {
             var readed = 0;
-            if (ReadedBuffer.Length > _position)
+            if (this.ReadedBuffer.Length > this._position)
             {
-                readed = Math.Min(ReadedBuffer.Length - _position, count);
-                this.ReadedBuffer.CopyTo(_position, buffer, index, readed);
+                readed = Math.Min(this.ReadedBuffer.Length - this._position, count);
+                this.ReadedBuffer.CopyTo(this._position, buffer, index, readed);
             }
             if (readed < count)
             {
@@ -93,15 +93,15 @@ namespace System.IO
 
         public override string ReadToEnd()
         {
-            return Append(base.ReadToEnd());
+            return this.Append(base.ReadToEnd());
         }
 
         private int Append(int ch)
         {
             if (ch != -1)
             {
-                ReadedBuffer.Append((char)ch);
-                _position++;
+                this.ReadedBuffer.Append((char)ch);
+                this._position++;
             }
             return ch;
         }
@@ -110,16 +110,16 @@ namespace System.IO
         {
             if (str != null)
             {
-                ReadedBuffer.Append(str);
-                _position += str.Length;
+                this.ReadedBuffer.Append(str);
+                this._position += str.Length;
             }
             return str;
         }
 
         private void Append(char[] value, int startIndex, int charCount)
         {
-            ReadedBuffer.Append(value, startIndex, charCount);
-            _position += charCount;
+            this.ReadedBuffer.Append(value, startIndex, charCount);
+            this._position += charCount;
         }
     }
 }

@@ -11,22 +11,22 @@ namespace System.Net
 
         public HttpUriBuilder(string uriString)
         {
-            QueryStringParameters = new List<KeyValuePair<string, string>>();
-            _uriString = uriString;
+            this.QueryStringParameters = new List<KeyValuePair<string, string>>();
+            this._uriString = uriString;
         }
 
         public void AddQueryStringParameter(string key, string value)
         {
-            QueryStringParameters.Add(new KeyValuePair<string, string>(key, value));
+            this.QueryStringParameters.Add(new KeyValuePair<string, string>(key, value));
         }
 
         public Uri Build()
         {
-            var parameter = QueryStringParameters.Count == 0
+            var parameter = this.QueryStringParameters.Count == 0
                 ? ""
-                : "?" + String.Join("&", QueryStringParameters.Select(z => WebUtility.UrlEncode(z.Key) + "=" + WebUtility.UrlEncode(z.Value)));
+                : "?" + String.Join("&", this.QueryStringParameters.Select(z => WebUtility.UrlEncode(z.Key) + "=" + WebUtility.UrlEncode(z.Value)));
 
-            return new Uri(_uriString + parameter, UriKind.Absolute);
+            return new Uri(this._uriString + parameter, UriKind.Absolute);
         }
     }
 }

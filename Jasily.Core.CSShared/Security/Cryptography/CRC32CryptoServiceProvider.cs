@@ -17,8 +17,8 @@ namespace System.Security.Cryptography
 
         public CRC32CryptoServiceProvider(uint polynomial)
         {
-            Polynomial = polynomial;
-            Initialize();
+            this.Polynomial = polynomial;
+            this.Initialize();
         }
 
         private static uint[] BuildCRC32Table(uint polynomial)
@@ -44,8 +44,8 @@ namespace System.Security.Cryptography
 
         public override void Initialize()
         {
-            Crc32Table = CRC32CryptoServiceProvider.BuildCRC32Table(Polynomial);
-            Crc32Value = AllOnes;
+            this.Crc32Table = BuildCRC32Table(this.Polynomial);
+            this.Crc32Value = AllOnes;
         }
 
         protected override void HashCore(byte[] buffer, int offset, int count)
@@ -53,16 +53,16 @@ namespace System.Security.Cryptography
             ulong ptr;
             for (var i = offset; i < count; i++)
             {
-                ptr = (Crc32Value & 0xFF) ^ buffer[i];
-                Crc32Value >>= 8;
-                Crc32Value ^= Crc32Table[ptr];
+                ptr = (this.Crc32Value & 0xFF) ^ buffer[i];
+                this.Crc32Value >>= 8;
+                this.Crc32Value ^= this.Crc32Table[ptr];
             }
         }
 
         protected override byte[] HashFinal()
         {
             var finalHash = new byte[4];
-            ulong finalCRC = Crc32Value ^ AllOnes;
+            ulong finalCRC = this.Crc32Value ^ AllOnes;
 
             finalHash[3] = (byte)((finalCRC >> 0) & 0xFF);
             finalHash[2] = (byte)((finalCRC >> 8) & 0xFF);

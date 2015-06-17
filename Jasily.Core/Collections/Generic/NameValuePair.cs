@@ -8,13 +8,13 @@ namespace System.Collections.Generic
         
         public NameValuePair(TName name, TValue value)
         {
-            _name = name;
-            _value = value;
+            this._name = name;
+            this._value = value;
         }
 
-        public TName Name { get { return _name; } }
+        public TName Name { get { return this._name; } }
 
-        public TValue Value { get { return _value; } }
+        public TValue Value { get { return this._value; } }
 
         public override string ToString()
         {

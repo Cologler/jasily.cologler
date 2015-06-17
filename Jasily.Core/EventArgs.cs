@@ -4,7 +4,7 @@
     {
         public EventArgs(T1 value1)
         {
-            Value1 = value1;
+            this.Value1 = value1;
         }
         
         public T1 Value1 { get; private set; }
@@ -26,7 +26,7 @@
         public EventArgs(T1 value1, T2 value2, T3 value3)
             : base(value1, value2)
         {
-            Value3 = value3;
+            this.Value3 = value3;
         }
 
         public T3 Value3 { get; private set; }
@@ -37,7 +37,7 @@
         public EventArgs(T1 value1, T2 value2, T3 value3, T4 value4)
             : base(value1, value2, value3)
         {
-            Value4 = value4;
+            this.Value4 = value4;
         }
 
         public T4 Value4 { get; private set; }
@@ -48,7 +48,7 @@
         public EventArgs(T1 value1, T2 value2, T3 value3, T4 value4, T5 value5)
             : base(value1, value2, value3, value4)
         {
-            Value5 = value5;
+            this.Value5 = value5;
         }
 
         public T5 Value5 { get; private set; }
@@ -59,7 +59,7 @@
         public EventArgs(T1 value1, T2 value2, T3 value3, T4 value4, T5 value5, T6 value6)
             : base(value1, value2, value3, value4, value5)
         {
-            Value6 = value6;
+            this.Value6 = value6;
         }
 
         public T6 Value6 { get; private set; }
@@ -70,7 +70,7 @@
         public EventArgs(T1 value1, T2 value2, T3 value3, T4 value4, T5 value5, T6 value6, T7 value7)
             : base(value1, value2, value3, value4, value5, value6)
         {
-            Value7 = value7;
+            this.Value7 = value7;
         }
 
         public T7 Value7 { get; private set; }

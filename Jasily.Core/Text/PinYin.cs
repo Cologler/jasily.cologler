@@ -6,14 +6,17 @@ using System.Threading;
 
 namespace System.Text
 {
-    public class JasilyPinYin : IJasilyTryGetValue<char, JasilyPinYin.Pinyin[]>, IJasilyTryGetValue<char, JasilyPinYin.Pinyin>
+    /// <summary>
+    /// how to use: http://www.evernote.com/l/ALIpFNbcP99E_5AUADs89Ty1dL2K12obbDU/
+    /// </summary>
+    public class PinYin : ITryGetValue<char, PinYin.Pinyin[]>, ITryGetValue<char, PinYin.Pinyin>
     {
         Lazy<Dictionary<uint, string>> InnerLazyData;
         
-        public JasilyPinYin(string Uni2Pinyin)
+        public PinYin(string Uni2Pinyin)
         {
             var factory = new Func<Dictionary<uint, string>>(() => Init(Uni2Pinyin));
-            InnerLazyData = new Lazy<Dictionary<uint, string>>(factory, LazyThreadSafetyMode.ExecutionAndPublication);
+            this.InnerLazyData = new Lazy<Dictionary<uint, string>>(factory, LazyThreadSafetyMode.ExecutionAndPublication);
         }
 
         private static Dictionary<uint, string> Init(string Uni2Pinyin)
@@ -39,21 +42,21 @@ namespace System.Text
 
         public bool IsChineseChar(char ch)
         {
-            return InnerLazyData.Value.ContainsKey(ch);
+            return this.InnerLazyData.Value.ContainsKey(ch);
         }
 
         public Pinyin? this[char ch]
         {
-            get { return this.GetValueOrNull<char, JasilyPinYin.Pinyin>(ch); }
+            get { return this.GetValueOrNull<char, Pinyin>(ch); }
         }
 
         public bool TryGetPinYin(char ch, out Pinyin[] pinyins)
         {
             string r;
 
-            if (InnerLazyData.Value.TryGetValue(ch, out r))
+            if (this.InnerLazyData.Value.TryGetValue(ch, out r))
             {
-                pinyins = Selector(r);
+                pinyins = this.Selector(r);
                 return true;
             }
             else
@@ -71,7 +74,7 @@ namespace System.Text
         public bool TryGetFirstPinYin(char ch, out Pinyin pinyin)
         {
             Pinyin[] pinyins = null;
-            if (TryGetPinYin(ch, out pinyins))
+            if (this.TryGetPinYin(ch, out pinyins))
             {
                 pinyin = pinyins[0];
                 return true;
@@ -87,15 +90,20 @@ namespace System.Text
         {
             internal Pinyin(string pinyin)
             {
-                PinYin = pinyin.Substring(0, pinyin.Length - 1);
+                this.PinYin = pinyin.Substring(0, pinyin.Length - 1);
 
                 switch (pinyin[pinyin.Length - 1])
                 {
-                    case '1': Tone = ToneType.Tone1; break;
-                    case '2': Tone = ToneType.Tone2; break;
-                    case '3': Tone = ToneType.Tone3; break;
-                    case '4': Tone = ToneType.Tone4; break;
-                    default: Tone = ToneType.Unknown; break;
+                    case '1':
+                        this.Tone = ToneType.Tone1; break;
+                    case '2':
+                        this.Tone = ToneType.Tone2; break;
+                    case '3':
+                        this.Tone = ToneType.Tone3; break;
+                    case '4':
+                        this.Tone = ToneType.Tone4; break;
+                    default:
+                        this.Tone = ToneType.Unknown; break;
                 }
             }
 
@@ -112,14 +120,14 @@ namespace System.Text
             Tone4
         }
 
-        bool IJasilyTryGetValue<char, JasilyPinYin.Pinyin[]>.TryGetValue(char key, out JasilyPinYin.Pinyin[] value)
+        bool ITryGetValue<char, Pinyin[]>.TryGetValue(char key, out Pinyin[] value)
         {
-            return TryGetPinYin(key, out value);
+            return this.TryGetPinYin(key, out value);
         }
 
-        bool IJasilyTryGetValue<char, JasilyPinYin.Pinyin>.TryGetValue(char key, out JasilyPinYin.Pinyin value)
+        bool ITryGetValue<char, Pinyin>.TryGetValue(char key, out Pinyin value)
         {
-            return TryGetFirstPinYin(key, out value);
+            return this.TryGetFirstPinYin(key, out value);
         }
     }
 }

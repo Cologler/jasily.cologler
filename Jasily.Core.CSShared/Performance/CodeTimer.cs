@@ -25,15 +25,15 @@ namespace System.Performance
 
         public void Initialize()
         {
-            CachedProcessPriorityClass = Process.GetCurrentProcess().PriorityClass;
-            CachedThreadPriority = Thread.CurrentThread.Priority;
+            this.CachedProcessPriorityClass = Process.GetCurrentProcess().PriorityClass;
+            this.CachedThreadPriority = Thread.CurrentThread.Priority;
             
             Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High;
             Thread.CurrentThread.Priority = ThreadPriority.Highest;
 
-            IsCachedStatus = true;
+            this.IsCachedStatus = true;
 
-            Time(1, () => { });
+            this.Time(1, () => { });
         }
 
         public CodeTimerResult Time(int iteration, Action action)
@@ -85,8 +85,8 @@ namespace System.Performance
         {
             if (this.IsCachedStatus)
             {
-                Process.GetCurrentProcess().PriorityClass = CachedProcessPriorityClass;
-                Thread.CurrentThread.Priority = CachedThreadPriority;
+                Process.GetCurrentProcess().PriorityClass = this.CachedProcessPriorityClass;
+                Thread.CurrentThread.Priority = this.CachedThreadPriority;
                 this.IsCachedStatus = false;
             }
         }

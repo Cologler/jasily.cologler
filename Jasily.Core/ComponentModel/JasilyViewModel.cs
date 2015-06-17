@@ -11,13 +11,13 @@ namespace System.ComponentModel
 
         public JasilyViewModel(TSource source)
         {
-            Source = source;
+            this.Source = source;
         }
 
         public TSource Source
         {
-            get { return _source; }
-            set { SetPropertyRef(ref _source, value); }
+            get { return this._source; }
+            set { this.SetPropertyRef(ref this._source, value); }
         }
     }
 }

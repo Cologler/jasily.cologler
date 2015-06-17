@@ -31,37 +31,37 @@ namespace System.Text
         {
             if (line == null) throw new ArgumentNullException("line");
 
-            InnerLines.AddRange(line.Split(new string[] {WindowsLineSplit, UnixLineSplit}, StringSplitOptions.None));
+            this.InnerLines.AddRange(line.Split(new string[] {WindowsLineSplit, UnixLineSplit}, StringSplitOptions.None));
         }
 
         public IEnumerator<string> GetEnumerator()
         {
-            return InnerLines.GetEnumerator();
+            return this.InnerLines.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return GetEnumerator();
+            return this.GetEnumerator();
         }
 
         public StringLine PadLeft(int totalWidth)
         {
-            return new StringLine(InnerLines.Select(z => z.PadLeft(totalWidth)));
+            return new StringLine(this.InnerLines.Select(z => z.PadLeft(totalWidth)));
         }
 
         public StringLine PadLeft(int totalWidth, char paddingChar)
         {
-            return new StringLine(InnerLines.Select(z => z.PadLeft(totalWidth, paddingChar)));
+            return new StringLine(this.InnerLines.Select(z => z.PadLeft(totalWidth, paddingChar)));
         }
 
         public StringLine PadRight(int totalWidth)
         {
-            return new StringLine(InnerLines.Select(z => z.PadRight(totalWidth)));
+            return new StringLine(this.InnerLines.Select(z => z.PadRight(totalWidth)));
         }
 
         public StringLine PadRight(int totalWidth, char paddingChar)
         {
-            return new StringLine(InnerLines.Select(z => z.PadRight(totalWidth, paddingChar)));
+            return new StringLine(this.InnerLines.Select(z => z.PadRight(totalWidth, paddingChar)));
         }
     }
 }

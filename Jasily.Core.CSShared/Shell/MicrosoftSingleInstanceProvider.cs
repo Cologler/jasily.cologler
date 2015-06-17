@@ -141,7 +141,7 @@ namespace System.Shell
         /// <returns>True if this is the first instance of the application.</returns>
         public bool InitializeAsFirstInstance(string uniqueName)
         {
-            commandLineArgs = GetCommandLineArgs(uniqueName);
+            this.commandLineArgs = GetCommandLineArgs(uniqueName);
 
             // Build unique application Id and the IPC channel name.
             var applicationIdentifier = uniqueName + Environment.UserName;
@@ -150,16 +150,16 @@ namespace System.Shell
 
             // Create mutex based on unique application Id to check if this is the first instance of the application. 
             bool firstInstance;
-            singleInstanceMutex = new Mutex(true, applicationIdentifier, out firstInstance);
+            this.singleInstanceMutex = new Mutex(true, applicationIdentifier, out firstInstance);
             if (firstInstance)
             {
-                IsFirstInstance = true;
-                CreateRemoteService(channelName);
+                this.IsFirstInstance = true;
+                this.CreateRemoteService(channelName);
             }
             else
             {
-                IsFirstInstance = false;
-                SignalFirstInstance(channelName, commandLineArgs);
+                this.IsFirstInstance = false;
+                SignalFirstInstance(channelName, this.commandLineArgs);
             }
 
             return firstInstance;
@@ -170,16 +170,16 @@ namespace System.Shell
         /// </summary>
         public void Dispose()
         {
-            if (singleInstanceMutex != null)
+            if (this.singleInstanceMutex != null)
             {
-                singleInstanceMutex.Close();
-                singleInstanceMutex = null;
+                this.singleInstanceMutex.Close();
+                this.singleInstanceMutex = null;
             }
 
-            if (channel != null)
+            if (this.channel != null)
             {
-                ChannelServices.UnregisterChannel(channel);
-                channel = null;
+                ChannelServices.UnregisterChannel(this.channel);
+                this.channel = null;
             }
         }
 
@@ -214,7 +214,7 @@ namespace System.Shell
                 {
                     try
                     {
-                        using (TextReader reader = new StreamReader(cmdLinePath, System.Text.Encoding.Unicode))
+                        using (TextReader reader = new StreamReader(cmdLinePath, Text.Encoding.Unicode))
                         {
                             args = NativeMethods.CommandLineToArgvW(reader.ReadToEnd());
                         }
@@ -250,10 +250,10 @@ namespace System.Shell
             props["exclusiveAddressUse"] = "false";
 
             // Create the IPC Server channel with the channel properties
-            channel = new IpcServerChannel(props, serverProvider);
+            this.channel = new IpcServerChannel(props, serverProvider);
 
             // Register the channel with the channel services
-            ChannelServices.RegisterChannel(channel, true);
+            ChannelServices.RegisterChannel(this.channel, true);
 
             // Expose the remote service with the REMOTE_SERVICE_NAME
             RemotingServices.Marshal(this, RemoteServiceName);

@@ -1,14 +1,9 @@
 ﻿
 namespace System.Collections.Generic
 {
-    public interface IJasilyTryGetValue<TKey, TValue>
+    public static class JasilyITryGetValue
     {
-        bool TryGetValue(TKey key, out TValue value);
-    }
-
-    public static class JasilyIJasilyTryGetValue
-    {
-        public static TValue? GetValueOrNull<TKey, TValue>(this IJasilyTryGetValue<TKey, TValue> obj, TKey key)
+        public static TValue? GetValueOrNull<TKey, TValue>(this ITryGetValue<TKey, TValue> obj, TKey key)
             where TValue : struct
         {
             TValue r;
@@ -20,8 +15,7 @@ namespace System.Collections.Generic
         }
 
 
-        public static TValue GetValueOrDefault<TKey, TValue>(
-            this IJasilyTryGetValue<TKey, TValue> obj, TKey key,
+        public static TValue GetValueOrDefault<TKey, TValue>(this ITryGetValue<TKey, TValue> obj, TKey key,
             TValue defaultValue = default(TValue))
         {
             var r = default(TValue);
@@ -33,10 +27,8 @@ namespace System.Collections.Generic
         }
 
 
-        public static TResult GetValueOrDefault<TKey, TValue, TResult>(
-            this IJasilyTryGetValue<TKey, TValue> obj, TKey key,
-            Func<TValue, TResult> selector,
-            TResult defaultValue = default(TResult))
+        public static TResult GetValueOrDefault<TKey, TValue, TResult>(this ITryGetValue<TKey, TValue> obj, TKey key,
+            Func<TValue, TResult> selector, TResult defaultValue = default(TResult))
         {
             var r = default(TValue);
 

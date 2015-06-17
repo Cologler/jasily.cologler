@@ -11,17 +11,17 @@ namespace System.Collections.ObjectModel
         public ObservableCollectionGroup(TKey key)
             : base()
         {
-            _key = key;
+            this._key = key;
         }
         public ObservableCollectionGroup(TKey key, IEnumerable<TElement> collection)
             : base(collection)
         {
-            _key = key;
+            this._key = key;
         }
         public ObservableCollectionGroup(TKey key, List<TElement> list)
             : base(list)
         {
-            _key = key;
+            this._key = key;
         }
         public ObservableCollectionGroup()
             : base()
@@ -38,13 +38,13 @@ namespace System.Collections.ObjectModel
 
         public TKey Key
         {
-            get { return _key; }
+            get { return this._key; }
             set
             {
-                if (!_key.Equals(value))
+                if (!this._key.Equals(value))
                 {
-                    _key = value;
-                    OnPropertyChanged(new PropertyChangedEventArgs("Key"));
+                    this._key = value;
+                    this.OnPropertyChanged(new PropertyChangedEventArgs("Key"));
                 }
             }
         }

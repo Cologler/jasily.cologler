@@ -21,7 +21,7 @@ namespace System.Linq.Expressions
             catch (JasilyException e)
             {
                 if (e.Id == PropertySelectorErrorGuid)
-                    throw new System.NotSupportedException("propertySelector only can select property from current type.");
+                    throw new NotSupportedException("propertySelector only can select property from current type.");
                 else
                     throw;
             }
