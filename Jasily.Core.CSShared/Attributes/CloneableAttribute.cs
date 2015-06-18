@@ -27,13 +27,9 @@ namespace System.Attributes
                 where fieldInfo.GetCustomAttribute<CloneableAttribute>() != null
                 select fieldInfo)
             {
-#if DESKTOP
                 var value = fieldInfo.GetValue(source);
                 var clone = value as ICloneable;
                 fieldInfo.SetValue(dest, clone != null ? clone.Clone() : value);
-#else
-                fieldInfo.SetValue(dest, fieldInfo.GetValue(source));
-#endif
             }
 
             var properties = type.GetRuntimeProperties();
@@ -42,13 +38,9 @@ namespace System.Attributes
                 where propertyInfo.GetCustomAttribute<CloneableAttribute>() != null
                 select propertyInfo)
             {
-#if DESKTOP
                 var value = propertyInfo.GetValue(source);
                 var clone = value as ICloneable;
                 propertyInfo.SetValue(dest, clone != null ? clone.Clone() : value);
-#else
-                propertyInfo.SetValue(dest, propertyInfo.GetValue(source));
-#endif
             }
 
             return dest;

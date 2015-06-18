@@ -6,10 +6,15 @@ using System.Threading.Tasks;
 
 namespace System
 {
-    public interface ICloneable<out T>
-#if DESKTOP
-        : ICloneable
+#if !DESKTOP
+    public interface ICloneable
+    {
+        object Clone();
+    }
 #endif
+
+    public interface ICloneable<out T>
+        : ICloneable
     {
         new T Clone();
     }
