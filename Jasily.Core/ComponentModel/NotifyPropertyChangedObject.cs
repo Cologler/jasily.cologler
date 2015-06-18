@@ -14,6 +14,14 @@ namespace System.ComponentModel
             this._registeredPropertyForEndRefresh = new List<string>();
         }
 
+        private string ParseProperty<T>(Expression<Func<T, object>> propertySelector)
+        {
+            if (typeof(T).FullName != this.GetType().FullName)
+                throw new NotSupportedException("type of source in propertySelector must be current type.");
+
+            return propertySelector.PropertySelector();
+        }
+
         /// <summary>
         /// please always call on background thread.
         /// </summary>
@@ -21,11 +29,8 @@ namespace System.ComponentModel
         /// <param name="propertySelector"></param>
         public void RegisterForEndRefresh<T>(Expression<Func<T, object>> propertySelector)
         {
-            if (typeof(T).FullName != this.GetType().FullName)
-                throw new NotSupportedException("type of source in propertySelector must be current type.");
-
             lock (this._syncRootForEndRefresh)
-                this._registeredPropertyForEndRefresh.Add(propertySelector.PropertySelector());
+                this._registeredPropertyForEndRefresh.Add(this.ParseProperty(propertySelector));
         }
 
         /// <summary>
@@ -73,6 +78,10 @@ namespace System.ComponentModel
             }
         }
 
+        protected virtual void NotifyPropertyChanged<T>(Expression<Func<T, object>> propertySelector)
+        {
+            this.NotifyPropertyChanged(this.ParseProperty(propertySelector));
+        }
         protected virtual void NotifyPropertyChanged(string propertyName)
         {
             this.PropertyChanged.Fire(this, propertyName);

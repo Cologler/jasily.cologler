@@ -13,5 +13,16 @@
             collection.Add(item);
             return item;
         }
+
+        public static bool MoveTo<T>(this ICollection<T> source, T item, ICollection<T> dest)
+        {
+            if (source.Remove(item))
+            {
+                dest.Add(item);
+                return true;
+            }
+
+            return false;
+        }
     }
 }
