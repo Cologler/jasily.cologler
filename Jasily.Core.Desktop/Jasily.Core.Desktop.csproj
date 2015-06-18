@@ -44,6 +44,12 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Jasily.Core.CSShared\Attributes\CloneableAttribute.cs">
+      <Link>Attributes\CloneableAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Jasily.Core.CSShared\ICloneable.cs">
+      <Link>ICloneable.cs</Link>
+    </Compile>
     <Compile Include="..\Jasily.Core.CSShared\IO\ClipboardMonitor.cs">
       <Link>IO\ClipboardMonitor.cs</Link>
     </Compile>
@@ -52,6 +58,9 @@
     </Compile>
     <Compile Include="..\Jasily.Core.CSShared\IO\FileSystemTestType.cs">
       <Link>IO\FileSystemTestType.cs</Link>
+    </Compile>
+    <Compile Include="..\Jasily.Core.CSShared\Net\JasilyHttpWebRequest.cs">
+      <Link>Net\JasilyHttpWebRequest.cs</Link>
     </Compile>
     <Compile Include="..\Jasily.Core.CSShared\Performance\CodeTimer.cs">
       <Link>Performance\CodeTimer.cs</Link>

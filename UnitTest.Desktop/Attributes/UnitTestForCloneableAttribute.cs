@@ -11,7 +11,7 @@ namespace UnitTest.Desktop.Attributes
         public void TestMethod1()
         {
             var accept = new AcceptClass("1", "2", "3", "4", "5", "6", "7", "8", "9");
-            var acceptC = CloneableAttribute.CloneWithCloneableAttribute(accept,
+            var acceptC = CloneableAttribute.Clone(accept,
                 new AcceptClass("", "", "", "", "", "", "", "", ""));
 
             Assert.AreEqual(accept.GetPublicProperty(), acceptC.GetPublicProperty());

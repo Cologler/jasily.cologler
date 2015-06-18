@@ -8,6 +8,8 @@ namespace System.Net
 {
     public static class JasilyHttpWebRequest
     {
+#if !DESKTOP
+
         /// <summary>
         /// 异常信息与 request 的 BeginGetRequestStream, EndGetRequestStream 相同。
         /// </summary>
@@ -55,6 +57,8 @@ namespace System.Net
 
             return await task.Task;
         }
+
+#endif
 
         public static async Task SendAsync(this HttpWebRequest request, Stream input)
         {

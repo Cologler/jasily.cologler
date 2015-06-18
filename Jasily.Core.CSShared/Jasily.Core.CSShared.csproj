@@ -44,9 +44,12 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\CloneableAttribute.cs" />
+    <Compile Include="ICloneable.cs" />
     <Compile Include="IO\ClipboardMonitor.cs" />
     <Compile Include="IO\FileSystemTest.cs" />
     <Compile Include="IO\FileSystemTestType.cs" />
+    <Compile Include="Net\JasilyHttpWebRequest.cs" />
     <Compile Include="Shell\ISingleInstanceApp.cs" />
     <Compile Include="Net\Sockets\JasilySocket.cs" />
     <Compile Include="Net\Sockets\NetworkStream.cs" />

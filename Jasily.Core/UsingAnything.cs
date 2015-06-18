@@ -8,8 +8,8 @@ namespace System
 {
     public struct UsingAnything : IDisposable
     {
-        Action StartAction;
-        Action EndAction;
+        readonly Action StartAction;
+        readonly Action EndAction;
 
         public UsingAnything(Action start, Action end)
         {

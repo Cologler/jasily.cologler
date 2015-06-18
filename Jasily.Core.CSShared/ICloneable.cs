@@ -7,7 +7,10 @@ using System.Threading.Tasks;
 namespace System
 {
     public interface ICloneable<out T>
+#if DESKTOP
+        : ICloneable
+#endif
     {
-        T Clone();
+        new T Clone();
     }
 }

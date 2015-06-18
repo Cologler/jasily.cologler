@@ -9,11 +9,11 @@ namespace System.Text
     /// <summary>
     /// how to use: http://www.evernote.com/l/ALIpFNbcP99E_5AUADs89Ty1dL2K12obbDU/
     /// </summary>
-    public class PinYin : ITryGetValue<char, PinYin.Pinyin[]>, ITryGetValue<char, PinYin.Pinyin>
+    public class PinYinManager : ITryGetValue<char, PinYinManager.Pinyin[]>, ITryGetValue<char, PinYinManager.Pinyin>
     {
         Lazy<Dictionary<uint, string>> InnerLazyData;
         
-        public PinYin(string Uni2Pinyin)
+        public PinYinManager(string Uni2Pinyin)
         {
             var factory = new Func<Dictionary<uint, string>>(() => Init(Uni2Pinyin));
             this.InnerLazyData = new Lazy<Dictionary<uint, string>>(factory, LazyThreadSafetyMode.ExecutionAndPublication);
