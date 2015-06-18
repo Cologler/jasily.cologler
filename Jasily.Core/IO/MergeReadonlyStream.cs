@@ -12,7 +12,7 @@ namespace System.IO
             this.InnerStreams = source.ToArray();
 
             if (this.InnerStreams.Any(z => z == null))
-                throw new ArgumentNullException("some stream in source was null.");
+                throw new ArgumentNullException("source", "some stream in source was null.");
         }
 
         public int StreamCount
