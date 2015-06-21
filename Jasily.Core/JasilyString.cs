@@ -67,6 +67,17 @@ namespace System
         }
 
         /// <summary>
+        /// use spliter to split text. default value was '\r\n'
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="spliter"></param>
+        /// <returns></returns>
+        public static IEnumerable<string> AsLines(this string text, string spliter = "\r\n")
+        {
+            return text == null ? null : text.Split(new string[] {spliter}, StringSplitOptions.None);
+        }
+
+        /// <summary>
         /// repeat this like ( string * int ) in python
         /// </summary>
         /// <param name="str"></param>
