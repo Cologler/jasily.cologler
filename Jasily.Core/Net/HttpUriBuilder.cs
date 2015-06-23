@@ -17,7 +17,10 @@ namespace System.Net
 
         public void AddQueryStringParameter(string key, string value)
         {
-            this.QueryStringParameters.Add(new KeyValuePair<string, string>(key, value));
+            this.QueryStringParameters.Add(
+                new KeyValuePair<string, string>(
+                    key.ThrowIfNullOrEmpty("key"),
+                    value.ThrowIfNull("value")));
         }
 
         public Uri Build()

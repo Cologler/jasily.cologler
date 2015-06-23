@@ -69,6 +69,7 @@
     <Compile Include="JasilyByteArrayHelper.cs" />
     <Compile Include="JasilyChar.cs" />
     <Compile Include="JasilyDateTime.cs" />
+    <Compile Include="JasilyIPrintHelper.cs" />
     <Compile Include="UfDateTimeConverter.cs" />
     <Compile Include="JasilyEvent.cs" />
     <Compile Include="JasilyException.cs" />
