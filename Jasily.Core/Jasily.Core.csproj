@@ -61,8 +61,6 @@
     <Compile Include="EventArgs.cs" />
     <Compile Include="IBuilder.cs" />
     <Compile Include="ICopy.cs" />
-    <Compile Include="IInitializable.cs" />
-    <Compile Include="JasilyInitializable.cs" />
     <Compile Include="IO\JasilyStream.cs" />
     <Compile Include="IO\JasilyStringReader.cs" />
     <Compile Include="IO\MemoryTributary.cs" />
