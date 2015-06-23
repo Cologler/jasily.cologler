@@ -1,6 +1,7 @@
 ﻿
 namespace System.Security.Cryptography
 {
+    // ReSharper disable once InconsistentNaming
     public sealed class CRC32CryptoServiceProvider : CRC32
     {
         const uint DefaultPolynomial = 0xEDB88320;

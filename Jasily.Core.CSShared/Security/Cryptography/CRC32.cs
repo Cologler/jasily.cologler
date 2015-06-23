@@ -1,9 +1,10 @@
 ﻿
 namespace System.Security.Cryptography
 {
+    // ReSharper disable once InconsistentNaming
     public abstract class CRC32 : HashAlgorithm
     {
-        public static CRC32 Create()
+        public new static CRC32 Create()
         {
             return new CRC32CryptoServiceProvider();
         }

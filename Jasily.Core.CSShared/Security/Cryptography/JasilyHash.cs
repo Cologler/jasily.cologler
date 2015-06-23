@@ -36,6 +36,10 @@ namespace System.Security.Cryptography
             return BitConverter.ToString(hashBytes).Replace("-", "");
         }
 
+        public static string ComputeHashString(this HashAlgorithm hash, string text)
+        {
+            return hash.ComputeHash(text.GetBytes()).ConverterToHashString();
+        }
         public static string ComputeHashString(this HashAlgorithm hash, byte[] buffer)
         {
             return hash.ComputeHash(buffer).ConverterToHashString();
