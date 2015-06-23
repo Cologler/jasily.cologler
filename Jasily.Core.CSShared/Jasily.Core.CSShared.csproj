@@ -50,6 +50,9 @@
     <Compile Include="IO\FileSystemTest.cs" />
     <Compile Include="IO\FileSystemTestType.cs" />
     <Compile Include="Net\JasilyHttpWebRequest.cs" />
+    <Compile Include="Security\Cryptography\JasilyCrypto.cs" />
+    <Compile Include="Security\Cryptography\JasilyICryptoTransform.cs" />
+    <Compile Include="Security\Cryptography\JasilySymmetricAlgorithmHelper.cs" />
     <Compile Include="Shell\ISingleInstanceApp.cs" />
     <Compile Include="Net\Sockets\JasilySocket.cs" />
     <Compile Include="Net\Sockets\NetworkStream.cs" />

@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace System
 {
-    public static class JasilyObject
+    public static class JasilyObjectHelper
     {
         /// <summary>
         /// if both are not null, using Equals() to check if they equals.

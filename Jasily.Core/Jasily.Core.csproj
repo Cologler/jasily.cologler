@@ -66,13 +66,13 @@
     <Compile Include="IO\MemoryTributary.cs" />
     <Compile Include="IO\MergeReadonlyStream.cs" />
     <Compile Include="IPrint.cs" />
-    <Compile Include="JasilyByte.cs" />
+    <Compile Include="JasilyByteArrayHelper.cs" />
     <Compile Include="JasilyChar.cs" />
     <Compile Include="JasilyDateTime.cs" />
     <Compile Include="UfDateTimeConverter.cs" />
     <Compile Include="JasilyEvent.cs" />
     <Compile Include="JasilyException.cs" />
-    <Compile Include="JasilyObject.cs" />
+    <Compile Include="JasilyObjectHelper.cs" />
     <Compile Include="JasilyString.cs" />
     <Compile Include="JasilyThrow.cs" />
     <Compile Include="JasilyWeakReference.cs" />
