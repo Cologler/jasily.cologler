@@ -3,7 +3,7 @@ using System.Text;
 
 namespace System
 {
-    public static class JasilyByte
+    public static class JasilyByteArrayHelper
     {
         /// <summary>
         /// 从此数组派生出一个只读内存流
