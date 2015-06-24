@@ -56,7 +56,8 @@
     <Compile Include="Linq\Expressions\UnitTestForJasilyExpression.cs" />
     <Compile Include="Performance\UnitTestForCodeTimer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="UnitTestForObject.cs" />
+    <Compile Include="UnitTestForPrint.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Jasily.Core.Desktop\Jasily.Core.Desktop.csproj">

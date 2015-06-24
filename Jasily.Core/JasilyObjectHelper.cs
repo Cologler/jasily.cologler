@@ -16,7 +16,15 @@ namespace System
         /// <returns></returns>
         public static bool NormalEquals<T>(this T obj, T other)
         {
-            return (obj == null && other == null) || (obj != null && obj.Equals(other));
+            if (obj == null) return other == null;
+
+            if (other == null) return false;
+
+            if (ReferenceEquals(obj, other)) return true;
+
+            var equ = obj as IEquatable<T>;
+
+            return equ != null ? equ.Equals(other) : obj.Equals(other);
         }
 
         /// <summary>
