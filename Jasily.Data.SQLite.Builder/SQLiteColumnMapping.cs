@@ -5,7 +5,7 @@ using Jasily.Data.SQLite.Builder.Attributes;
 
 namespace Jasily.Data.SQLite.Builder
 {
-    internal class SQLiteColumnMapping
+    public class SQLiteColumnMapping
     {
         public string ColumnName { get; private set; }
 
@@ -56,7 +56,7 @@ namespace Jasily.Data.SQLite.Builder
             return this.Property != null ? this.Property.GetValue(obj) : this.Field.GetValue(obj);
         }
 
-        public void BuildMetaData()
+        internal void BuildMetaData()
         {
             this.ColumnTypeName = GetSQLiteTypeName(this.ColumnType);
         }

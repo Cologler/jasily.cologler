@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using Jasily.Data.SQLite.Builder.Attributes;
 
 namespace Jasily.Data.SQLite.Builder
 {
-    internal class SQLiteTableMapping
+    public class SQLiteTableMapping
     {
         private readonly Dictionary<string, SQLiteColumnMapping> columns;
 
@@ -25,7 +26,7 @@ namespace Jasily.Data.SQLite.Builder
 
         public string TableName { get; private set; }
 
-        public void BuildColumnsMapping()
+        internal void MapColumns()
         {
             foreach (var property in this.EntityType.GetRuntimeProperties())
             {
@@ -77,19 +78,24 @@ namespace Jasily.Data.SQLite.Builder
 
         public string BuildFieldsDefinitions()
         {
-            var fieldsDef = this.columns.Values.Select(z =>
-                String.Format("{0} {1}{2}{3}",
-                    z.ColumnName,
-                    z.FieldTypeNameName,
-                    z.IsPrimaryKey ? " PRIMARY KEY" : "",
-                    z.IsAutoIncrement ? " AUTOINCREMENT" : ""));
+            //var fieldsDef = this.columns.Values.Select(z =>
+            //    String.Format("{0} {1}{2}{3}",
+            //        z.ColumnName,
+            //        z.FieldTypeNameName,
+            //        z.IsPrimaryKey ? " PRIMARY KEY" : "",
+            //        z.IsAutoIncrement ? " AUTOINCREMENT" : ""));
 
-            return String.Join(", ", fieldsDef);
+            return String.Join(", ", "");
         }
 
         public IEnumerable<SQLiteColumnMapping> GetColumns()
         {
             return this.columns.Values.ToArray();
+        }
+
+        public SQLiteColumnMapping this[string columnName]
+        {
+            get { return this.columns.GetValueOrDefault(columnName); }
         }
     }
 

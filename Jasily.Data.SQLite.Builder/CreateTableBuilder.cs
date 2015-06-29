@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Jasily.Data.SQLite.Builder
 {
@@ -17,10 +18,10 @@ namespace Jasily.Data.SQLite.Builder
         public bool IsWithoutRowid { get; set; }
 
         public string Build<T>()
-            where T : new ()
+            where T : new()
         {
             var map = SQLiteMappingManager.GetMapping<T>();
-
+            
             var sqlpart = new List<string>();
 
             sqlpart.Add("CREATE");
@@ -40,31 +41,34 @@ namespace Jasily.Data.SQLite.Builder
 
             sqlpart.Add("(");
 
-            foreach (var column in map.GetColumns())
-            {
-                sqlpart.Add(column.ColumnName);
-                sqlpart.Add(column.ColumnTypeName);
-
-                if (column.PrimaryKeyAttribute != null)
-                {
-                    sqlpart.Add("PRIMARY KEY");
-
-                    if (column.PrimaryKeyAttribute.Order.HasValue)
-                        sqlpart.Add(column.PrimaryKeyAttribute.Order.Value.GetString());
-
-                    if (column.PrimaryKeyAttribute.IsAutoIncrement)
-                        sqlpart.Add("AUTOINCREMENT");
-                }
-            }
+            sqlpart.Add(String.Join(", ",
+                map.GetColumns().Select(column => String.Join(" ", this.BuildColumnDefintions(column)))));
 
             sqlpart.Add(")");
 
             if (this.IsWithoutRowid)
-                sqlpart.Add("WITHOUT ROWID  ");
+                sqlpart.Add("WITHOUT ROWID");
 
             sqlpart.Add(";");
 
             return String.Join(" ", sqlpart);
+        }
+
+        private IEnumerable<string> BuildColumnDefintions(SQLiteColumnMapping column)
+        {
+            yield return column.ColumnName;
+            yield return column.ColumnTypeName;
+
+            if (column.PrimaryKeyAttribute != null)
+            {
+                yield return "PRIMARY KEY";
+
+                if (column.PrimaryKeyAttribute.Order.HasValue)
+                    yield return column.PrimaryKeyAttribute.Order.Value.GetString();
+
+                if (column.PrimaryKeyAttribute.IsAutoIncrement)
+                    yield return "AUTOINCREMENT";
+            }
         }
     }
 }

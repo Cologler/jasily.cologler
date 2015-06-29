@@ -6,11 +6,11 @@ using Jasily.Data.SQLite.Builder.Attributes;
 
 namespace Jasily.Data.SQLite.Builder
 {
-    internal class SQLiteMappingManager
+    public static class SQLiteMappingManager
     {
         private static readonly Dictionary<Type, Lazy<SQLiteTableMapping>> mapped = new Dictionary<Type, Lazy<SQLiteTableMapping>>();
 
-        internal static SQLiteTableMapping GetMapping<T>()
+        public static SQLiteTableMapping GetMapping<T>()
             where T : new()
         {
             var type = typeof(T);
@@ -39,7 +39,7 @@ namespace Jasily.Data.SQLite.Builder
             if (attr == null)
                 throw new ArgumentException(String.Format("type {0} must contain SQLiteTableAttribute", typeof(T).Name));
             var mapping = new SQLiteTableMapping<T>(attr);
-            mapping.BuildColumnsMapping();
+            mapping.MapColumns();
             return mapping;
         }
     }
