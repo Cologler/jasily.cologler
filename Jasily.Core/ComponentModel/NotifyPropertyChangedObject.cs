@@ -51,7 +51,7 @@ namespace System.ComponentModel
             }
         }
 
-        public bool SetPropertyRef<T>(ref T property, T newValue, [CallerMemberName] string propertyName = null)
+        protected bool SetPropertyRef<T>(ref T property, T newValue, [CallerMemberName] string propertyName = null)
         {
             if (property.NormalEquals(newValue))
             {
