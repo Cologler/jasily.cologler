@@ -11,7 +11,7 @@ namespace Jasily.Data.SQLBuilder.Attributes
             this.FieldName = fieldName;
         }
 
-        public string FieldName { get; private set; }
+        public string FieldName { get; set; }
 
         public SQLiteFieldFlags FieldFlags { get; set; }
     }

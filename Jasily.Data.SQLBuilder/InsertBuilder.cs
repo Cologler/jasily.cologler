@@ -14,11 +14,9 @@ namespace Jasily.Data.SQLBuilder
 
         public InsertMode InsertMode { get; set; }
 
-        public string Build<T>(T obj, out IList<object> parameters)
+        public string Build<T>()
             where T : new()
         {
-            parameters = new List<object>();
-
             var map = DbMappingManager.GetMapping<T>();
 
             var sql = new List<string>();
@@ -33,13 +31,7 @@ namespace Jasily.Data.SQLBuilder
 
             sql.Add("(");
 
-            var columnNames = new List<string>();
-            foreach (var column in map.GetColumns()
-                .Where(column => column.PrimaryKeyAttribute == null || !column.PrimaryKeyAttribute.IsAutoIncrement))
-            {
-                columnNames.Add(column.ColumnName);
-                parameters.Add(column.GetValue(obj));
-            }
+            var columnNames = this.GetColumns(map).Select(column => column.ColumnName).ToList();
 
             sql.Add(String.Join(", ", columnNames));
             sql.Add(")");
@@ -50,6 +42,29 @@ namespace Jasily.Data.SQLBuilder
             sql.Add(")");
 
             return String.Concat(String.Join(" ", sql), ";");
+        }
+
+        public IList<IList<object>> GetParameters<T>(IEnumerable<T> objs)
+            where T : new()
+        {
+            var map = DbMappingManager.GetMapping<T>();
+            return objs.Select(o => this.GetParameters(map, o)).ToList();
+        }
+
+        private IList<object> GetParameters<T>(DbTableMapping mapping, T obj)
+            where T : new()
+        {
+            return this.GetColumns(mapping).Select(column => column.GetValue(obj)).ToList();
+        }
+
+        private IEnumerable<DbColumnMapping> GetColumns(DbTableMapping mapping)
+        {
+            return mapping.GetColumns()
+                .Where(column =>
+                    this.InsertMode != InsertMode.Insert ||
+                    column.PrimaryKeyAttribute == null ||
+                    !column.PrimaryKeyAttribute.IsAutoIncrement)
+                .ToArray();
         }
     }
 }

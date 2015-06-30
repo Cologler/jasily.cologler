@@ -10,6 +10,6 @@ namespace Jasily.Data.SQLBuilder.Attributes
             this.TableName = tableName;
         }
 
-        public string TableName { get; private set; }
+        public string TableName { get; set; }
     }
 }
