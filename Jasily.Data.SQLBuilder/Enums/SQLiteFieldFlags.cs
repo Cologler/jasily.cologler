@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Jasily.Data.SQLite.Builder
+namespace Jasily.Data.SQLBuilder.Enums
 {
     [Flags]
     public enum SQLiteFieldFlags : int

@@ -1,9 +1,10 @@
 ﻿using System;
+using Jasily.Data.SQLBuilder.Enums;
 
-namespace Jasily.Data.SQLite.Builder.Attributes
+namespace Jasily.Data.SQLBuilder.Attributes
 {
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
-    public class SQLiteFieldPrimaryKeyAttribute : SQLiteConflictableAttribute
+    public class DbFieldPrimaryKeyAttribute : DbConflictableAttribute
     {
         public OrderMode? Order { get; set; }
 

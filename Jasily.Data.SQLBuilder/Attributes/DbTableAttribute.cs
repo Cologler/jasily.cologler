@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace Jasily.Data.SQLite.Builder.Attributes
+namespace Jasily.Data.SQLBuilder.Attributes
 {
     [AttributeUsage(AttributeTargets.Class)]
-    public class SQLiteTableAttribute : Attribute
+    public class DbTableAttribute : Attribute
     {
-        public SQLiteTableAttribute(string tableName = null)
+        public DbTableAttribute(string tableName = null)
         {
             this.TableName = tableName;
         }

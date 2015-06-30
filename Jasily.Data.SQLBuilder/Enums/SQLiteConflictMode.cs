@@ -1,4 +1,4 @@
-﻿namespace Jasily.Data.SQLite.Builder
+﻿namespace Jasily.Data.SQLBuilder.Enums
 {
     public enum SQLiteConflictMode
     {

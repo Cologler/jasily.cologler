@@ -8,8 +8,8 @@
     <ProjectGuid>{295AEA0D-D4AF-458E-951A-B72D2EE6624B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Jasily.Data.SQLite.Builder</RootNamespace>
-    <AssemblyName>Jasily.Data.SQLite.Builder</AssemblyName>
+    <RootNamespace>Jasily.Data.SQLBuilder</RootNamespace>
+    <AssemblyName>Jasily.Data.SQLBuilder</AssemblyName>
     <DefaultLanguage>zh-CN</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -42,17 +42,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CreateTableBuilder.cs" />
-    <Compile Include="OrderMode.cs" />
-    <Compile Include="Attributes\SQLiteConflictableAttribute.cs" />
-    <Compile Include="SQLiteConflictMode.cs" />
-    <Compile Include="Attributes\SQLiteFieldAttribute.cs" />
-    <Compile Include="SQLiteFieldFlags.cs" />
-    <Compile Include="Attributes\SQLiteFieldPrimaryKeyAttribute.cs" />
-    <Compile Include="Attributes\SQLiteTableAttribute.cs" />
+    <Compile Include="DbProvider\SQLite\SQLite.cs" />
+    <Compile Include="GetSQLiteStringHelper.cs" />
+    <Compile Include="InsertBuilder.cs" />
+    <Compile Include="Enums\InsertMode.cs" />
+    <Compile Include="Enums\OrderMode.cs" />
+    <Compile Include="Attributes\DbConflictableAttribute.cs" />
+    <Compile Include="SQLBuilder.cs" />
+    <Compile Include="Enums\SQLiteConflictMode.cs" />
+    <Compile Include="Attributes\DbFieldAttribute.cs" />
+    <Compile Include="Enums\SQLiteFieldFlags.cs" />
+    <Compile Include="Attributes\DbFieldPrimaryKeyAttribute.cs" />
+    <Compile Include="Attributes\DbTableAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SQLiteColumnMapping.cs" />
-    <Compile Include="SQLiteMappingManager.cs" />
-    <Compile Include="SQLiteTableMapping.cs" />
+    <Compile Include="DbColumnMapping.cs" />
+    <Compile Include="DbMappingManager.cs" />
+    <Compile Include="DbTableMapping.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

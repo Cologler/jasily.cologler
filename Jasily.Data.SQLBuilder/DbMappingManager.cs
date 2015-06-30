@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Threading;
-using Jasily.Data.SQLite.Builder.Attributes;
+using Jasily.Data.SQLBuilder.Attributes;
 
-namespace Jasily.Data.SQLite.Builder
+namespace Jasily.Data.SQLBuilder
 {
-    public static class SQLiteMappingManager
+    public static class DbMappingManager
     {
-        private static readonly Dictionary<Type, Lazy<SQLiteTableMapping>> mapped = new Dictionary<Type, Lazy<SQLiteTableMapping>>();
+        private static readonly Dictionary<Type, Lazy<DbTableMapping>> mapped = new Dictionary<Type, Lazy<DbTableMapping>>();
 
-        public static SQLiteTableMapping GetMapping<T>()
+        public static DbTableMapping GetMapping<T>()
             where T : new()
         {
             var type = typeof(T);
@@ -23,19 +23,19 @@ namespace Jasily.Data.SQLite.Builder
             lock (mapped)
             {
                 m = mapped.GetValueOrSetDefault(type,
-                    new Func<Lazy<SQLiteTableMapping>>(
-                        () => new Lazy<SQLiteTableMapping>(
-                            new Func<SQLiteTableMapping>(BuildMapping<T>),
+                    new Func<Lazy<DbTableMapping>>(
+                        () => new Lazy<DbTableMapping>(
+                            new Func<DbTableMapping>(BuildMapping<T>),
                             LazyThreadSafetyMode.ExecutionAndPublication)));
             }
 
             return m.Value;
         }
 
-        private static SQLiteTableMapping BuildMapping<T>()
+        private static DbTableMapping BuildMapping<T>()
             where T : new()
         {
-            var attr = typeof(T).GetTypeInfo().GetCustomAttribute<SQLiteTableAttribute>();
+            var attr = typeof(T).GetTypeInfo().GetCustomAttribute<DbTableAttribute>();
             if (attr == null)
                 throw new ArgumentException(String.Format("type {0} must contain SQLiteTableAttribute", typeof(T).Name));
             var mapping = new SQLiteTableMapping<T>(attr);

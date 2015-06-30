@@ -1,11 +1,12 @@
 ﻿using System;
+using Jasily.Data.SQLBuilder.Enums;
 
-namespace Jasily.Data.SQLite.Builder.Attributes
+namespace Jasily.Data.SQLBuilder.Attributes
 {
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
-    public class SQLiteFieldAttribute : Attribute
+    public class DbFieldAttribute : Attribute
     {
-        public SQLiteFieldAttribute(string fieldName = null)
+        public DbFieldAttribute(string fieldName = null)
         {
             this.FieldName = fieldName;
         }

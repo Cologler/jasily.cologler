@@ -17,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jasily.Core.WP80", "Jasily.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jasily.Core.WP81", "Jasily.Core.WP81\Jasily.Core.WP81.csproj", "{6C92ACF0-A2B7-4738-8B6D-20C3BECBEAFD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jasily.Data.SQLite.Builder", "Jasily.Data.SQLite.Builder\Jasily.Data.SQLite.Builder.csproj", "{295AEA0D-D4AF-458E-951A-B72D2EE6624B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jasily.Data.SQLBuilder", "Jasily.Data.SQLBuilder\Jasily.Data.SQLBuilder.csproj", "{295AEA0D-D4AF-458E-951A-B72D2EE6624B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
