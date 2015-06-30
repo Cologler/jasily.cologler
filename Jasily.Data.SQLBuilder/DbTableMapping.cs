@@ -97,10 +97,10 @@ namespace Jasily.Data.SQLBuilder
         }
     }
 
-    internal sealed class SQLiteTableMapping<T> : DbTableMapping
+    internal sealed class DbTableMapping<T> : DbTableMapping
         where T : new()
     {
-        internal SQLiteTableMapping(DbTableAttribute attr)
+        internal DbTableMapping(DbTableAttribute attr)
             : base(typeof(T), attr)
         {
         }

@@ -13,7 +13,7 @@ namespace Jasily.Data.SQLBuilder
         public bool IsWithoutRowid { get; set; }
 
         public string Build<T>()
-            where T : new()
+            where T : new ()
         {
             var map = DbMappingManager.GetMapping<T>();
             
@@ -29,7 +29,7 @@ namespace Jasily.Data.SQLBuilder
             if (this.IsNotExists)
                 sql.Add("IF NOT EXISTS");
 
-            this.TryGetDatabaseName(sql);
+            sql.AddRange(this.DatabaseNamePart());
 
             sql.Add(map.TableName);
 

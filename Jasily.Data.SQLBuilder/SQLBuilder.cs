@@ -10,12 +10,28 @@ namespace Jasily.Data.SQLBuilder
         /// </summary>
         public string DatabaseName { get; set; }
 
-        protected void TryGetDatabaseName(List<string> sql)
+        protected IEnumerable<string> DatabaseNamePart()
         {
             if (!String.IsNullOrWhiteSpace(this.DatabaseName))
             {
-                sql.Add(this.DatabaseName);
+                yield return this.DatabaseName;
             }
+        }
+    }
+
+    public abstract class SQLBuilder<T> : SQLBuilder
+        where T : new()
+    {
+        protected SQLBuilder()
+        {
+            this.Mapping = DbMappingManager.GetMapping<T>();
+        }
+
+        protected DbTableMapping Mapping { get; private set; }
+
+        protected IEnumerable<string> TableNamePart()
+        {
+            yield return this.Mapping.TableName;
         }
     }
 }

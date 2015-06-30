@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using Jasily.Data.SQLBuilder.Attributes;
+using Jasily.Data.SQLBuilder.DbProvider.SQLite;
 
 namespace Jasily.Data.SQLBuilder
 {
@@ -40,43 +41,16 @@ namespace Jasily.Data.SQLBuilder
 
         public void SetValue(object obj, object value)
         {
+            var sqlite = new SQLite();
+
             if (this.Property != null)
             {
-                this.Property.SetValue(obj, TryConvertValue(value, this.ColumnType));
+                this.Property.SetValue(obj, sqlite.ConvertValue(value, this.ColumnType));
             }
             else
             {
-                this.Field.SetValue(obj, TryConvertValue(value, this.ColumnType));
+                this.Field.SetValue(obj, sqlite.ConvertValue(value, this.ColumnType));
             }
-        }
-
-        private static object TryConvertValue(object value, Type type)
-        {
-            if (value == null)
-                return null;
-
-            var valueType = value.GetType();
-
-            if (valueType == type)
-                return value;
-
-            switch (valueType.FullName)
-            {
-                case "System.DBNull":
-                    return null;
-
-                case "System.Int64":
-                    var Int64 = (long)value;
-                    if (type == typeof(int))
-                    {
-                        if (Int64 <= Int32.MaxValue && Int64 >= Int32.MinValue)
-                            return Convert.ToInt32(Int64);
-                    }
-                    break;
-
-            }
-
-            throw new NotSupportedException();
         }
 
         public object GetValue(object obj)
@@ -86,23 +60,7 @@ namespace Jasily.Data.SQLBuilder
 
         internal void BuildMetaData()
         {
-            this.ColumnTypeName = GetSQLiteTypeName(this.ColumnType);
-        }
-
-        private static string GetSQLiteTypeName(Type type)
-        {
-            if (type == typeof(string))
-            {
-                return "TEXT";
-            }
-            else if (type == typeof(int) || type == typeof(long) || type == typeof(bool))
-            {
-                return "INTEGER";
-            }
-            else
-            {
-                throw new NotSupportedException(String.Format("type {0} was not a SQLite type.", type.Name));
-            }
+            this.ColumnTypeName = new SQLite().GetDbTypeName(this.ColumnType);
         }
     }
 }

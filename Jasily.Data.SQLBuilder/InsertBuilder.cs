@@ -5,7 +5,8 @@ using Jasily.Data.SQLBuilder.Enums;
 
 namespace Jasily.Data.SQLBuilder
 {
-    public class InsertBuilder : SQLBuilder
+    public class InsertBuilder<T> : SQLBuilder<T>
+        where T : new()
     {
         public InsertBuilder()
         {
@@ -14,10 +15,9 @@ namespace Jasily.Data.SQLBuilder
 
         public InsertMode InsertMode { get; set; }
 
-        public string Build<T>()
-            where T : new()
+        public string Build()
         {
-            var map = DbMappingManager.GetMapping<T>();
+            var map = this.Mapping;
 
             var sql = new List<string>();
 
@@ -25,7 +25,7 @@ namespace Jasily.Data.SQLBuilder
 
             sql.Add("INTO");
 
-            this.TryGetDatabaseName(sql);
+            sql.AddRange(this.DatabaseNamePart());
 
             sql.Add(map.TableName);
 
@@ -44,17 +44,14 @@ namespace Jasily.Data.SQLBuilder
             return String.Concat(String.Join(" ", sql), ";");
         }
 
-        public IList<IList<object>> GetParameters<T>(IEnumerable<T> objs)
-            where T : new()
+        public IList<IList<object>> GetParameters(IEnumerable<T> objs)
         {
-            var map = DbMappingManager.GetMapping<T>();
-            return objs.Select(o => this.GetParameters(map, o)).ToList();
+            return objs.Select(this.GetParameters).ToList();
         }
 
-        private IList<object> GetParameters<T>(DbTableMapping mapping, T obj)
-            where T : new()
+        private IList<object> GetParameters(T obj)
         {
-            return this.GetColumns(mapping).Select(column => column.GetValue(obj)).ToList();
+            return this.GetColumns(this.Mapping).Select(column => column.GetValue(obj)).ToList();
         }
 
         private IEnumerable<DbColumnMapping> GetColumns(DbTableMapping mapping)

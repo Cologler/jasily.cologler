@@ -38,7 +38,7 @@ namespace Jasily.Data.SQLBuilder
             var attr = typeof(T).GetTypeInfo().GetCustomAttribute<DbTableAttribute>();
             if (attr == null)
                 throw new ArgumentException(String.Format("type {0} must contain SQLiteTableAttribute", typeof(T).Name));
-            var mapping = new SQLiteTableMapping<T>(attr);
+            var mapping = new DbTableMapping<T>(attr);
             mapping.MapColumns();
             return mapping;
         }
