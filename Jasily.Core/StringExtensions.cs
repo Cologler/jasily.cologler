@@ -4,7 +4,7 @@ using System.Text;
 
 namespace System
 {
-    public static class JasilyString
+    public static class StringExtensions 
     {
         /// <summary>
         /// get bytes using special encoding
@@ -89,26 +89,31 @@ namespace System
             return str == null ? null : string.Concat(Enumerable.Repeat(str, count));
         }
 
-        public static string FirstLine(this string source)
+        /// <summary>
+        /// return first line from text
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        public static string FirstLine(this string text)
         {
-            if (source == null)
+            if (text == null)
                 return null;
 
-            var index = source.IndexOf('\n');
+            var index = text.IndexOf('\n');
 
             if (index == -1)
             {
-                return source;
+                return text;
             }
             else
             {
-                if (index > 0 && source[index - 1] == '\r')
+                if (index > 0 && text[index - 1] == '\r')
                 {
-                    return source.Substring(0, index - 1);
+                    return text.Substring(0, index - 1);
                 }
                 else
                 {
-                    return source.Substring(0, index);
+                    return text.Substring(0, index);
                 }
             }
         }
