@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
 namespace System
 {
-    public static class StringExtensions 
+    public static class StringExtensions
     {
+        #region byte[]
+
         /// <summary>
         /// get bytes using special encoding
         /// </summary>
@@ -26,6 +29,34 @@ namespace System
         {
             return text.GetBytes(Encoding.UTF8);
         }
+
+        #endregion
+
+        #region is
+
+        /// <summary>
+        /// return String.IsNullOrEmpty(text)
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        public static bool IsNullOrEmpty(this string text)
+        {
+            return String.IsNullOrEmpty(text);
+        }
+
+        /// <summary>
+        /// return String.IsNullOrWhiteSpace(text)
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        public static bool IsNullOrWhiteSpace(this string text)
+        {
+            return String.IsNullOrWhiteSpace(text);
+        }
+
+        #endregion
+
+        #region throw
 
         /// <summary>
         /// throw if current text is null or empty.
@@ -54,6 +85,75 @@ namespace System
 
             return text;
         }
+
+        #endregion
+
+        #region split
+
+        public static string[] Split(this string text, string separator, StringSplitOptions options = StringSplitOptions.None)
+        {
+            return text.Split(new[] { separator }, options);
+        }
+
+        public static string[] Split(this string text, string separator, int count, StringSplitOptions options = StringSplitOptions.None)
+        {
+            return text.Split(new [] { separator }, count, options);
+        }
+
+        #endregion
+
+        #region format
+
+        public static string Format(this string format, params object[] args)
+        {
+            return String.Format(format, args);
+        }
+
+        public static string Format(this string format, IFormatProvider provider, params object[] args)
+        {
+            return String.Format(format, provider, args);
+        }
+
+        #endregion
+
+        #region parse
+
+        public static int? TryParseInt32(string s)
+        {
+            int n;
+            return Int32.TryParse(s, out n) ? (int?) n : null;
+        }
+        public static int? TryParseInt32(string s, NumberStyles style, IFormatProvider provider)
+        {
+            int n;
+            return Int32.TryParse(s, style, provider, out n) ? (int?)n : null;
+        }
+
+        public static long? TryParseInt64(string s)
+        {
+            long n;
+            return long.TryParse(s, out n) ? (long?)n : null;
+        }
+        public static long? TryParseInt64(string s, NumberStyles style, IFormatProvider provider)
+        {
+            long n;
+            return long.TryParse(s, style, provider, out n) ? (long?)n : null;
+        }
+
+        public static double? TryParseDouble(string s)
+        {
+            double n;
+            return double.TryParse(s, out n) ? (long?)n : null;
+        }
+        public static double? TryParseDouble(string s, NumberStyles style, IFormatProvider provider)
+        {
+            double n;
+            return double.TryParse(s, style, provider, out n) ? (double?)n : null;
+        }
+
+        #endregion
+
+        #region other
 
         /// <summary>
         /// use spliter to join texts. default value was '\r\n'
@@ -117,5 +217,7 @@ namespace System
                 }
             }
         }
+
+        #endregion
     }
 }

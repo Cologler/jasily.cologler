@@ -71,11 +71,12 @@
     <Compile Include="JasilyChar.cs" />
     <Compile Include="JasilyDateTime.cs" />
     <Compile Include="JasilyIPrintHelper.cs" />
+    <Compile Include="RandomExtensions.cs" />
     <Compile Include="UfDateTimeConverter.cs" />
     <Compile Include="JasilyEvent.cs" />
     <Compile Include="JasilyException.cs" />
     <Compile Include="JasilyObjectHelper.cs" />
-    <Compile Include="JasilyString.cs" />
+    <Compile Include="StringExtensions.cs" />
     <Compile Include="JasilyThrow.cs" />
     <Compile Include="JasilyWeakReference.cs" />
     <Compile Include="IO\SeekableStringReader.cs" />
