@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Jasily.Data.SQLBuilder.DbProvider;
 using Jasily.Data.SQLBuilder.Enums;
 
 namespace Jasily.Data.SQLBuilder
 {
-    public class InsertBuilder<T> : SQLBuilder<T>
-        where T : new()
+    public class InsertBuilder<TDbProvider, TEntity> : SQLBuilder<TDbProvider, TEntity>
+        where TDbProvider : IDbProvider, new()
+        where TEntity : new()
     {
-        public InsertBuilder()
+        public InsertBuilder(IDbProvider dbProvider)
+            : base(dbProvider)
         {
             this.InsertMode = InsertMode.Insert;
         }
@@ -21,7 +24,7 @@ namespace Jasily.Data.SQLBuilder
 
             var sql = new List<string>();
 
-            sql.Add(this.InsertMode.GetString());
+            sql.Add(this.DbProvider.GetString(this.InsertMode));
 
             sql.Add("INTO");
 
@@ -44,17 +47,17 @@ namespace Jasily.Data.SQLBuilder
             return String.Concat(String.Join(" ", sql), ";");
         }
 
-        public IList<IList<object>> GetParameters(IEnumerable<T> objs)
+        public IList<IList<object>> GetParameters(IEnumerable<TEntity> objs)
         {
             return objs.Select(this.GetParameters).ToList();
         }
 
-        private IList<object> GetParameters(T obj)
+        private IList<object> GetParameters(TEntity obj)
         {
             return this.GetColumns(this.Mapping).Select(column => column.GetValue(obj)).ToList();
         }
 
-        private IEnumerable<DbColumnMapping> GetColumns(DbTableMapping mapping)
+        private IEnumerable<DbColumnMapping<IDbProvider>> GetColumns(DbTableMapping<TDbProvider> mapping)
         {
             return mapping.GetColumns()
                 .Where(column =>

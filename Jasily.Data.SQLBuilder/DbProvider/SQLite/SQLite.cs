@@ -1,13 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
+using Jasily.Data.SQLBuilder.Enums;
 
 namespace Jasily.Data.SQLBuilder.DbProvider.SQLite
 {
-    public class SQLite
+    public class SQLite : IDbProvider
     {
         public string GetDbTypeName<T>()
         {
             return this.GetDbTypeName(typeof(T));
         }
+
         public string GetDbTypeName(Type type)
         {
             switch (type.FullName)
@@ -31,7 +34,7 @@ namespace Jasily.Data.SQLBuilder.DbProvider.SQLite
 
             var valueType = value.GetType();
 
-            if (valueType == type) 
+            if (valueType == type)
                 return value;
 
             switch (valueType.FullName)
@@ -40,7 +43,7 @@ namespace Jasily.Data.SQLBuilder.DbProvider.SQLite
                     return null;
 
                 case "System.Int64":
-                    var int64 = (long)value;
+                    var int64 = (long) value;
                     switch (type.FullName)
                     {
                         case "System.Boolean":
@@ -65,6 +68,59 @@ namespace Jasily.Data.SQLBuilder.DbProvider.SQLite
             }
 
             throw new NotSupportedException();
+        }
+
+        public IEnumerable<string> BuildColumnDefintions(DbColumnMapping<IDbProvider> column)
+        {
+            yield return column.ColumnName;
+            yield return column.ColumnTypeName;
+
+            if (column.PrimaryKeyAttribute != null)
+            {
+                yield return "PRIMARY KEY";
+
+                if (column.PrimaryKeyAttribute.Order.HasValue)
+                    yield return this.GetString(column.PrimaryKeyAttribute.Order.Value);
+
+                if (column.PrimaryKeyAttribute.IsAutoIncrement)
+                    yield return "AUTOINCREMENT";
+            }
+        }
+
+        public string GetString(OrderMode order)
+        {
+            switch (order)
+            {
+                case OrderMode.Asc:
+                    return "ASC";
+                case OrderMode.Desc:
+                    return "DESC";
+                default:
+                    throw new ArgumentOutOfRangeException("order", order, null);
+            }
+        }
+
+        public string GetString(InsertMode insert)
+        {
+            switch (insert)
+            {
+                case InsertMode.Insert:
+                    return "INSERT";
+                case InsertMode.Replace:
+                    return "REPLACE";
+                case InsertMode.InsertOrReplace:
+                    return "INSERT OR REPLACE";
+                case InsertMode.InsertOrRollback:
+                    return "INSERT OR ROLLBACK";
+                case InsertMode.InsetOrAbort:
+                    return "INSERT OR ABORT";
+                case InsertMode.InsertOrFail:
+                    return "INSERT OR FAIL";
+                case InsertMode.InsertOrIgnore:
+                    return "INSERT OR IGNORE";
+                default:
+                    throw new ArgumentOutOfRangeException("insert", insert, null);
+            }
         }
     }
 }

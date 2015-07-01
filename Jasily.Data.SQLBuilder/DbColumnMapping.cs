@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Reflection;
 using Jasily.Data.SQLBuilder.Attributes;
+using Jasily.Data.SQLBuilder.DbProvider;
 using Jasily.Data.SQLBuilder.DbProvider.SQLite;
 
 namespace Jasily.Data.SQLBuilder
 {
-    public class DbColumnMapping
+    public class DbColumnMapping<TDbProvider>
+        where TDbProvider : IDbProvider
     {
         public string ColumnName { get; private set; }
 

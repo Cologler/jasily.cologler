@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Jasily.Data.SQLBuilder.Attributes;
+using Jasily.Data.SQLBuilder.DbProvider;
 
 namespace Jasily.Data.SQLBuilder
 {
-    public class DbTableMapping
+    public class DbTableMapping<TDbProvider>
+        where TDbProvider : IDbProvider
     {
-        private readonly Dictionary<string, DbColumnMapping> columns;
+        private readonly Dictionary<string, DbColumnMapping<IDbProvider>> columns;
 
         internal DbTableMapping(Type entityType, DbTableAttribute attr)
         {
-            this.columns = new Dictionary<string, DbColumnMapping>();
+            this.columns = new Dictionary<string, DbColumnMapping<IDbProvider>>();
 
             this.EntityType = entityType;
             this.TableAttribute = attr;
@@ -25,7 +27,7 @@ namespace Jasily.Data.SQLBuilder
 
         public string TableName { get; private set; }
 
-        public DbColumnMapping PrimaryKeyColums { get; private set; }
+        public DbColumnMapping<IDbProvider> PrimaryKeyColums { get; private set; }
 
         internal void MapColumns()
         {
@@ -39,7 +41,7 @@ namespace Jasily.Data.SQLBuilder
                     if (!property.CanWrite)
                         throw new NotSupportedException(String.Format("property {0} must can write.", property.Name));
 
-                    var map = new DbColumnMapping(property, attr);
+                    var map = new DbColumnMapping<IDbProvider>(property, attr);
 
                     if (this.columns.ContainsKey(map.ColumnName))
                         throw new Exception(String.Format("name of property {0} [{1}] already exists.", property.Name, map.ColumnName));
@@ -61,7 +63,7 @@ namespace Jasily.Data.SQLBuilder
                     if (field.IsInitOnly)
                         throw new NotSupportedException(String.Format("field {0} can not init only.", field.Name));
 
-                    var map = new DbColumnMapping(field, attr);
+                    var map = new DbColumnMapping<IDbProvider>(field, attr);
 
                     if (this.columns.ContainsKey(map.ColumnName))
                         throw new Exception(String.Format("name of field {0} [{1}] already exists.", field.Name, map.ColumnName));
@@ -86,22 +88,23 @@ namespace Jasily.Data.SQLBuilder
             }
         }
 
-        public IEnumerable<DbColumnMapping> GetColumns()
+        public IEnumerable<DbColumnMapping<IDbProvider>> GetColumns()
         {
             return this.columns.Values.ToArray();
         }
 
-        public DbColumnMapping this[string columnName]
+        public DbColumnMapping<IDbProvider> this[string columnName]
         {
             get { return this.columns.GetValueOrDefault(columnName); }
         }
     }
 
-    internal sealed class DbTableMapping<T> : DbTableMapping
-        where T : new()
+    internal sealed class DbTableMapping<TDbProvider, TEntity> : DbTableMapping<TDbProvider>
+        where TDbProvider : IDbProvider
+        where TEntity : new()
     {
         internal DbTableMapping(DbTableAttribute attr)
-            : base(typeof(T), attr)
+            : base(typeof(TEntity), attr)
         {
         }
     }

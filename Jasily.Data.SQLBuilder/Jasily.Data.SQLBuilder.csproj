@@ -42,8 +42,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CreateTableBuilder.cs" />
+    <Compile Include="DbProvider\IDbProvider.cs" />
     <Compile Include="DbProvider\SQLite\SQLite.cs" />
-    <Compile Include="GetSQLiteStringHelper.cs" />
     <Compile Include="InsertBuilder.cs" />
     <Compile Include="Enums\InsertMode.cs" />
     <Compile Include="Enums\OrderMode.cs" />

@@ -1,10 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Jasily.Data.SQLBuilder.DbProvider;
+using Jasily.Data.SQLBuilder.DbProvider.SQLite;
 
 namespace Jasily.Data.SQLBuilder
 {
     public abstract class SQLBuilder
     {
+        public IDbProvider DbProvider { get; private set; }
+
+        public SQLBuilder(IDbProvider dbProvider)
+        {
+            this.DbProvider = dbProvider;
+        }
+
         /// <summary>
         /// can keep empty
         /// </summary>
@@ -17,17 +27,33 @@ namespace Jasily.Data.SQLBuilder
                 yield return this.DatabaseName;
             }
         }
-    }
 
-    public abstract class SQLBuilder<T> : SQLBuilder
-        where T : new()
-    {
-        protected SQLBuilder()
+        public static CreateTableBuilder<TDbProvider> CreateTable<TDbProvider>()
+            where TDbProvider : IDbProvider, new()
         {
-            this.Mapping = DbMappingManager.GetMapping<T>();
+            return new CreateTableBuilder<TDbProvider>(new TDbProvider());
         }
 
-        protected DbTableMapping Mapping { get; private set; }
+        public static InsertBuilder<TDbProvider, TEntity> Insert<TDbProvider, TEntity>()
+            where TDbProvider : IDbProvider, new()
+            where TEntity : new()
+        {
+            return new InsertBuilder<TDbProvider, TEntity>(new TDbProvider());
+        }
+    }
+
+    public abstract class SQLBuilder<TDbProvider, TEntity> : SQLBuilder
+        where TDbProvider : IDbProvider, new ()
+        where TEntity : new ()
+    {
+
+        protected SQLBuilder(IDbProvider dbProvider)
+            : base(dbProvider)
+        {
+            this.Mapping = DbMappingManager<TDbProvider>.GetMapping<TEntity>();
+        }
+
+        protected DbTableMapping<TDbProvider> Mapping { get; private set; }
 
         protected IEnumerable<string> TableNamePart()
         {
