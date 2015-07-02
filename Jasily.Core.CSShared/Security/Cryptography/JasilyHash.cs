@@ -31,7 +31,7 @@ namespace System.Security.Cryptography
             }
         }
 
-        public static string ConverterToHashString(this byte[] hashBytes)
+        private static string ConverterToHexString(this byte[] hashBytes)
         {
             return BitConverter.ToString(hashBytes).Replace("-", "");
         }
@@ -42,15 +42,15 @@ namespace System.Security.Cryptography
         }
         public static string ComputeHashString(this HashAlgorithm hash, byte[] buffer)
         {
-            return hash.ComputeHash(buffer).ConverterToHashString();
+            return hash.ComputeHash(buffer).ConverterToHexString();
         }
         public static string ComputeHashString(this HashAlgorithm hash, Stream inputStream)
         {
-            return hash.ComputeHash(inputStream).ConverterToHashString();
+            return hash.ComputeHash(inputStream).ConverterToHexString();
         }
         public static string ComputeHashString(this HashAlgorithm hash, byte[] buffer, int offset, int count)
         {
-            return hash.ComputeHash(buffer, offset, count).ConverterToHashString();
+            return hash.ComputeHash(buffer, offset, count).ConverterToHexString();
         }
     }
 }

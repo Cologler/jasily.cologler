@@ -42,7 +42,7 @@
     <Compile Include="Attributes\PrintAttribute.cs" />
     <Compile Include="Collections\Generic\JasilyITryGetValue.cs" />
     <Compile Include="Collections\Generic\ITryGetValue.cs" />
-    <Compile Include="Collections\Generic\JasilyDictionary.cs" />
+    <Compile Include="Collections\Generic\JasilyDictionaryHelper.cs" />
     <Compile Include="Collections\Generic\JasilyICollection.cs" />
     <Compile Include="Collections\Generic\JasilyList.cs" />
     <Compile Include="Collections\Generic\NameValuePair.cs" />
