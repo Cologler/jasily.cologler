@@ -25,7 +25,7 @@ namespace Jasily.Data.SQLBuilder
 
             lock (mapped)
             {
-                m = mapped.GetValueOrSetDefault(type,
+                m = mapped.GetOrSetValue(type,
                     new Func<Lazy<DbTableMapping<TDbProvider>>>(
                         () => new Lazy<DbTableMapping<TDbProvider>>(
                             new Func<DbTableMapping<TDbProvider>>(BuildMapping<T>),

@@ -2,7 +2,7 @@
 
 namespace System.Threading.Tasks
 {
-    public static class JasilyTask
+    public static class TaskExtensions
     {
         public static async Task<IEnumerable<T>> AsTask<T>(this IEnumerable<Task<T>> source)
         {

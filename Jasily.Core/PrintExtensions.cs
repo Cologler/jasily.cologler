@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace System
 {
-    public static class JasilyIPrintHelper
+    public static class PrintExtensions
     {
         /// <summary>
         /// print class or struct's member value.

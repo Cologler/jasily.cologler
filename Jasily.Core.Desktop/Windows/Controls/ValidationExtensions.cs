@@ -4,7 +4,7 @@ using System.Windows.Input;
 
 namespace System.Windows.Controls
 {
-    public static class JasilyValidation
+    public static class ValidationExtensions
     {
         public static bool IsValid(this DependencyObject node, bool isFocusErrorControl = false)
         {

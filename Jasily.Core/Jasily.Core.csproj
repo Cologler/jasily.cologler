@@ -70,12 +70,12 @@
     <Compile Include="JasilyByteArrayHelper.cs" />
     <Compile Include="JasilyChar.cs" />
     <Compile Include="JasilyDateTime.cs" />
-    <Compile Include="JasilyIPrintHelper.cs" />
+    <Compile Include="PrintExtensions.cs" />
     <Compile Include="RandomExtensions.cs" />
     <Compile Include="UfDateTimeConverter.cs" />
     <Compile Include="JasilyEvent.cs" />
     <Compile Include="JasilyException.cs" />
-    <Compile Include="JasilyObjectHelper.cs" />
+    <Compile Include="ObjectExtensions.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="JasilyThrow.cs" />
     <Compile Include="JasilyWeakReference.cs" />
@@ -84,7 +84,7 @@
     <Compile Include="Net\JasilyWebResult.cs" />
     <Compile Include="Net\WebResult.cs" />
     <Compile Include="Net\WebResultType.cs" />
-    <Compile Include="Runtime\Serialization\Json\JasilyDataContractJsonSerializer.cs" />
+    <Compile Include="Runtime\Serialization\Json\DataContractJsonSerializerExtensions.cs" />
     <Compile Include="Text\StringLine.cs" />
     <Compile Include="UsingAnything.cs" />
     <Compile Include="Linq\Expressions\JasilyExpression.cs" />
@@ -94,7 +94,7 @@
     <Compile Include="Text\PinYinManager.cs" />
     <Compile Include="Text\RegularExpressions\JasilyRegex.cs" />
     <Compile Include="Text\RegularExpressions\RegexResourceStrings.cs" />
-    <Compile Include="Threading\Tasks\JasilyTask.cs" />
+    <Compile Include="Threading\Tasks\TaskExtensions.cs" />
     <Compile Include="Xml\Serialization\JasilyXmlSerializer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

@@ -65,8 +65,8 @@
     <Compile Include="Security\Cryptography\HashType.cs" />
     <Compile Include="Security\Cryptography\JasilyHash.cs" />
     <Compile Include="Shell\MicrosoftSingleInstanceProvider.cs" />
-    <Compile Include="Windows\JasilyDispatcher.cs" />
-    <Compile Include="Windows\JasilyVisibility.cs" />
+    <Compile Include="Windows\DispatcherExtensions.cs" />
+    <Compile Include="Windows\VisibilityExtensions.cs" />
     <Compile Include="Windows\Media\Animation\JasilyStoryboard.cs" />
     <Compile Include="Windows\Media\Animation\StoryboardFactory.cs" />
   </ItemGroup>

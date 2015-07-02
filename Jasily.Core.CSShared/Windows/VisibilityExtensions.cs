@@ -1,7 +1,7 @@
 ﻿
 namespace System.Windows
 {
-    public static class JasilyVisibility
+    public static class VisibilityExtensions
     {
 #if DESKTOP
         /// <summary>

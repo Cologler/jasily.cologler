@@ -98,14 +98,14 @@
     <Compile Include="..\Jasily.Core.CSShared\Shell\MicrosoftSingleInstanceProvider.cs">
       <Link>Shell\MicrosoftSingleInstanceProvider.cs</Link>
     </Compile>
-    <Compile Include="..\Jasily.Core.CSShared\Windows\JasilyDispatcher.cs">
-      <Link>Windows\JasilyDispatcher.cs</Link>
+    <Compile Include="..\Jasily.Core.CSShared\Windows\DispatcherExtensions.cs">
+      <Link>Windows\DispatcherExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\Jasily.Core.CSShared\Windows\JasilyVisibility.cs">
-      <Link>Windows\JasilyVisibility.cs</Link>
+    <Compile Include="..\Jasily.Core.CSShared\Windows\VisibilityExtensions.cs">
+      <Link>Windows\VisibilityExtensions.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Windows\Controls\JasilyValidation.cs" />
+    <Compile Include="Windows\Controls\ValidationExtensions.cs" />
     <Compile Include="Windows\Data\JasilyCollectionView.cs" />
   </ItemGroup>
   <ItemGroup>

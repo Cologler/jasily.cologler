@@ -38,7 +38,7 @@ namespace System.Security.Cryptography
 
         public static string ComputeHashString(this HashAlgorithm hash, string text)
         {
-            return hash.ComputeHash(text.GetBytes()).ConverterToHashString();
+            return hash.ComputeHash(text.GetBytes()).ConverterToHexString();
         }
         public static string ComputeHashString(this HashAlgorithm hash, byte[] buffer)
         {

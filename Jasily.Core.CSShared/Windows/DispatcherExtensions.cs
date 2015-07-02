@@ -1,7 +1,7 @@
 ﻿
 namespace System.Windows
 {
-    public static class JasilyDispatcher
+    public static class DispatcherExtensions
     {
 #if DESKTOP
         /// <summary>

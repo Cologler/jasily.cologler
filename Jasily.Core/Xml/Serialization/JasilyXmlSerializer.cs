@@ -5,7 +5,7 @@ using System.Text;
 
 namespace System.Xml.Serialization
 {
-    public static class JasilyXmlSerializer
+    public static class XmlSerializerExtensions
     {
         public static T XmlToObject<T>(this Stream stream)
         {

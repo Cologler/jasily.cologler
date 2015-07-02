@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace System.Runtime.Serialization.Json
 {
-    public static class JasilyDataContractJsonSerializer
+    public static class DataContractJsonSerializerExtensions 
     {
         public static T JsonToObject<T>(this Stream stream)
         {
