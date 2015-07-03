@@ -53,7 +53,6 @@
     <Compile Include="ComponentModel\JasilyViewModel.cs" />
     <Compile Include="ComponentModel\NotifyPropertyChangedObject.cs" />
     <Compile Include="Diagnostics\DebugPro.cs" />
-    <Compile Include="Diagnostics\JasilyLogger.cs" />
     <Compile Include="Enums\CollectionChangedAction.cs" />
     <Compile Include="Enums\ObjectChangedAction.cs" />
     <Compile Include="Enums\PropertyChangedAction.cs" />

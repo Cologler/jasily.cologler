@@ -104,6 +104,9 @@
     <Compile Include="..\Jasily.Core.CSShared\Windows\VisibilityExtensions.cs">
       <Link>Windows\VisibilityExtensions.cs</Link>
     </Compile>
+    <Compile Include="Diagnostics\IJasilyLoggerExtensions.cs" />
+    <Compile Include="Diagnostics\IJasilyLoggerObject.cs" />
+    <Compile Include="Diagnostics\JasilyLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Windows\Controls\ValidationExtensions.cs" />
     <Compile Include="Windows\Data\JasilyCollectionView.cs" />
