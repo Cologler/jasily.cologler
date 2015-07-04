@@ -160,5 +160,16 @@ namespace System.Linq
             var len = count / chunkSize + (count % chunkSize != 0 ? 1 : 0);
             return Enumerable.Range(0, len).Select(i => source.Skip(i * chunkSize).Take(chunkSize));
         }
+
+        /// <summary>
+        /// return a single item array.
+        /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static IEnumerable<TSource> GetIEnumerable<TSource>(this TSource source)
+        {
+            return new[] {source};
+        }
     }
 }

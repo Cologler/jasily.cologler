@@ -97,5 +97,118 @@ namespace System
         {
             return (T) obj;
         }
+
+        #region type convert
+
+        /// <summary>
+        /// if obj is type, return the obj self, else return a new object.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static bool TryTypeConvert(this object obj, Type type, out object dest)
+        {
+            if (ReferenceEquals(obj, null) || obj.GetType() == type)
+            {
+                dest = obj;
+                return true;
+            }
+
+            switch (obj.GetType().FullName)
+            {
+                case "System.String":
+                    return TryTypeConvert((string)obj, type, out dest);
+
+                case "System.Int32":
+                    return TryTypeConvert((int)obj, type, out dest);
+
+                case "System.Int64":
+                    return TryTypeConvert((long)obj, type, out dest);
+
+                default:
+                    dest = null;
+                    return false;
+            }
+        }
+
+        public static bool TryTypeConvert(this string obj, Type type, out object dest)
+        {
+            if (ReferenceEquals(obj, null) || obj.GetType() == type)
+            {
+                dest = obj;
+                return true;
+            }
+
+            switch (type.Name)
+            {
+                case "System.Int32":
+                    dest = Int32.Parse(obj);
+                    break;
+
+                case "System.Int64":
+                    dest = Int64.Parse(obj);
+                    break;
+
+                default:
+                    dest = null;
+                    return false;
+            }
+
+            return true;
+        }
+
+        public static bool TryTypeConvert(this int obj, Type type, out object dest)
+        {
+            if (obj.GetType() == type)
+            {
+                dest = obj;
+                return true;
+            }
+
+            switch (type.Name)
+            {
+                case "System.String":
+                    dest = obj.ToString();
+                    break;
+
+                case "System.Int64":
+                    dest = Convert.ToInt64(obj);
+                    break;
+
+                default:
+                    dest = null;
+                    return false;
+            }
+
+            return true;
+        }
+
+        public static bool TryTypeConvert(this long obj, Type type, out object dest)
+        {
+            if (obj.GetType() == type)
+            {
+                dest = obj;
+                return true;
+            }
+
+            switch (type.Name)
+            {
+                case "System.String":
+                    dest = obj.ToString();
+                    break;
+
+                case "System.Int32":
+                    dest = Convert.ToInt32(obj);
+                    break;
+
+                default:
+                    dest = null;
+                    return false;
+            }
+
+            return true;
+        }
+
+        #endregion
     }
 }

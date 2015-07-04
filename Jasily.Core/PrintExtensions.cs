@@ -38,14 +38,12 @@ namespace System
             if (level != 0) sb.Add("");
 
             sb.AddRange(from f in type.GetRuntimeFields()
-                .Where(z => !z.IsStatic &&
-                            (dontNeedAttr || CustomAttributeExtensions.GetCustomAttribute<PrintAttribute>((MemberInfo) z) != null))
+                where !f.IsStatic && (dontNeedAttr || f.GetCustomAttribute<PrintAttribute>() != null) && f.Name[0] != '<'
                 let value = f.GetValue(obj)
                 select String.Format("{0}[{1}] {2}", ' '.Repeat(indent * level), f.Name, Print(value, indent, level + 1)));
 
             sb.AddRange(from p in type.GetRuntimeProperties()
-                .Where(z => z.CanRead &&
-                            (dontNeedAttr || z.GetCustomAttribute<PrintAttribute>() != null))
+                where p.CanRead && (dontNeedAttr || p.GetCustomAttribute<PrintAttribute>() != null)
                 let value = p.GetValue(obj)
                 select String.Format("{0}[{1}] {2}", ' '.Repeat(indent * level), p.Name, Print(value, indent, level + 1)));
 

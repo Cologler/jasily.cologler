@@ -35,11 +35,11 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
-    <Folder Include="Reflection\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActivatorPro.cs" />
     <Compile Include="Attributes\PrintAttribute.cs" />
+    <Compile Include="ChangeEventArgs.cs" />
     <Compile Include="Collections\Generic\JasilyITryGetValue.cs" />
     <Compile Include="Collections\Generic\ITryGetValue.cs" />
     <Compile Include="Collections\Generic\JasilyDictionaryHelper.cs" />
@@ -49,6 +49,8 @@
     <Compile Include="Collections\ObjectModel\CollectionChangedEventArgs.cs" />
     <Compile Include="Collections\ObjectModel\JasilyCollection.cs" />
     <Compile Include="Collections\ObjectModel\ObservableCollectionGroup.cs" />
+    <Compile Include="ComponentModel\Editable\EditableFieldAttribute.cs" />
+    <Compile Include="ComponentModel\Editable\JasilyEditableViewModel.cs" />
     <Compile Include="ComponentModel\JasilyINotifyPropertyChanged.cs" />
     <Compile Include="ComponentModel\JasilyViewModel.cs" />
     <Compile Include="ComponentModel\NotifyPropertyChangedObject.cs" />
@@ -71,6 +73,7 @@
     <Compile Include="JasilyDateTime.cs" />
     <Compile Include="PrintExtensions.cs" />
     <Compile Include="RandomExtensions.cs" />
+    <Compile Include="Reflection\JasilyReflectionExtensions.cs" />
     <Compile Include="UfDateTimeConverter.cs" />
     <Compile Include="JasilyEvent.cs" />
     <Compile Include="JasilyException.cs" />
