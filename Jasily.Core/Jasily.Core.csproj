@@ -55,10 +55,13 @@
     <Compile Include="ComponentModel\JasilyViewModel.cs" />
     <Compile Include="ComponentModel\NotifyPropertyChangedObject.cs" />
     <Compile Include="Diagnostics\DebugPro.cs" />
+    <Compile Include="Enums\ByteSize.cs" />
+    <Compile Include="Enums\ByteSizeTypeExtensions.cs" />
     <Compile Include="Enums\CollectionChangedAction.cs" />
     <Compile Include="Enums\ObjectChangedAction.cs" />
     <Compile Include="Enums\PropertyChangedAction.cs" />
     <Compile Include="Enums\ResourceChangedAction.cs" />
+    <Compile Include="Enums\BinarySizeType.cs" />
     <Compile Include="Enums\TimeSpace.cs" />
     <Compile Include="EventArgs.cs" />
     <Compile Include="IBuilder.cs" />
