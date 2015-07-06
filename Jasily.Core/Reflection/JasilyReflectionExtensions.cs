@@ -37,5 +37,14 @@ namespace System.Reflection
             if (p != null) return p.SetValue;
             return null;
         }
+
+        public static string GetCSharpName(this Type type)
+        {
+            return type.IsConstructedGenericType
+                ? String.Format("{0}<{1}>",
+                    type.Name.Substring(0, type.Name.IndexOf("`", StringComparison.Ordinal)),
+                    type.GenericTypeArguments.Select(GetCSharpName).AsLines(", "))
+                : type.Name;
+        }
     }
 }

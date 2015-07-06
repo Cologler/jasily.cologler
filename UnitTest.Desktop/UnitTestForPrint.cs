@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Attributes;
+using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -11,25 +12,46 @@ namespace UnitTest.Desktop
         [TestMethod]
         public void TestMethod1()
         {
-            
-            Debug.WriteLine(new A()
+            Debug.WriteLine(new Parent()
             {
                 D = new D() { Z = "6" },
                 E = new E() { Z = "5" }
-            }.Print());
+            }.Print(4));
         }
     }
 
 
-    public class A : IPrint
+    public class Parent : IPrint
     {
+        public IObserver<Tuple<List<D>, List<D>, List<D>>> ZNN; 
+
+        public List<D> List = new List<D>()
+        {
+            new D()
+            {
+                D2 = new D()
+                {
+                    D2 = new D() {Z = "hehe"}
+                }
+            },
+            new D()
+            {
+                D2 = new D()
+                {
+                    D2 = new D() {Z = "hehe"}
+                }
+            }
+        };
+
+        public E E2 { get; private set; }
+
         public static string 发 = "123";
 
-        public readonly int s = 11;
+        public readonly int ParentReadonlyInt32 = 11;
 
-        public string B { get; set; }
+        public string ParentString { get; set; }
 
-        public int C;
+        protected int C;
 
         public D D { get; set; }
 
@@ -39,7 +61,7 @@ namespace UnitTest.Desktop
         {
             D2= new D()
             {
-                D2 =  new D() { Z = "hehe" }
+                D2 =  new D() { Z = "hehe\r\naa" }
             }
         };
     }
