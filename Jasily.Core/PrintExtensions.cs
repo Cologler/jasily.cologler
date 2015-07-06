@@ -1,6 +1,7 @@
 ﻿using System.Attributes;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 
 namespace System
@@ -25,15 +26,29 @@ namespace System
         {
             if (obj == null) return "[null]";
 
+            var sb = new List<string>();
+
             var print = obj as IPrint;
 
-            if (print == null) return obj.ToString();
+            if (print == null)
+            {
+                var array = obj as Array;
+
+                if (array != null)
+                {
+                    sb.Add(String.Format("{0}[{1}]", ' '.Repeat(indent * level), "Array"));
+                    sb.AddRange(array.OfType<object>()
+                        .Select(z => String.Format("{0}{1}", ' '.Repeat(indent * (level + 1)), Print(z, indent, level + 2))));
+                }
+                else
+                {
+                    return obj.ToString();
+                }
+            }
 
             var type = obj.GetType();
 
             bool dontNeedAttr = type.GetTypeInfo().GetCustomAttribute<PrintAttribute>() == null;
-
-            var sb = new List<string>();
 
             if (level != 0) sb.Add("");
 
