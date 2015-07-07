@@ -1,5 +1,4 @@
-﻿using System.IO;
-using System.Runtime.Serialization.Json;
+﻿using System.Runtime.Serialization.Json;
 using System.Xml.Serialization;
 
 namespace System.Net

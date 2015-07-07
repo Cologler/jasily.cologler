@@ -1,16 +1,16 @@
-﻿using System.Collections.Generic;
-using System.Collections;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Ipc;
 using System.Runtime.Serialization.Formatters;
+using System.Security;
+using System.Text;
 using System.Threading;
 using System.Windows;
-using System.Security;
-using System.Runtime.InteropServices;
-using System.ComponentModel;
-using System.Reflection;
 
 // ========================
 // source from http://blogs.microsoft.co.il/blogs/arik/SingleInstance.cs.txt
@@ -214,7 +214,7 @@ namespace System.Shell
                 {
                     try
                     {
-                        using (TextReader reader = new StreamReader(cmdLinePath, Text.Encoding.Unicode))
+                        using (TextReader reader = new StreamReader(cmdLinePath, Encoding.Unicode))
                         {
                             args = NativeMethods.CommandLineToArgvW(reader.ReadToEnd());
                         }

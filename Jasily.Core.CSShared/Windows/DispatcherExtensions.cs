@@ -1,4 +1,6 @@
 ﻿
+using System.Windows.Threading;
+
 namespace System.Windows
 {
     public static class DispatcherExtensions
@@ -10,20 +12,20 @@ namespace System.Windows
         /// <param name="dispatcher"></param>
         /// <param name="a">对采用 args 中指定参数的方法的委托，该委托将被推送到 System.Windows.Threading.Dispatcher 事件队列中。</param>
         /// <returns></returns>
-        public static Threading.DispatcherOperation BeginInvoke(this Threading.Dispatcher dispatcher, Action a)
+        public static DispatcherOperation BeginInvoke(this Dispatcher dispatcher, Action a)
         {
             return dispatcher.BeginInvoke(a, null);
         }
-        public static Threading.DispatcherOperation BeginInvoke<T>(this Threading.Dispatcher dispatcher, Action<T> a, T arg)
+        public static DispatcherOperation BeginInvoke<T>(this Dispatcher dispatcher, Action<T> a, T arg)
         {
             return dispatcher.BeginInvoke(a, arg);
         }
-        public static Threading.DispatcherOperation BeginInvoke<T1, T2>(this Threading.Dispatcher dispatcher, Action<T1, T2> a, T1 arg1, T2 arg2)
+        public static DispatcherOperation BeginInvoke<T1, T2>(this Dispatcher dispatcher, Action<T1, T2> a, T1 arg1, T2 arg2)
         {
             return dispatcher.BeginInvoke(a, arg1, arg2);
         }
 
-        public static bool CheckAccessOrInvoke(this Threading.Dispatcher dispatcher, Action action)
+        public static bool CheckAccessOrInvoke(this Dispatcher dispatcher, Action action)
         {
             if (dispatcher.CheckAccess()) return true;
 
@@ -31,7 +33,7 @@ namespace System.Windows
 
             return false;
         }
-        public static bool CheckAccessOrInvoke<T>(this Threading.Dispatcher dispatcher, Action<T> action, T t)
+        public static bool CheckAccessOrInvoke<T>(this Dispatcher dispatcher, Action<T> action, T t)
         {
             if (dispatcher.CheckAccess()) return true;
 
@@ -39,7 +41,7 @@ namespace System.Windows
 
             return false;
         }
-        public static bool CheckAccessOrInvoke<T1, T2>(this Threading.Dispatcher dispatcher, Action<T1, T2> action, T1 t1, T2 t2)
+        public static bool CheckAccessOrInvoke<T1, T2>(this Dispatcher dispatcher, Action<T1, T2> action, T1 t1, T2 t2)
         {
             if (dispatcher.CheckAccess()) return true;
 
@@ -48,7 +50,7 @@ namespace System.Windows
             return false;
         }
 
-        public static bool CheckAccessOrBeginInvoke(this Threading.Dispatcher dispatcher, Action action)
+        public static bool CheckAccessOrBeginInvoke(this Dispatcher dispatcher, Action action)
         {
             if (dispatcher.CheckAccess()) return true;
 
@@ -56,7 +58,7 @@ namespace System.Windows
 
             return false;
         }
-        public static bool CheckAccessOrBeginInvoke<T>(this Threading.Dispatcher dispatcher, Action<T> action, T t)
+        public static bool CheckAccessOrBeginInvoke<T>(this Dispatcher dispatcher, Action<T> action, T t)
         {
             if (dispatcher.CheckAccess()) return true;
 
@@ -64,7 +66,7 @@ namespace System.Windows
 
             return false;
         }
-        public static bool CheckAccessOrBeginInvoke<T1, T2>(this Threading.Dispatcher dispatcher, Action<T1, T2> action, T1 t1, T2 t2)
+        public static bool CheckAccessOrBeginInvoke<T1, T2>(this Dispatcher dispatcher, Action<T1, T2> action, T1 t1, T2 t2)
         {
             if (dispatcher.CheckAccess()) return true;
 
@@ -73,7 +75,7 @@ namespace System.Windows
             return false;
         }
 
-        public static Threading.Dispatcher GetUIDispatcher()
+        public static Dispatcher GetUIDispatcher()
         {
             return Application.Current.Dispatcher;
         }
@@ -81,7 +83,7 @@ namespace System.Windows
         /// get UI dispatcher
         /// </summary>
         /// <returns></returns>
-        public static Threading.Dispatcher GetUIDispatcher(this object obj)
+        public static Dispatcher GetUIDispatcher(this object obj)
         {
             return GetUIDispatcher();
         }

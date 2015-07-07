@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.Contracts;
-
-namespace System
+﻿namespace System
 {
     public interface IBuilder<out T>
     {

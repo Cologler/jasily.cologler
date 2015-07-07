@@ -1,6 +1,4 @@
-﻿using System.Security.Cryptography;
-
-namespace System.Security.Cryptography
+﻿namespace System.Security.Cryptography
 {
     public static class JasilyCryptoHelper
     {
