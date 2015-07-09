@@ -24,20 +24,20 @@ namespace System.ComponentModel.Editable
                 .Where(f => f.GetCustomAttribute<EditableFieldAttribute>() != null))
             {
                 var getter = this.ThisType.GetGetter(field.Name);
-                if (getter == null) continue;
-                var setter = this.SourceType.GetSetter(field.Name);
-                if (setter == null) continue;
-                setter(obj, getter(this));
+                if (getter != null)
+                {
+                    field.SetValue(obj, getter(this));
+                }
             }
 
             foreach (var property in this.SourceType.GetRuntimeProperties()
                 .Where(f => f.GetCustomAttribute<EditableFieldAttribute>() != null))
             {
                 var getter = this.ThisType.GetGetter(property.Name);
-                if (getter == null) continue;
-                var setter = this.SourceType.GetSetter(property.Name);
-                if (setter == null) continue;
-                setter(obj, getter(this));
+                if (getter != null)
+                {
+                    property.SetValue(obj, getter(this));
+                }
             }
         }
 
@@ -48,21 +48,21 @@ namespace System.ComponentModel.Editable
             foreach (var field in this.SourceType.GetRuntimeFields()
                 .Where(f => f.GetCustomAttribute<EditableFieldAttribute>() != null))
             {
-                var getter = this.SourceType.GetGetter(field.Name);
-                if (getter == null) continue;
                 var setter = this.ThisType.GetSetter(field.Name);
-                if (setter == null) continue;
-                setter(this, getter(obj));
+                if (setter != null)
+                {
+                    setter(this, field.GetValue(obj));
+                }
             }
 
             foreach (var property in this.SourceType.GetRuntimeProperties()
                 .Where(f => f.GetCustomAttribute<EditableFieldAttribute>() != null))
             {
-                var getter = this.SourceType.GetGetter(property.Name);
-                if (getter == null) continue;
                 var setter = this.ThisType.GetSetter(property.Name);
-                if (setter == null) continue;
-                setter(this, getter(obj));
+                if (setter != null)
+                {
+                    setter(this, property.GetValue(obj));
+                }
             }
         }
     }
