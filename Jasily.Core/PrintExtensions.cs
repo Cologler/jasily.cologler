@@ -1,5 +1,7 @@
 ﻿using System.Attributes;
 using System.Collections;
+using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 
@@ -137,6 +139,20 @@ namespace System
                     this.builder.AppendFormat("CLASS<  {0}  >", print.GetType().GetCSharpName());
                     this.builder.AppendLine();
                     this.Walk(print);
+                    return;
+                }
+
+                var buff = obj as byte[];
+
+                if (buff != null)
+                {
+                    this.builder.AppendLine(buff.Take(128).GetHexString() + "...");
+                    return;
+                }
+
+                if (obj is Stream)
+                {
+                    this.builder.AppendLine("stream content was ignored.");
                     return;
                 }
 

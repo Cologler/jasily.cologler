@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
+using System.IO;
 using System.Text;
 
 namespace System.Runtime.Serialization.Json
@@ -7,9 +8,24 @@ namespace System.Runtime.Serialization.Json
     {
         public static T JsonToObject<T>(this Stream stream)
         {
-            var ser = new DataContractJsonSerializer(typeof(T));
-            var obj = (T)ser.ReadObject(stream);
-            return obj;
+#if DEBUG
+            var bytes = stream.ToArray();
+            stream = bytes.ToMemoryStream();
+#endif
+
+            try
+            {
+                var ser = new DataContractJsonSerializer(typeof(T));
+                var obj = (T)ser.ReadObject(stream);
+                return obj;
+            }
+            catch (Exception)
+            {
+#if DEBUG
+                Debug.WriteLine("JsonToObject() failed: {0}", bytes.GetString());
+#endif
+                throw;
+            }
         }
 
         public static T JsonToObject<T>(this byte[] bytes)

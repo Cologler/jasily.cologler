@@ -54,6 +54,10 @@
     <Compile Include="ComponentModel\JasilyINotifyPropertyChanged.cs" />
     <Compile Include="ComponentModel\JasilyViewModel.cs" />
     <Compile Include="ComponentModel\NotifyPropertyChangedObject.cs" />
+    <Compile Include="Data\IJasilyEntity.cs" />
+    <Compile Include="Data\IJasilyEntitySetProvider.cs" />
+    <Compile Include="Data\IJasilyEntitySetReader.cs" />
+    <Compile Include="Data\IJasilyEntitySetWriter.cs" />
     <Compile Include="Diagnostics\DebugPro.cs" />
     <Compile Include="Enums\ByteSize.cs" />
     <Compile Include="Enums\ByteSizeTypeExtensions.cs" />
@@ -71,7 +75,7 @@
     <Compile Include="IO\MemoryTributary.cs" />
     <Compile Include="IO\MergeReadonlyStream.cs" />
     <Compile Include="IPrint.cs" />
-    <Compile Include="JasilyByteArrayHelper.cs" />
+    <Compile Include="ByteArrayExtensions.cs" />
     <Compile Include="JasilyChar.cs" />
     <Compile Include="JasilyDateTime.cs" />
     <Compile Include="PrintExtensions.cs" />
