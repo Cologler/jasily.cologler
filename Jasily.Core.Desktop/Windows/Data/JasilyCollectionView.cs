@@ -6,6 +6,7 @@ namespace System.Windows.Data
     public class JasilyCollectionView<T> : JasilyViewModel
     {
         private T selected;
+        private Predicate<T> filter;
 
         public JasilyCollectionView()
         {
@@ -24,7 +25,15 @@ namespace System.Windows.Data
             set { this.SetPropertyRef(ref this.selected, value); }
         }
 
-        public Predicate<T> Filter { get; set; }
+        public Predicate<T> Filter
+        {
+            get { return this.filter; }
+            set
+            {
+                this.filter = value;
+                this.View.Filter = value != null ? this.OnFilter : (Predicate<object>) null;
+            }
+        }
 
         private bool OnFilter(object obj)
         {

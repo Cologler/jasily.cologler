@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace System.Data
 {
-    public interface IJasilyEntitySetReader<TEntity, in TKey>
+    public interface IJasilyEntitySetReader<TEntity, TKey>
         where TEntity : class, IJasilyEntity<TKey>
     {
         /// <summary>
@@ -12,6 +12,13 @@ namespace System.Data
         /// <param name="id"></param>
         /// <returns></returns>
         Task<TEntity> FindAsync(TKey id);
+
+        /// <summary>
+        /// return a entities dictionary where match id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<IDictionary<TKey, TEntity>> FindAsync(IEnumerable<TKey> ids);
 
         /// <summary>
         /// list some item from all entities
