@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 
 namespace System.ComponentModel
@@ -16,7 +17,8 @@ namespace System.ComponentModel
 
         private string ParseProperty<T>(Expression<Func<T, object>> propertySelector)
         {
-            if (typeof(T).FullName != this.GetType().FullName)
+            if (this.GetType() != typeof(T) &&
+                !this.GetType().GetTypeInfo().IsSubclassOf(typeof(T)))
                 throw new NotSupportedException("type of source in propertySelector must be current type.");
 
             return propertySelector.PropertySelector();
