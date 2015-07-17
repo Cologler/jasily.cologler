@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace System.ComponentModel
 {
-    public static class JasilyINotifyPropertyChanged
+    public static class INotifyPropertyChangedExtensions
     {
         /// <summary>
         /// if e != null, call e() with propertyName
@@ -21,7 +22,7 @@ namespace System.ComponentModel
         /// <typeparam name="T"></typeparam>
         /// <param name="e"></param>
         /// <param name="sender"></param>
-        /// <param name="args"></param>
+        /// <param name="propertyNames"></param>
         public static void Fire(this PropertyChangedEventHandler e, object sender, params string[] propertyNames)
         {
             if (e != null)

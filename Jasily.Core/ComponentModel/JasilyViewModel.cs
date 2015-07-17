@@ -14,6 +14,7 @@ namespace System.ComponentModel
             this.Source = source;
         }
 
+        [NotifyPropertyChanged(Order = -1)]
         public TSource Source
         {
             get { return this.source; }

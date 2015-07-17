@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -31,12 +32,13 @@ namespace System.ComponentModel
         /// <param name="propertySelector"></param>
         public void RegisterForEndRefresh<T>(Expression<Func<T, object>> propertySelector)
         {
+            var property = this.ParseProperty(propertySelector);
             lock (this._syncRootForEndRefresh)
-                this._registeredPropertyForEndRefresh.Add(this.ParseProperty(propertySelector));
+                this._registeredPropertyForEndRefresh.Add(property);
         }
 
         /// <summary>
-        /// please always call on UI thread. the method will call PropertyChanged for each Registered property.
+        /// please always call this action on UI thread. the method will call PropertyChanged for each Registered property.
         /// </summary>
         public void EndRefresh()
         {
@@ -66,7 +68,7 @@ namespace System.ComponentModel
                 return true;
             }
         }
-        public bool SetPropertyRef<T>(ref T property, T newValue, params string[] propertyNames)
+        protected bool SetPropertyRef<T>(ref T property, T newValue, params string[] propertyNames)
         {
             if (property.NormalEquals(newValue))
             {
@@ -80,19 +82,37 @@ namespace System.ComponentModel
             }
         }
 
-        protected virtual void NotifyPropertyChanged<T>(Expression<Func<T, object>> propertySelector)
+        /// <summary>
+        /// the method will call PropertyChanged for each property which has [NotifyPropertyChanged]
+        /// </summary>
+        public virtual void RefreshProperties()
+        {
+            var list = (
+                from property in this.GetType().GetRuntimeProperties()
+                let attr = property.GetCustomAttribute<NotifyPropertyChangedAttribute>()
+                where attr != null
+                select new Tuple<NotifyPropertyChangedAttribute, PropertyInfo>(attr, property)
+            ).ToList();
+
+            this.NotifyPropertyChanged(list
+                .OrderBy(z => z.Item1.Order)
+                .Select(z => z.Item2.Name)
+                .ToArray());
+        }
+
+        protected void NotifyPropertyChanged<T>(Expression<Func<T, object>> propertySelector)
         {
             this.NotifyPropertyChanged(this.ParseProperty(propertySelector));
         }
-        protected virtual void NotifyPropertyChanged(string propertyName)
+        protected void NotifyPropertyChanged(string propertyName)
         {
             this.PropertyChanged.Fire(this, propertyName);
         }
-        protected virtual void NotifyPropertyChanged(params string[] propertyNames)
+        protected void NotifyPropertyChanged(params string[] propertyNames)
         {
             this.PropertyChanged.Fire(this, propertyNames);
         }
-        protected virtual void NotifyPropertyChanged(IEnumerable<string> propertyNames)
+        protected void NotifyPropertyChanged(IEnumerable<string> propertyNames)
         {
             this.PropertyChanged.Fire(this, propertyNames);
         }
