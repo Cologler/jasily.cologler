@@ -98,6 +98,15 @@
     <Compile Include="..\Jasily.Core.CSShared\Shell\MicrosoftSingleInstanceProvider.cs">
       <Link>Shell\MicrosoftSingleInstanceProvider.cs</Link>
     </Compile>
+    <Compile Include="..\Jasily.Core.CSShared\Windows\Data\JasilyCollectionView.cs">
+      <Link>Windows\Data\JasilyCollectionView.cs</Link>
+    </Compile>
+    <Compile Include="..\Jasily.Core.CSShared\Windows\Data\JasilySelectorCollectionView.cs">
+      <Link>Windows\Data\JasilySelectorCollectionView.cs</Link>
+    </Compile>
+    <Compile Include="..\Jasily.Core.CSShared\Windows\Data\NullCollapsedValueConverter.cs">
+      <Link>Windows\Data\NullCollapsedValueConverter.cs</Link>
+    </Compile>
     <Compile Include="..\Jasily.Core.CSShared\Windows\DispatcherExtensions.cs">
       <Link>Windows\DispatcherExtensions.cs</Link>
     </Compile>
@@ -109,8 +118,6 @@
     <Compile Include="Diagnostics\JasilyLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Windows\Controls\ValidationExtensions.cs" />
-    <Compile Include="Windows\Data\JasilyCollectionView.cs" />
-    <Compile Include="Windows\Data\JasilySelectorCollectionView.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Jasily.Core\Jasily.Core.csproj">
