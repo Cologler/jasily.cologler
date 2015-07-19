@@ -3,7 +3,7 @@ using System.Threading;
 
 namespace System.Linq
 {
-    public static class JasilyLinq
+    public static class LinqExtensions
     {
         /// <summary>
         /// 从 System.Collections.Generic.IEnumerable&lt;T&gt; 创建一个数组。
@@ -169,7 +169,7 @@ namespace System.Linq
         /// <returns></returns>
         public static IEnumerable<TSource> GetIEnumerable<TSource>(this TSource source)
         {
-            return new[] {source};
+            return new[] { source };
         }
     }
 }

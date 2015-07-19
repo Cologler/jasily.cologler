@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace UnitTest.Desktop
@@ -17,6 +20,8 @@ namespace UnitTest.Desktop
             Assert.IsFalse(new TestClassB() { Id = 5 }.NormalEquals(new TestClassB() { Id = 5 }));
             Assert.IsTrue(new TestStructA() { Oid = 8, Id = 5 }.NormalEquals(new TestStructA() { Id = 5 }));
             Assert.IsFalse(new TestStructB() { Oid = 8, Id = 5 }.NormalEquals(new TestStructB() { Id = 5 }));
+
+            Debug.WriteLine(typeof(List<string>).GetCSharpName());
         }
 
         class TestClassA : IEquatable<TestClassA>
