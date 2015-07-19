@@ -39,7 +39,7 @@
   <ItemGroup>
     <Compile Include="ActivatorPro.cs" />
     <Compile Include="Attributes\PrintAttribute.cs" />
-    <Compile Include="ChangeEventArgs.cs" />
+    <Compile Include="ChangingEventArgs.cs" />
     <Compile Include="Collections\Generic\JasilyITryGetValue.cs" />
     <Compile Include="Collections\Generic\ITryGetValue.cs" />
     <Compile Include="Collections\Generic\JasilyDictionaryHelper.cs" />
@@ -82,6 +82,7 @@
     <Compile Include="PrintExtensions.cs" />
     <Compile Include="RandomExtensions.cs" />
     <Compile Include="Reflection\JasilyReflectionExtensions.cs" />
+    <Compile Include="RequestActionEventArgs.cs" />
     <Compile Include="UfDateTimeConverter.cs" />
     <Compile Include="JasilyEvent.cs" />
     <Compile Include="JasilyException.cs" />
