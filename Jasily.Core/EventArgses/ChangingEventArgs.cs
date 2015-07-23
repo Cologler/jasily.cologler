@@ -1,4 +1,4 @@
-﻿namespace System
+﻿namespace System.EventArgses
 {
     public sealed class ChangingEventArgs<T> : EventArgs
     {
