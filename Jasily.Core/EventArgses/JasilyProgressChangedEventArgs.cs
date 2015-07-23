@@ -1,18 +1,18 @@
 ﻿namespace System.EventArgses
 {
-    public class ProgressEventArgs : EventArgs
+    public class JasilyProgressChangedEventArgs : EventArgs
     {
         public long Current { get; }
 
         public long Total { get; }
 
-        public ProgressEventArgs(long current, long total)
+        public JasilyProgressChangedEventArgs(long current, long total)
         {
             this.Current = current;
             this.Total = total;
         }
 
-        public double GetPercent()
+        public double GetPercentage()
         {
             return Convert.ToDouble(this.Current) / Convert.ToDouble(this.Total);
         }
