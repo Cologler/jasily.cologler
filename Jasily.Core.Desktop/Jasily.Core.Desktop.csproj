@@ -59,9 +59,6 @@
     <Compile Include="..\Jasily.Core.CSShared\IO\FileSystemTestType.cs">
       <Link>IO\FileSystemTestType.cs</Link>
     </Compile>
-    <Compile Include="..\Jasily.Core.CSShared\Net\JasilyHttpWebRequest.cs">
-      <Link>Net\JasilyHttpWebRequest.cs</Link>
-    </Compile>
     <Compile Include="..\Jasily.Core.CSShared\Performance\CodeTimer.cs">
       <Link>Performance\CodeTimer.cs</Link>
     </Compile>
@@ -124,6 +121,9 @@
       <Project>{8442e8e7-d515-4481-8a36-71711b1fbf79}</Project>
       <Name>Jasily.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Net\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

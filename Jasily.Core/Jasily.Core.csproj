@@ -82,6 +82,7 @@
     <Compile Include="JasilyChar.cs" />
     <Compile Include="JasilyDateTime.cs" />
     <Compile Include="Net\Http\RangeHeader.cs" />
+    <Compile Include="Net\HttpWebRequestExtensions.cs" />
     <Compile Include="Net\Sockets\Port.cs" />
     <Compile Include="PrintExtensions.cs" />
     <Compile Include="RandomExtensions.cs" />

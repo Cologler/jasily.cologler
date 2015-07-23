@@ -49,7 +49,6 @@
     <Compile Include="IO\ClipboardMonitor.cs" />
     <Compile Include="IO\FileSystemTest.cs" />
     <Compile Include="IO\FileSystemTestType.cs" />
-    <Compile Include="Net\JasilyHttpWebRequest.cs" />
     <Compile Include="Security\Cryptography\JasilyCrypto.cs" />
     <Compile Include="Security\Cryptography\JasilyICryptoTransform.cs" />
     <Compile Include="Security\Cryptography\JasilySymmetricAlgorithmHelper.cs" />
