@@ -78,5 +78,12 @@ namespace System.Net
 
             return this.Result;
         }
+
+	    public WebResult<TOut> Cast<TOut>(Func<T, TOut> selector)
+	    {
+		    return this.WebException != null
+			    ? new WebResult<TOut>(this.WebException)
+			    : new WebResult<TOut>(this.Response, selector(this.Result));
+	    }
     }
 }
