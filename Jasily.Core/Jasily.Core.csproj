@@ -40,6 +40,7 @@
     <Compile Include="ActivatorPro.cs" />
     <Compile Include="Attributes\PrintAttribute.cs" />
     <Compile Include="EnumExtensions.cs" />
+    <Compile Include="Enums\SupportedFlagsAttribute.cs" />
     <Compile Include="EventArgses\ChangingEventArgs.cs" />
     <Compile Include="Collections\Generic\JasilyITryGetValue.cs" />
     <Compile Include="Collections\Generic\ITryGetValue.cs" />
