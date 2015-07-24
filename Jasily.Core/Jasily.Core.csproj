@@ -74,6 +74,7 @@
     <Compile Include="EventArgses\JasilyProgressChangedEventArgs.cs" />
     <Compile Include="IBuilder.cs" />
     <Compile Include="ICopy.cs" />
+    <Compile Include="IO\JasilyBuffer.cs" />
     <Compile Include="IO\JasilyStreamCopyObserver.cs" />
     <Compile Include="IO\StreamExtensions.cs" />
     <Compile Include="IO\JasilyStringReader.cs" />
