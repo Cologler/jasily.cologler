@@ -88,6 +88,7 @@
     <Compile Include="RandomExtensions.cs" />
     <Compile Include="Reflection\JasilyReflectionExtensions.cs" />
     <Compile Include="RequestActionEventArgs.cs" />
+    <Compile Include="Services\IServiceProvider.cs" />
     <Compile Include="UfDateTimeConverter.cs" />
     <Compile Include="JasilyEvent.cs" />
     <Compile Include="JasilyException.cs" />
