@@ -5,6 +5,8 @@ namespace System.IO
     public class JasilyStreamCopyObserver : IObserver<long>, IDisposable
     {
         public event EventHandler<JasilyProgressChangedEventArgs> ProgressChanged;
+        public event EventHandler Completed;
+        public event EventHandler<Exception> Error;
 
         public JasilyStreamCopyObserver(long total)
         {
@@ -18,7 +20,7 @@ namespace System.IO
         /// </summary>
         void IObserver<long>.OnCompleted()
         {
-            throw new NotImplementedException();
+            this.Completed.Fire(this);
         }
 
         /// <summary>
@@ -27,7 +29,7 @@ namespace System.IO
         /// <param name="error">一个提供有关错误的附加信息的对象。</param>
         void IObserver<long>.OnError(Exception error)
         {
-            throw new NotImplementedException();
+            this.Error.Fire(this, error);
         }
 
         /// <summary>
@@ -45,6 +47,8 @@ namespace System.IO
         public void Dispose()
         {
             this.ProgressChanged = null;
+            this.Completed = null;
+            this.Error = null;
         }
     }
 }

@@ -6,10 +6,13 @@
 
         public long Total { get; }
 
+        public bool IsCompleted { get; }
+
         public JasilyProgressChangedEventArgs(long current, long total)
         {
             this.Current = current;
             this.Total = total;
+            this.IsCompleted = current == total;
         }
 
         public double GetPercentage()
