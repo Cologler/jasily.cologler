@@ -219,5 +219,21 @@ namespace System
         }
 
         #endregion
+
+        public static string TrimStart(this string str, params string[] trimStrings)
+        {
+            if (trimStrings == null || trimStrings.Length == 0)
+                return str;
+
+            if (trimStrings.Any(z => z.IsNullOrEmpty()))
+                throw new ArgumentException();
+
+            string start;
+            while ((start = trimStrings.FirstOrDefault(z => str.StartsWith(z))) != null)
+            {
+                str = str.Substring(start.Length);
+            }
+            return str;
+        }
     }
 }
