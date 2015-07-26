@@ -2,7 +2,7 @@
 
 namespace System.Net
 {
-    public class WebResult
+    public class WebResult : IDisposable
     {
         /// <summary>
         /// maybe null if not contain response.
@@ -47,6 +47,11 @@ namespace System.Net
         /// return null if this.Type != WebResultType.WebException
         /// </summary>
         public WebException WebException { get; private set; }
+
+        public void Dispose()
+        {
+            this.Response?.Dispose();
+        }
     }
 
     public class WebResult<T> : WebResult
