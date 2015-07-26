@@ -98,6 +98,9 @@
     <Compile Include="..\Jasily.Core.CSShared\Shell\MicrosoftSingleInstanceProvider.cs">
       <Link>Shell\MicrosoftSingleInstanceProvider.cs</Link>
     </Compile>
+    <Compile Include="..\Jasily.Core.CSShared\Windows\Data\EmptyCollapsedValueConverter.cs">
+      <Link>Windows\Data\EmptyCollapsedValueConverter.cs</Link>
+    </Compile>
     <Compile Include="..\Jasily.Core.CSShared\Windows\Data\JasilyCollectionView.cs">
       <Link>Windows\Data\JasilyCollectionView.cs</Link>
     </Compile>
