@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jasily.Torrent", "Jasily.Torrent\Jasily.Torrent.csproj", "{632C5DA2-2328-434D-925F-1F73191DB221}"
 EndProject
@@ -18,6 +18,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jasily.Core.WP81", "Jasily.Core.WP81\Jasily.Core.WP81.csproj", "{6C92ACF0-A2B7-4738-8B6D-20C3BECBEAFD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jasily.Data.SQLBuilder", "Jasily.Data.SQLBuilder\Jasily.Data.SQLBuilder.csproj", "{295AEA0D-D4AF-458E-951A-B72D2EE6624B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jasily", "Jasily\Jasily.csproj", "{6ADB6547-070B-4518-A2D1-E3BC349730BC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -101,6 +103,18 @@ Global
 		{295AEA0D-D4AF-458E-951A-B72D2EE6624B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{295AEA0D-D4AF-458E-951A-B72D2EE6624B}.Release|ARM.ActiveCfg = Release|Any CPU
 		{295AEA0D-D4AF-458E-951A-B72D2EE6624B}.Release|x86.ActiveCfg = Release|Any CPU
+		{6ADB6547-070B-4518-A2D1-E3BC349730BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6ADB6547-070B-4518-A2D1-E3BC349730BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6ADB6547-070B-4518-A2D1-E3BC349730BC}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{6ADB6547-070B-4518-A2D1-E3BC349730BC}.Debug|ARM.Build.0 = Debug|Any CPU
+		{6ADB6547-070B-4518-A2D1-E3BC349730BC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6ADB6547-070B-4518-A2D1-E3BC349730BC}.Debug|x86.Build.0 = Debug|Any CPU
+		{6ADB6547-070B-4518-A2D1-E3BC349730BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6ADB6547-070B-4518-A2D1-E3BC349730BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6ADB6547-070B-4518-A2D1-E3BC349730BC}.Release|ARM.ActiveCfg = Release|Any CPU
+		{6ADB6547-070B-4518-A2D1-E3BC349730BC}.Release|ARM.Build.0 = Release|Any CPU
+		{6ADB6547-070B-4518-A2D1-E3BC349730BC}.Release|x86.ActiveCfg = Release|Any CPU
+		{6ADB6547-070B-4518-A2D1-E3BC349730BC}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
