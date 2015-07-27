@@ -45,6 +45,7 @@
     <Compile Include="Collections\IItemPage.cs" />
     <Compile Include="Collections\ItemPageEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Windows\JasilyClipboard.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Threading\" />
