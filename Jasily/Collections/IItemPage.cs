@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Jasily.Collections
+namespace System.Collections
 {
     public interface IItemPage : IDataPage
     {

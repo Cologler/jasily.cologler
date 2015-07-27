@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Jasily.Collections
+namespace System.Collections
 {
     public struct ItemPageEntity<T> : IItemPage<T>
         where T : class
