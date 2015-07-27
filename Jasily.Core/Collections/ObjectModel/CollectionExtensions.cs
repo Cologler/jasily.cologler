@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace System.Collections.ObjectModel
 {
-    public static class JasilyCollection
+    public static class CollectionExtensions
     {
         public static void AddRange<T>(this Collection<T> self, IEnumerable<T> collection)
         {
