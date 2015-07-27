@@ -79,6 +79,23 @@ namespace System.Windows
         {
             return Application.Current.Dispatcher;
         }
+
+#elif WINDOWS_PHONE_80
+        /// <summary>
+        /// get UI dispatcher
+        /// </summary>
+        /// <returns></returns>
+        public static System.Windows.Threading.Dispatcher GetUIDispatcher()
+        {
+            return Deployment.Current.Dispatcher;
+        }
+#else
+        public static Dispatcher GetUIDispatcher()
+        {
+            throw new NotSupportedException();
+        }
+#endif
+
         /// <summary>
         /// get UI dispatcher
         /// </summary>
@@ -87,17 +104,5 @@ namespace System.Windows
         {
             return GetUIDispatcher();
         }
-#endif
-
-#if WINDOWS_PHONE_80
-        /// <summary>
-        /// get UI dispatcher
-        /// </summary>
-        /// <returns></returns>
-        public static System.Windows.Threading.Dispatcher GetDispatcher()
-        {
-            return Deployment.Current.Dispatcher;
-        }
-#endif
     }
 }

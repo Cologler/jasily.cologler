@@ -39,13 +39,16 @@
   <ItemGroup>
     <Compile Include="ActivatorPro.cs" />
     <Compile Include="Attributes\PrintAttribute.cs" />
+    <Compile Include="Collections\Generic\ICollectionExtensions.cs" />
+    <Compile Include="Collections\Generic\IReadOnlyDictionaryExtensions.cs" />
+    <Compile Include="Collections\Generic\TryGetValueExtensions.cs" />
     <Compile Include="Diagnostics\IJasilyPrinter.cs" />
     <Compile Include="EnumExtensions.cs" />
     <Compile Include="Enums\SupportedFlagsAttribute.cs" />
     <Compile Include="EventArgses\ChangingEventArgs.cs" />
-    <Compile Include="Collections\Generic\JasilyITryGetValue.cs" />
+    <Compile Include="Collections\Generic\ITryGetValueExtensions.cs" />
     <Compile Include="Collections\Generic\ITryGetValue.cs" />
-    <Compile Include="Collections\Generic\JasilyDictionaryHelper.cs" />
+    <Compile Include="Collections\Generic\IDictionaryExtensions.cs" />
     <Compile Include="Collections\Generic\JasilyICollection.cs" />
     <Compile Include="Collections\Generic\ListExtensions.cs" />
     <Compile Include="Collections\Generic\NameValuePair.cs" />
