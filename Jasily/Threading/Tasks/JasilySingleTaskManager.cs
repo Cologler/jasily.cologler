@@ -78,7 +78,7 @@ namespace System.Threading.Tasks
         }
         public async Task RunAsync(string id, Action action)
         {
-            await this.RunAsync(id, Task.Run(() => action());
+            await this.RunAsync(id, Task.Run(() => action()));
         }
     }
 }
