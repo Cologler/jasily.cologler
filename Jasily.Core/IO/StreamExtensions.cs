@@ -70,6 +70,7 @@ namespace System.IO
         public static void CopyTo(this Stream stream, Stream destination, int bufferSize, IObserver<long> progressChangedWatcher)
         {
             if (progressChangedWatcher == null) throw new ArgumentNullException(nameof(progressChangedWatcher));
+            if (bufferSize <= 0) throw new ArgumentOutOfRangeException($"{nameof(bufferSize)} must >= 0.");
 
             long total = 0;
             byte[] buffer = new byte[bufferSize];
@@ -89,6 +90,7 @@ namespace System.IO
         public static async Task CopyToAsync(this Stream stream, Stream destination, int bufferSize, IObserver<long> progressChangedWatcher)
         {
             if (progressChangedWatcher == null) throw new ArgumentNullException(nameof(progressChangedWatcher));
+            if (bufferSize <= 0) throw new ArgumentOutOfRangeException($"{nameof(bufferSize)} must >= 0.");
 
             long total = 0;
             byte[] buffer = new byte[bufferSize];
@@ -103,6 +105,7 @@ namespace System.IO
         }
 
         /// <summary>
+        /// use two thread to read/write stream.
         /// this method was testing, no not use to release.
         /// </summary>
         /// <param name="stream"></param>
@@ -111,16 +114,60 @@ namespace System.IO
         /// <param name="progressChangedWatcher"></param>
         /// <param name="poolSize"></param>
         /// <returns></returns>
-        public static async Task ReadWriteAsyncCopyToAsync(this Stream stream,
-            Stream destination, int bufferSize, IObserver<long> progressChangedWatcher, int poolSize = 20)
+        public static async Task DoubleThreadCopyToAsync(this Stream stream, Stream destination, int bufferSize,
+            IObserver<long> progressChangedWatcher, int poolSize = 20)
         {
+            if (stream == null) throw new ArgumentNullException(nameof(stream));
+            if (destination == null) throw new ArgumentNullException(nameof(destination));
+            if (bufferSize <= 0) throw new ArgumentOutOfRangeException($"{nameof(bufferSize)} must >= 0.");
             if (progressChangedWatcher == null) throw new ArgumentNullException(nameof(progressChangedWatcher));
+            if (poolSize <= 0) throw new ArgumentOutOfRangeException($"{nameof(poolSize)} must > 0.");
 
-            var copyer = new StreamCopyer(stream, destination, bufferSize, poolSize, progressChangedWatcher);
-            await copyer.Start();
+            using (var copyer = new DoubleThreadStreamCopyer(stream, destination, bufferSize, poolSize, progressChangedWatcher))
+                await copyer.Start();
+        }        
+
+        public static async Task CopyToObserveOnTimeAsync(this Stream stream, Stream destination, int bufferSize,
+            IObserver<long> progressChangedWatcher, int milliseconds)
+        {
+            if (stream == null) throw new ArgumentNullException(nameof(stream));
+            if (destination == null) throw new ArgumentNullException(nameof(destination));
+            if (bufferSize <= 0) throw new ArgumentOutOfRangeException($"{nameof(bufferSize)} must >= 0.");
+            if (progressChangedWatcher == null) throw new ArgumentNullException(nameof(progressChangedWatcher));            
+            if (milliseconds <= 0) throw new ArgumentOutOfRangeException($"{nameof(milliseconds)} must > 0.");
+
+            var copyer = new StreamCopyTimeObserver(stream, destination, bufferSize, progressChangedWatcher, milliseconds);
+            await copyer.StartAsync();
+        }
+        public static async Task CopyToObserveOnTimeAsync(this Stream stream, Stream destination, int bufferSize,
+            IObserver<long> progressChangedWatcher, TimeSpan timeSpan)
+        {
+            if (stream == null) throw new ArgumentNullException(nameof(stream));
+            if (destination == null) throw new ArgumentNullException(nameof(destination));
+            if (bufferSize <= 0) throw new ArgumentOutOfRangeException($"{nameof(bufferSize)} must >= 0.");
+            if (progressChangedWatcher == null) throw new ArgumentNullException(nameof(progressChangedWatcher));
+            if (timeSpan.Milliseconds <= 0) throw new ArgumentOutOfRangeException($"{nameof(timeSpan)} must > 0.");
+
+            var copyer = new StreamCopyTimeObserver(stream, destination, bufferSize, progressChangedWatcher, timeSpan);
+            await copyer.StartAsync();
         }
 
-        private class StreamCopyer : IDisposable
+        public static async Task CopyToObserveOnProgressAsync(this Stream stream, Stream destination, int bufferSize,
+            IObserver<long> progressChangedWatcher, int step)
+        {
+            if (stream == null) throw new ArgumentNullException(nameof(stream));
+            if (destination == null) throw new ArgumentNullException(nameof(destination));
+            if (bufferSize <= 0) throw new ArgumentOutOfRangeException($"{nameof(bufferSize)} must >= 0.");
+            if (progressChangedWatcher == null) throw new ArgumentNullException(nameof(progressChangedWatcher));
+            if (step <= 0) throw new ArgumentOutOfRangeException($"{nameof(step)} must > 0.");
+
+            var copyer = new StreamCopyProgressObserver(stream, destination, bufferSize, progressChangedWatcher, step);
+            await copyer.StartAsync();
+        }
+
+        #endregion
+
+        private class DoubleThreadStreamCopyer : IDisposable
         {
             private readonly object SyncRoot = new object();
             private readonly Queue<JasilyBuffer> BufferPool = new Queue<JasilyBuffer>();
@@ -129,7 +176,7 @@ namespace System.IO
             private readonly int BufferSize;
             private readonly int PoolSize;
             private readonly SemaphoreSlim Semaphore;
-            private readonly IObserver<long>  Watcher;
+            private readonly IObserver<long> Watcher;
             private readonly TaskCompletionSource<bool> TaskInstance = new TaskCompletionSource<bool>();
 
             /// <summary>
@@ -143,7 +190,7 @@ namespace System.IO
             /// </summary>
             private bool IsOutEndOrThrow = false;
 
-            public StreamCopyer(Stream input, Stream output, int bufferSize, int poolSize = 20, IObserver<long> progressChangedWatcher = null)
+            public DoubleThreadStreamCopyer(Stream input, Stream output, int bufferSize, int poolSize = 20, IObserver<long> progressChangedWatcher = null)
             {
                 this.Input = input;
                 this.Output = output;
@@ -220,7 +267,7 @@ namespace System.IO
 
             private async void BeginWrite()
             {
-                await Task.Run(async() =>
+                await Task.Run(async () =>
                 {
                     try
                     {
@@ -289,6 +336,121 @@ namespace System.IO
             }
         }
 
-        #endregion
+        private class StreamCopyTimeObserver : StreamCopyObserver
+        {
+            private TimeSpan TimeSpan;
+
+            public StreamCopyTimeObserver(Stream input, Stream output, int bufferSize, IObserver<long> watcher,
+                int milliseconds)
+                : base(input, output, bufferSize, watcher)
+            {
+                if (milliseconds <= 0) throw new ArgumentOutOfRangeException($"{nameof(milliseconds)} must > 0.");
+
+                this.TimeSpan = TimeSpan.FromMilliseconds(milliseconds);
+            }
+            public StreamCopyTimeObserver(Stream input, Stream output, int bufferSize, IObserver<long> watcher,
+                TimeSpan timeSpan)
+                : base(input, output, bufferSize, watcher)
+            {
+                if (timeSpan.Milliseconds <= 0) throw new ArgumentOutOfRangeException($"{nameof(timeSpan)} must > 0.");
+
+                this.TimeSpan = timeSpan;
+            }
+
+            public async override Task StartAsync()
+            {
+                this.Timer();
+                await base.StartAsync();
+            }
+
+            private void Timer()
+            {
+                Task.Run(async () =>
+                {
+                    while (!this.IsCompleted)
+                    {
+                        base.OnRead();
+                        await Task.Delay(this.TimeSpan);
+                    }
+                });
+            }
+
+            protected override void OnRead()
+            {
+                
+            }
+        }
+
+        private class StreamCopyProgressObserver : StreamCopyObserver
+        {
+            private int Step;
+            private long NextFire;
+
+            public StreamCopyProgressObserver(Stream input, Stream output, int bufferSize, IObserver<long> watcher,
+                int step)
+                : base(input, output, bufferSize, watcher)
+            {
+                if (step <= 0) throw new ArgumentOutOfRangeException($"{nameof(step)} must >= 0.");
+
+                this.NextFire = this.Step = step;
+            }
+
+            protected override void OnRead()
+            {
+                if (this.TotalReaded >= this.NextFire)
+                {
+                    base.OnRead();
+                    this.NextFire = ((this.TotalReaded / this.Step) * this.Step) + this.Step;
+                }
+            }
+        }
+
+        private class StreamCopyObserver
+        {
+            protected Stream Input { get; }
+            protected Stream Output { get; }
+            protected int BufferSize { get; }
+            protected IObserver<long> Watcher { get; }
+
+            protected long TotalReaded { get; private set; }
+            protected bool IsCompleted { get; private set; }
+
+            public StreamCopyObserver(Stream input, Stream output, int bufferSize, IObserver<long> watcher)
+            {
+                if (input == null) throw new ArgumentNullException(nameof(input));
+                if (output == null) throw new ArgumentNullException(nameof(output));
+                if (watcher == null) throw new ArgumentNullException(nameof(watcher));
+                if (bufferSize <= 0) throw new ArgumentOutOfRangeException($"{nameof(bufferSize)} must >= 0.");
+
+                this.Input = input;
+                this.Output = output;
+                this.BufferSize = bufferSize;
+                this.Watcher = watcher;
+            }
+
+            public async virtual Task StartAsync()
+            {
+                byte[] buffer = new byte[BufferSize];
+                int bytesRead;
+                while ((bytesRead = await this.Input.ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false)) != 0)
+                {
+                    await this.Output.WriteAsync(buffer, 0, bytesRead).ConfigureAwait(false);
+                    this.TotalReaded += bytesRead;
+                    this.OnRead();
+                }
+                this.OnCompleted();
+            }
+
+            protected virtual void OnRead()
+            {
+                this.Watcher.OnNext(this.TotalReaded);
+            }
+
+            protected virtual void OnCompleted()
+            {
+                this.IsCompleted = true;
+                this.Watcher.OnCompleted();
+            }
+        }
     }
 }

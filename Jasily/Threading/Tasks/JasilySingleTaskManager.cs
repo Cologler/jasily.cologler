@@ -38,9 +38,12 @@ namespace System.Threading.Tasks
             }
             finally
             {
-                lock (this.SyncRoot)
+                if (t == task)
                 {
-                    Pool.Remove(id);
+                    lock (this.SyncRoot)
+                    {
+                        Pool.Remove(id);
+                    }
                 }
             }
         }
