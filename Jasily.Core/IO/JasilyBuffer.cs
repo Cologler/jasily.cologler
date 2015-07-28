@@ -20,5 +20,20 @@ namespace System.IO
         public int Offset { get; }
 
         public int Count { get; }
+
+        public JasilyBuffer GetInvalidBuffer()
+        {
+            if (this.Offset == 0 && this.Count == this.Buffer.Length)
+                return this.Clone();
+
+            var buffer = new byte[this.Count];
+            Array.ConstrainedCopy(this.Buffer, this.Offset, buffer, 0, this.Count);
+            return new JasilyBuffer(buffer, 0, this.Count);
+        }
+
+        public JasilyBuffer Clone()
+        {
+            return new JasilyBuffer(this.Buffer, 0, this.Count);
+        }
     }
 }
