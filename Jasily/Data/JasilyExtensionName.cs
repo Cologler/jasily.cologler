@@ -13,8 +13,7 @@ namespace System.Data
         {
             MP4,
             MKV,
-            RM,
-            RMVB,
+            RM, RMVB,
             AVI,
             TS,
             WMV,
@@ -24,9 +23,13 @@ namespace System.Data
         public enum Music
         {
             MP3,
-            FLAC,
-            APE,
+            FLAC, APE,
             WMA
+        }
+
+        public enum Picture
+        {
+            JPG, JPEG, PNG, GIF
         }
 
         public static bool IsVideo(string extensionName)
@@ -38,6 +41,28 @@ namespace System.Data
                 return false;
 
             return IsType<Video>(extensionName);
+        }
+
+        public static bool IsMusic(string extensionName)
+        {
+            if (extensionName == null)
+                throw new ArgumentNullException();
+
+            if (extensionName.IsNullOrWhiteSpace())
+                return false;
+
+            return IsType<Music>(extensionName);
+        }
+
+        public static bool IsPicture(string extensionName)
+        {
+            if (extensionName == null)
+                throw new ArgumentNullException();
+
+            if (extensionName.IsNullOrWhiteSpace())
+                return false;
+
+            return IsType<Picture>(extensionName);
         }
 
         private static bool IsType<T>(string extensionName)
