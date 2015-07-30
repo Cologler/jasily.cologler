@@ -49,6 +49,7 @@
     <Compile Include="Collections\ItemPageEntity.cs" />
     <Compile Include="Data\JasilyExtensionName.cs" />
     <Compile Include="Diagnostics\IJasilyTestable.cs" />
+    <Compile Include="Diagnostics\SizeRangeAttribute.cs" />
     <Compile Include="Diagnostics\TestAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Threading\Tasks\JasilySingleTaskManager.cs" />
