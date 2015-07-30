@@ -181,14 +181,16 @@ namespace System
         }
 
         /// <summary>
-        /// use spliter to split text. default value was '\r\n'
+        /// use spliter to split text. default value was '\r\n' or '\r' or '\n'
         /// </summary>
         /// <param name="text"></param>
         /// <param name="spliter"></param>
         /// <returns></returns>
-        public static IEnumerable<string> AsLines(this string text, string spliter = "\r\n")
+        public static IEnumerable<string> AsLines(this string text, string spliter = null)
         {
-            return text == null ? null : text.Split(new string[] {spliter}, StringSplitOptions.None);
+            return spliter == null
+                ? text?.Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None)
+                : text?.Split(new string[] { spliter }, StringSplitOptions.None);
         }
 
         /// <summary>
