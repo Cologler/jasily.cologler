@@ -15,13 +15,7 @@
             if (ReferenceEquals(obj, null))
                 return true;
 
-            if (obj is DateTime)
-            {
-                return ((DateTime)obj).Kind == this.Kind;
-            }
-            
-            var ndt = obj as DateTime?;
-            return ndt.HasValue && ndt.Value.Kind == this.Kind;
+            return obj.TryCast<DateTime>()?.Select(z => z.Kind == this.Kind) ?? false;
         }
     }
 }

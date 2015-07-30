@@ -1,5 +1,6 @@
 ﻿
 using System.Runtime.CompilerServices;
+using static System.Diagnostics.Debug;
 
 namespace System
 {
@@ -91,11 +92,6 @@ namespace System
                 return selector(t);
             else
                 return def();
-        }
-
-        public static T Cast<T>(this object obj)
-        {
-            return (T) obj;
         }
 
         #region type convert
@@ -210,5 +206,18 @@ namespace System
         }
 
         #endregion
+
+        public static TOut Select<TIn, TOut>(this TIn obj, Func<TIn, TOut> selector)
+        {
+            Assert(selector != null);
+
+            return selector(obj);
+        }
+
+        public static T? TryCast<T>(this object obj)
+            where T : struct
+        {
+            return obj is T ? (T)obj : (T?)null;
+        }
     }
 }

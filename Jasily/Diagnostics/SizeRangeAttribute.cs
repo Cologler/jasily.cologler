@@ -22,31 +22,17 @@ namespace System.Diagnostics
         {
             if (ReferenceEquals(obj, null)) return false;
 
-            if (obj is int)
-            {
-                return Test((int)obj);
-            }
-
-            if (obj is long)
-            {
-                return Test((long)obj);
-            }
-
-            var array = obj as Array;
-            if (array != null)
-            {
-                return Test(array.Length);
-            }
-
-            var col = obj as ICollection;
-            if (col != null)
-            {
-                return Test(col.Count);
-            }
-
-            return false;
+            return obj.TryCast<int>()?.Select(this.Test)
+                ?? obj.TryCast<long>()?.Select(this.Test)
+                ?? (obj as Array)?.Length.Select(this.Test)
+                ?? (obj as ICollection)?.Count.Select(this.Test)
+                ?? false;
         }
 
+        private bool Test(int number)
+        {
+            return this.Test(System.Convert.ToInt64(number));
+        }
         private bool Test(long number)
         {
             return number >= this.Min && number <= this.Max;
