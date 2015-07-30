@@ -8,8 +8,16 @@ using static System.Diagnostics.Debug;
 
 namespace System.Diagnostics
 {
-    public static class AttributeTester
+    public static class AttributeTestor
     {
+        [Conditional("DEBUG")]
+        public static void Test(this IJasilyTestable obj)
+        {
+            Assert(obj != null);
+
+            Test((object)obj);
+        }
+
         [Conditional("DEBUG")]
         public static void Test(object obj)
         {
@@ -49,8 +57,7 @@ namespace System.Diagnostics
             {
                 if (info.IsStatic)
                 {
-                    if (Debugger.IsAttached)
-                        throw new NotImplementedException();
+                    if (Debugger.IsAttached) Debugger.Break();
                 }
                 else
                 {
