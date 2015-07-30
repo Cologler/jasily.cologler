@@ -207,13 +207,41 @@ namespace System
 
         #endregion
 
-        public static TOut Select<TIn, TOut>(this TIn obj, Func<TIn, TOut> selector)
+        public static TOut Select<TIn, TOut>(
+            this TIn obj, Func<TIn, TOut> selector)
         {
             Assert(selector != null);
 
             return selector(obj);
         }
+        public static TOut Select<TIn, T1, TOut>(
+            this TIn obj, Func<TIn, T1, TOut> selector, T1 arg1)
+        {
+            Assert(selector != null);
 
+            return selector(obj, arg1);
+        }
+        public static TOut Select<TIn, T1, T2, TOut>(
+            this TIn obj, Func<TIn, T1, T2, TOut> selector, T1 arg1, T2 arg2)
+        {
+            Assert(selector != null);
+
+            return selector(obj, arg1, arg2);
+        }
+        public static TOut Select<TIn, T1, T2, T3, TOut>(
+            this TIn obj, Func<TIn, T1, T2, T3, TOut> selector, T1 arg1, T2 arg2, T3 arg3)
+        {
+            Assert(selector != null);
+
+            return selector(obj, arg1, arg2, arg3);
+        }
+
+        /// <summary>
+        /// 拆箱操作 @_@
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public static T? TryCast<T>(this object obj)
             where T : struct
         {
