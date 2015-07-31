@@ -114,10 +114,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Collections\ObjectModel\IncrementalLoadingObservableCollection.cs" />
+    <Compile Include="Collections\ObjectModel\IncrementalLoadingResult.cs" />
+    <Compile Include="Collections\ObjectModel\SimpleIncrementalLoadingObservableCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="Properties\Jasily.UAP10.rd.xml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Jasily.Core\Jasily.Core.csproj">
+      <Project>{8442e8e7-d515-4481-8a36-71711b1fbf79}</Project>
+      <Name>Jasily.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
