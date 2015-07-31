@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 
-namespace System.IO
+namespace Jasily.IO
 {
     /// <summary>
     /// source: http://memorytributary.codeplex.com/
