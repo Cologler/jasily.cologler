@@ -17,28 +17,10 @@ namespace System
         /// <returns></returns>
         public static bool NormalEquals<T>(this T obj, T other)
         {
-            if (obj == null) return other == null;
-
-            if (other == null) return false;
-
             if (ReferenceEquals(obj, other)) return true;
-
-            var equ = obj as IEquatable<T>;
-
-            return equ != null ? equ.Equals(other) : obj.Equals(other);
-        }
-
-        /// <summary>
-        /// performance test can see: http://www.evernote.com/l/ALKIesUPaCJEv6WcQs1MqMeZN8hcMympy1U/, fast than 'as'
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        [Obsolete("if not inline, should slow than 'as', wtf.")]
-        public static T As<T>(this T obj)
-        {
-            return obj;
+            if (ReferenceEquals(obj, null) || ReferenceEquals(other, null)) return false;
+            
+            return (obj as IEquatable<T>)?.Equals(other) ?? obj.Equals(other);
         }
 
         /// <summary>
@@ -52,8 +34,7 @@ namespace System
         {
             var t = obj as T;
 
-            if (t != null)
-                action(t);
+            if (t != null) action(t);
         }
         /// <summary>
         /// if obj is special type, selector, or return def
@@ -69,10 +50,7 @@ namespace System
         {
             var t = obj as TIn;
 
-            if (t != null)
-                return selector(t);
-            else
-                return def;
+            return t == null ? def : selector(t);
         }
         /// <summary>
         /// if obj is special type, selector, or call def()
@@ -88,10 +66,7 @@ namespace System
         {
             var t = obj as TIn;
 
-            if (t != null)
-                return selector(t);
-            else
-                return def();
+            return t == null ? def() : selector(t);
         }
 
         #region type convert
@@ -207,8 +182,7 @@ namespace System
 
         #endregion
 
-        public static TOut CastWith<TIn, TOut>(
-            this TIn obj, Func<TIn, TOut> selector)
+        public static TOut CastWith<TIn, TOut>(this TIn obj, Func<TIn, TOut> selector)
         {
             Assert(selector != null);
 

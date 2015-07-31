@@ -119,7 +119,7 @@ namespace Jasily.IO
 
             if (lcount < 0)
             {
-                throw new ArgumentOutOfRangeException("count", lcount, "Number of bytes to copy cannot be negative.");
+                throw new ArgumentOutOfRangeException(nameof(count), lcount, "Number of bytes to copy cannot be negative.");
             }
 
             var remaining = (this.length - this.Position);
@@ -128,11 +128,11 @@ namespace Jasily.IO
 
             if (buffer == null)
             {
-                throw new ArgumentNullException("buffer", "Buffer cannot be null.");
+                throw new ArgumentNullException(nameof(buffer), "Buffer cannot be null.");
             }
             if (offset < 0)
             {
-                throw new ArgumentOutOfRangeException("offset", offset, "Destination offset cannot be negative.");
+                throw new ArgumentOutOfRangeException(nameof(offset), offset, "Destination offset cannot be negative.");
             }
 
             var read = 0;
