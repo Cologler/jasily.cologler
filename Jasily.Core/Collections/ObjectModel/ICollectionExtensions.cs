@@ -3,9 +3,9 @@ using System.Linq;
 
 namespace System.Collections.ObjectModel
 {
-    public static class CollectionExtensions
+    public static class ICollectionExtensions
     {
-        public static void AddRange<T>(this Collection<T> self, IEnumerable<T> collection)
+        public static void AddRange<T>(this ICollection<T> self, IEnumerable<T> collection)
         {
             foreach (var item in collection)
             {
@@ -13,7 +13,7 @@ namespace System.Collections.ObjectModel
             }
         }
 
-        public static int Remove<T>(this Collection<T> self, IEnumerable<T> collection)
+        public static int Remove<T>(this ICollection<T> self, IEnumerable<T> collection)
         {
             return collection.Count(self.Remove);
         }
