@@ -1,4 +1,6 @@
-﻿namespace System.Diagnostics
+﻿using System;
+
+namespace Jasily.Diagnostics
 {
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
     public sealed class DateTimeKindAttribute : TestAttribute

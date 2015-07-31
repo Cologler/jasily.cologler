@@ -1,6 +1,6 @@
-﻿using static System.Diagnostics.Debug;
+﻿using System;
 
-namespace System.Diagnostics
+namespace Jasily.Diagnostics
 {
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
     public sealed class CanBeNullAttribute : TestAttribute

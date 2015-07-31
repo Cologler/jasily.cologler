@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace System.Diagnostics
+namespace Jasily.Diagnostics
 {
     public sealed class SizeRangeAttribute : TestAttribute
     {

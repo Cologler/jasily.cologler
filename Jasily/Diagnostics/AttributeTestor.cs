@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 using System.Reflection;
-using static System.Diagnostics.Debug;
 
-namespace System.Diagnostics
+namespace Jasily.Diagnostics
 {
     public static class AttributeTestor
     {
         [Conditional("DEBUG")]
         public static void Test(this IJasilyTestable obj)
         {
-            Assert(obj != null);
+            Debug.Assert(obj != null);
 
             Test((object)obj);
         }
@@ -21,7 +16,7 @@ namespace System.Diagnostics
         [Conditional("DEBUG")]
         public static void Test(object obj)
         {
-            Assert(obj != null);
+            Debug.Assert(obj != null);
 
             var type = obj.GetType();
             foreach (var property in type.GetRuntimeProperties())
@@ -44,7 +39,7 @@ namespace System.Diagnostics
             var attr = info.GetCustomAttribute<T>();
             if (attr != null && info.CanRead)
             {
-                Assert(attr.Test(info.GetValue(obj)));
+                Debug.Assert(attr.Test(info.GetValue(obj)));
             }
         }
 
@@ -61,7 +56,7 @@ namespace System.Diagnostics
                 }
                 else
                 {
-                    Assert(attr.Test(info.GetValue(obj)));
+                    Debug.Assert(attr.Test(info.GetValue(obj)));
                 }
             }
         }

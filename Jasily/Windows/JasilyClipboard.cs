@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace System.Windows
+namespace Jasily.Windows
 {
     public class JasilyClipboard<T>
     {
@@ -20,57 +16,57 @@ namespace System.Windows
 
         private void SetValue(ClipMode mode, T item)
         {
-            lock (SyncRoot)
+            lock (this.SyncRoot)
             {
-                HasValue = true;
-                Mode = mode;
-                CurrentItem = item;
+                this.HasValue = true;
+                this.Mode = mode;
+                this.CurrentItem = item;
             }
 
-            ContentChanged.Fire(typeof(JasilyClipboard<T>));
+            this.ContentChanged.Fire(typeof(JasilyClipboard<T>));
         }
 
         public void Copy(T item)
         {
             Debug.Assert(!ReferenceEquals(item, null));
 
-            SetValue(ClipMode.Copy, item);
+            this.SetValue(ClipMode.Copy, item);
         }
 
         public void Cut(T item)
         {
             Debug.Assert(!ReferenceEquals(item, null));
 
-            SetValue(ClipMode.Cut, item);
+            this.SetValue(ClipMode.Cut, item);
         }
 
         public bool IsExist()
         {
-            return HasValue;
+            return this.HasValue;
         }
 
         public T Paste()
         {
-            if (!HasValue)
+            if (!this.HasValue)
                 throw new InvalidOperationException();
 
-            lock (SyncRoot)
+            lock (this.SyncRoot)
             {
-                if (!HasValue)
+                if (!this.HasValue)
                     throw new InvalidOperationException();
 
                 try
                 {
-                    return CurrentItem;
+                    return this.CurrentItem;
                 }
                 finally
                 {
-                    if (Mode == ClipMode.Cut)
+                    if (this.Mode == ClipMode.Cut)
                     {
-                        HasValue = false;
-                        CurrentItem = default(T);
+                        this.HasValue = false;
+                        this.CurrentItem = default(T);
 
-                        ContentChanged.BeginFire(typeof(JasilyClipboard<T>));
+                        this.ContentChanged.BeginFire(typeof(JasilyClipboard<T>));
                     }
                 }
             }

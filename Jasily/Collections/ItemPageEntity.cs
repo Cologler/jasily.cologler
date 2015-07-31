@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace System.Collections
+namespace Jasily.Collections
 {
     public struct ItemPageEntity<T> : IItemPage<T>
         where T : class
@@ -50,35 +47,35 @@ namespace System.Collections
 
         public async Task<bool> HasLastAsync()
         {
-            if (HasLast.HasValue)
-                return HasLast.Value;
+            if (this.HasLast.HasValue)
+                return this.HasLast.Value;
 
-            if (HasLastFunc == null)
+            if (this.HasLastFunc == null)
                 throw new NotSupportedException();
 
-            return await HasLastFunc();
+            return await this.HasLastFunc();
         }
 
         public async Task<bool> HasNextAsync()
         {
-            if (HasNext.HasValue)
-                return HasNext.Value;
+            if (this.HasNext.HasValue)
+                return this.HasNext.Value;
 
-            if (HasNextFunc == null)
+            if (this.HasNextFunc == null)
                 throw new NotSupportedException();
 
-            return await HasNextFunc();
+            return await this.HasNextFunc();
         }
 
         public async Task<T> GetNextPageAsync()
         {
-            if (NextPage != null)
-                return NextPage;
+            if (this.NextPage != null)
+                return this.NextPage;
 
-            if (GetNextFunc == null)
+            if (this.GetNextFunc == null)
                 throw new NotSupportedException();
 
-            return await GetNextFunc();
+            return await this.GetNextFunc();
         }
     }
 }

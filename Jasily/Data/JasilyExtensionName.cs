@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reflection;
 
-namespace System.Data
+namespace Jasily.Data
 {
     public static class JasilyExtensionName
     {

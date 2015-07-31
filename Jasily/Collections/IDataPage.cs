@@ -1,4 +1,4 @@
-﻿namespace System.Collections
+﻿namespace Jasily.Collections
 {
     public interface IDataPage
     {

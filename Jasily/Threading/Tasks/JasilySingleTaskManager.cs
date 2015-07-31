@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace System.Threading.Tasks
+namespace Jasily.Threading.Tasks
 {
     /// <summary>
     /// use @id to sure a task was single instanse once time.
@@ -25,10 +23,10 @@ namespace System.Threading.Tasks
             Task<T> t;
             lock (this.SyncRoot)
             {
-                if (!Pool.TryGetValue(id, out t))
+                if (!this.Pool.TryGetValue(id, out t))
                 {
                     t = task;
-                    Pool.Add(id, t);
+                    this.Pool.Add(id, t);
                 }
             }
 
@@ -42,7 +40,7 @@ namespace System.Threading.Tasks
                 {
                     lock (this.SyncRoot)
                     {
-                        Pool.Remove(id);
+                        this.Pool.Remove(id);
                     }
                 }
             }
