@@ -49,11 +49,8 @@
     <Compile Include="Collections\Generic\ITryGetValueExtensions.cs" />
     <Compile Include="Collections\Generic\ITryGetValue.cs" />
     <Compile Include="Collections\Generic\IDictionaryExtensions.cs" />
-    <Compile Include="Collections\Generic\JasilyICollection.cs" />
-    <Compile Include="Collections\Generic\ListExtensions.cs" />
     <Compile Include="Collections\Generic\NameValuePair.cs" />
     <Compile Include="Collections\ObjectModel\CollectionChangedEventArgs.cs" />
-    <Compile Include="Collections\ObjectModel\ICollectionExtensions.cs" />
     <Compile Include="Collections\ObjectModel\ObservableCollectionGroup.cs" />
     <Compile Include="ComponentModel\Editable\EditableFieldAttribute.cs" />
     <Compile Include="ComponentModel\Editable\JasilyEditableViewModel.cs" />
