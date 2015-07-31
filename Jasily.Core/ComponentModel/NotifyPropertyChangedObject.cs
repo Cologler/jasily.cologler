@@ -8,13 +8,8 @@ namespace System.ComponentModel
 {
     public class NotifyPropertyChangedObject : INotifyPropertyChanged
     {
-        readonly object _syncRootForEndRefresh = new object();
-        readonly List<string> _registeredPropertyForEndRefresh;
-
-        public NotifyPropertyChangedObject()
-        {
-            this._registeredPropertyForEndRefresh = new List<string>();
-        }
+        readonly object syncRootForEndRefresh = new object();
+        readonly List<string> registeredPropertyForEndRefresh = new List<string>();
 
         private string ParseProperty<T>(Expression<Func<T, object>> propertySelector)
         {
@@ -33,8 +28,8 @@ namespace System.ComponentModel
         public void RegisterForEndRefresh<T>(Expression<Func<T, object>> propertySelector)
         {
             var property = this.ParseProperty(propertySelector);
-            lock (this._syncRootForEndRefresh)
-                this._registeredPropertyForEndRefresh.Add(property);
+            lock (this.syncRootForEndRefresh)
+                this.registeredPropertyForEndRefresh.Add(property);
         }
 
         /// <summary>
@@ -42,14 +37,14 @@ namespace System.ComponentModel
         /// </summary>
         public void EndRefresh()
         {
-            if (this._registeredPropertyForEndRefresh.Count > 0)
+            if (this.registeredPropertyForEndRefresh.Count > 0)
             {
-                lock (this._syncRootForEndRefresh)
+                lock (this.syncRootForEndRefresh)
                 {
-                    if (this._registeredPropertyForEndRefresh.Count > 0)
+                    if (this.registeredPropertyForEndRefresh.Count > 0)
                     {
-                        this.NotifyPropertyChanged(this._registeredPropertyForEndRefresh);
-                        this._registeredPropertyForEndRefresh.Clear();
+                        this.NotifyPropertyChanged(this.registeredPropertyForEndRefresh);
+                        this.registeredPropertyForEndRefresh.Clear();
                     }
                 }
             }
