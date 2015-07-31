@@ -22,10 +22,10 @@ namespace System.Diagnostics
         {
             if (ReferenceEquals(obj, null)) return false;
 
-            return obj.TryCast<int>()?.Select(this.Test)
-                ?? obj.TryCast<long>()?.Select(this.Test)
-                ?? (obj as Array)?.Length.Select(this.Test)
-                ?? (obj as ICollection)?.Count.Select(this.Test)
+            return obj.TryCast<int>()?.CastWith(this.Test)
+                ?? obj.TryCast<long>()?.CastWith(this.Test)
+                ?? (obj as Array)?.Length.CastWith(this.Test)
+                ?? (obj as ICollection)?.Count.CastWith(this.Test)
                 ?? false;
         }
 

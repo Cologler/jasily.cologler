@@ -15,7 +15,7 @@
             if (ReferenceEquals(obj, null))
                 return true;
 
-            return obj.TryCast<DateTime>()?.Select(z => z.Kind == this.Kind) ?? false;
+            return obj.TryCast<DateTime>()?.CastWith(z => z.Kind == this.Kind) ?? false;
         }
     }
 }
