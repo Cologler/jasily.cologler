@@ -113,10 +113,20 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Jasily.Shared\Security\Cryptography\HashType.cs">
+      <Link>Security\Cryptography\HashType.cs</Link>
+    </Compile>
+    <Compile Include="..\Jasily.Shared\Security\Cryptography\IJasilyHashProvider.cs">
+      <Link>Security\Cryptography\IJasilyHashProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Jasily.Shared\Security\Cryptography\JasilyHashFactory.cs">
+      <Link>Security\Cryptography\JasilyHashFactory.cs</Link>
+    </Compile>
     <Compile Include="Collections\ObjectModel\IncrementalLoadingObservableCollection.cs" />
     <Compile Include="Collections\ObjectModel\IncrementalLoadingResult.cs" />
     <Compile Include="Collections\ObjectModel\SimpleIncrementalLoadingObservableCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Security\Cryptography\UAPHashAlgorithmProvider.cs" />
     <Content Include="Properties\Jasily.UAP10.rd.xml" />
   </ItemGroup>
   <ItemGroup>
