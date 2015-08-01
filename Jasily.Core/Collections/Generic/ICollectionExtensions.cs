@@ -25,21 +25,24 @@ namespace System.Collections.Generic
             }
         }
 
-        public static ICollection<T> Append<T>(this ICollection<T> collection, T item)
+        public static TCollection Append<T, TCollection>(this TCollection collection, T item)
+            where TCollection : ICollection<T>
         {
             if (collection == null) throw new ArgumentNullException(nameof(collection));
 
             collection.Add(item);
             return collection;
         }
-        public static ICollection<T> Append<T>(this ICollection<T> collection, params T[] items)
+        public static TCollection Append<T, TCollection>(this TCollection collection, params T[] items)
+            where TCollection : ICollection<T>
         {
             if (collection == null) throw new ArgumentNullException(nameof(collection));
 
             collection.AddRange(items);
             return collection;
         }
-        public static ICollection<T> Append<T>(this ICollection<T> collection, IEnumerable<T> items)
+        public static TCollection Append<T, TCollection>(this TCollection collection, IEnumerable<T> items)
+            where TCollection : ICollection<T>
         {
             if (collection == null) throw new ArgumentNullException(nameof(collection));
 
@@ -54,7 +57,8 @@ namespace System.Collections.Generic
             collection.Add(item);
             return item;
         }
-        public static IEnumerable<T> AddAndReturn<T>(this ICollection<T> collection, IEnumerable<T> items)
+        public static TEnumerable AddAndReturn<T, TEnumerable>(this ICollection<T> collection, TEnumerable items)
+            where TEnumerable : IEnumerable<T>
         {
             if (collection == null) throw new ArgumentNullException(nameof(collection));
 
@@ -89,6 +93,30 @@ namespace System.Collections.Generic
             }
 
             return false;
+        }
+
+        public static void Reset<T>(this ICollection<T> collection, T item)
+        {
+            if (collection == null) throw new ArgumentNullException(nameof(collection));
+
+            collection.Clear();
+            collection.Add(item);
+        }
+        public static void Reset<T>(this ICollection<T> collection, params T[] items)
+        {
+            if (collection == null) throw new ArgumentNullException(nameof(collection));
+            if (items == null) throw new ArgumentNullException(nameof(items));
+
+            collection.Clear();
+            collection.AddRange(items);
+        }
+        public static void Reset<T>(this ICollection<T> collection, IEnumerable<T> items)
+        {
+            if (collection == null) throw new ArgumentNullException(nameof(collection));
+            if (items == null) throw new ArgumentNullException(nameof(items));
+
+            collection.Clear();
+            collection.AddRange(items);
         }
     }
 }
