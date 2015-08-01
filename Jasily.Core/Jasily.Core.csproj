@@ -89,6 +89,7 @@
     <Compile Include="Net\Sockets\Port.cs" />
     <Compile Include="PrintExtensions.cs" />
     <Compile Include="RandomExtensions.cs" />
+    <Compile Include="Reflection\JasilyCustomAttributeExtensions.cs" />
     <Compile Include="Reflection\JasilyReflectionExtensions.cs" />
     <Compile Include="RequestActionEventArgs.cs" />
     <Compile Include="Services\IServiceProvider.cs" />
