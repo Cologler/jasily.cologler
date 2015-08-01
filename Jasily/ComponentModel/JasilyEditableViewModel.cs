@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 
-namespace System.ComponentModel.Editable
+namespace Jasily.ComponentModel
 {
     public abstract class JasilyEditableViewModel<T> : JasilyViewModel<T>
     {
@@ -28,13 +30,11 @@ namespace System.ComponentModel.Editable
             if (this.ThisMapped == null)
             {
                 var mapped = new Dictionary<string, Tuple<Func<object, object>, Action<object, object>>>();
-                foreach (var field in this.GetType().GetRuntimeFields()
-                    .Where(f => f.GetCustomAttribute<EditableFieldAttribute>() != null))
+                foreach (var field in this.GetType().GetRuntimeFields().Where(JasilyCustomAttributeExtensions.HasCustomAttribute<EditableFieldAttribute>))
                 {
                     mapped.Add(field.Name, new Tuple<Func<object, object>, Action<object, object>>(field.GetValue, field.SetValue));
                 }
-                foreach (var property in this.GetType().GetRuntimeProperties()
-                    .Where(p => p.GetCustomAttribute<EditableFieldAttribute>() != null))
+                foreach (var property in this.GetType().GetRuntimeProperties().Where(JasilyCustomAttributeExtensions.HasCustomAttribute<EditableFieldAttribute>))
                 {
                     mapped.Add(property.Name, new Tuple<Func<object, object>, Action<object, object>>(property.GetValue, property.SetValue));
                 }

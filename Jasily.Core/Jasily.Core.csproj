@@ -52,8 +52,6 @@
     <Compile Include="Collections\Generic\NameValuePair.cs" />
     <Compile Include="Collections\ObjectModel\CollectionChangedEventArgs.cs" />
     <Compile Include="Collections\ObjectModel\ObservableCollectionGroup.cs" />
-    <Compile Include="ComponentModel\Editable\EditableFieldAttribute.cs" />
-    <Compile Include="ComponentModel\Editable\JasilyEditableViewModel.cs" />
     <Compile Include="ComponentModel\INotifyPropertyChangedExtensions.cs" />
     <Compile Include="ComponentModel\JasilyViewModel.cs" />
     <Compile Include="ComponentModel\NotifyPropertyChangedAttribute.cs" />
