@@ -25,24 +25,21 @@ namespace System.Collections.Generic
             }
         }
 
-        public static TCollection Append<T, TCollection>(this TCollection collection, T item)
-            where TCollection : ICollection<T>
+        public static ICollection<T> Append<T>(this ICollection<T> collection, T item)
         {
             if (collection == null) throw new ArgumentNullException(nameof(collection));
 
             collection.Add(item);
             return collection;
         }
-        public static TCollection Append<T, TCollection>(this TCollection collection, params T[] items)
-            where TCollection : ICollection<T>
+        public static ICollection<T> Append<T>(this ICollection<T> collection, params T[] items)
         {
             if (collection == null) throw new ArgumentNullException(nameof(collection));
 
             collection.AddRange(items);
             return collection;
         }
-        public static TCollection Append<T, TCollection>(this TCollection collection, IEnumerable<T> items)
-            where TCollection : ICollection<T>
+        public static ICollection<T> Append<T>(this ICollection<T> collection, IEnumerable<T> items)
         {
             if (collection == null) throw new ArgumentNullException(nameof(collection));
 

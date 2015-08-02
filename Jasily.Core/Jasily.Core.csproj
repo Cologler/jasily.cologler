@@ -60,7 +60,6 @@
     <Compile Include="Data\IJasilyEntitySetProvider.cs" />
     <Compile Include="Data\IJasilyEntitySetReader.cs" />
     <Compile Include="Data\IJasilyEntitySetWriter.cs" />
-    <Compile Include="Diagnostics\DebugPro.cs" />
     <Compile Include="Enums\ByteSize.cs" />
     <Compile Include="Enums\ByteSizeTypeExtensions.cs" />
     <Compile Include="Enums\CollectionChangedAction.cs" />
