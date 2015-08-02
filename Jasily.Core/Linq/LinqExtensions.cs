@@ -151,16 +151,5 @@ namespace System.Linq
                 index += chunkSize;
             }
         }
-
-        /// <summary>
-        /// return a single item array.
-        /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <param name="source"></param>
-        /// <returns></returns>
-        public static IEnumerable<TSource> GetIEnumerable<TSource>(this TSource source)
-        {
-            return new[] { source };
-        }
     }
 }

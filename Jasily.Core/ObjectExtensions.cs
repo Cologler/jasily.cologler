@@ -182,6 +182,14 @@ namespace System
 
         #endregion
 
+        /// <summary>
+        /// 为链式编程提供支持
+        /// </summary>
+        /// <typeparam name="TIn"></typeparam>
+        /// <typeparam name="TOut"></typeparam>
+        /// <param name="obj"></param>
+        /// <param name="selector"></param>
+        /// <returns></returns>
         public static TOut CastWith<TIn, TOut>(this TIn obj, Func<TIn, TOut> selector)
         {
             Assert(selector != null);
@@ -198,7 +206,18 @@ namespace System
         public static T? TryCast<T>(this object obj)
             where T : struct
         {
-            return obj is T ? (T)obj : (T?)null;
+            return obj as T?;
+        }
+
+        /// <summary>
+        /// return a single item array : new[] { obj }.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static T[] IntoArray<T>(this T obj)
+        {
+            return new[] { obj };
         }
     }
 }
