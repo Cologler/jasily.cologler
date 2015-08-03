@@ -24,7 +24,7 @@ namespace Jasily.Diagnostics
         public JasilyLogger()
         {
             this.LoggerId = Interlocked.Increment(ref loggerCount);
-            this.WriteLine<JasilyLogger>(JasilyLoggerMode.Track, $"logger system {this.LoggerId} start on {DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss:mmm")}");
+            this.LogInfo(JasilyLoggerMode.Track, $"logger system {this.LoggerId} start on {DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss:mmm")}");
         }
 
         private bool NeedLog(JasilyLoggerMode mode)
@@ -43,23 +43,46 @@ namespace Jasily.Diagnostics
             return ((byte) value & (byte) flag) == (byte) flag;
         }
 
-        public void WriteLine<T>(JasilyLoggerMode mode, string message,
-            [CallerMemberName] string member = "",
-            [CallerLineNumber] int line = 0)
+        public void WriteInfo<T>(JasilyLoggerMode mode, string message,
+            [CallerMemberName] string member = "", [CallerLineNumber] int line = 0)
+            => this.WriteInfo(mode, typeof(T), message, member, line);
+
+        public void WriteInfo(JasilyLoggerMode mode, Type type, string message,
+            [CallerMemberName] string member = "", [CallerLineNumber] int line = 0)
+            => this.WriteLine(mode, type, "INFO", message, member, line);
+
+        public void WriteError<T>(JasilyLoggerMode mode, string message,
+            [CallerMemberName] string member = "", [CallerLineNumber] int line = 0)
+            => this.WriteError(mode, typeof(T), message, member, line);
+
+        public void WriteError(JasilyLoggerMode mode, Type type, string message,
+            [CallerMemberName] string member = "", [CallerLineNumber] int line = 0)
+            => this.WriteLine(mode, type, "ERROR", message, member, line);
+
+        public void WriteException<T>(JasilyLoggerMode mode, Exception e,
+            [CallerMemberName] string member = "", [CallerLineNumber] int line = 0)
+            => this.WriteException(mode, typeof(T), e, member, line);
+
+        public void WriteException(JasilyLoggerMode mode, Type type, Exception e,
+            [CallerMemberName] string member = "", [CallerLineNumber] int line = 0)
         {
             if (this.NeedLog(mode))
             {
-                this.RawOutput(mode, new JasilyLoggerData(message, typeof(T), member, line));
+                do
+                {
+                    this.WriteLine(mode, type, "THROW", FormatException(e), member, line);
+                } while ((e = e.InnerException) != null);
             }
         }
 
-        public void WriteLine(JasilyLoggerMode mode, Type type, string message,
-            [CallerMemberName] string member = "",
-            [CallerLineNumber] int line = 0)
+        private static string FormatException(Exception e) => e.ToString();
+
+        private void WriteLine(JasilyLoggerMode mode, Type type, string messageType, string message,
+            [CallerMemberName] string member = "", [CallerLineNumber] int line = 0)
         {
             if (this.NeedLog(mode))
             {
-                this.RawOutput(mode, new JasilyLoggerData(message, type, member, line));
+                this.RawOutput(mode, new JasilyLoggerData(messageType, message, type, member, line));
             }
         }
 
@@ -79,6 +102,6 @@ namespace Jasily.Diagnostics
                 this.RealTimeTrackEvent?.Invoke(this, data);
         }
 
-        JasilyLogger IJasilyLoggerObject<JasilyLogger>.GetLogger() => this;
+        JasilyLogger IJasilyLoggerObject.GetLogger() => this;
     }
 }
