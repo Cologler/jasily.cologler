@@ -50,8 +50,13 @@
     <Compile Include="Collections\IItemPage.cs" />
     <Compile Include="Collections\ItemPageEntity.cs" />
     <Compile Include="Data\JasilyExtensionName.cs" />
+    <Compile Include="Diagnostics\IJasilyLoggerExtensions.cs" />
+    <Compile Include="Diagnostics\IJasilyLoggerObject.cs" />
     <Compile Include="Diagnostics\IJasilyTestable.cs" />
     <Compile Include="Diagnostics\JasilyDebug.cs" />
+    <Compile Include="Diagnostics\JasilyLogger.cs" />
+    <Compile Include="Diagnostics\JasilyLoggerData.cs" />
+    <Compile Include="Diagnostics\JasilyLoggerMode.cs" />
     <Compile Include="Diagnostics\SizeRangeAttribute.cs" />
     <Compile Include="Diagnostics\TestAttribute.cs" />
     <Compile Include="IO\MemoryTributary.cs" />
