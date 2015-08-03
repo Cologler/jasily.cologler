@@ -8,11 +8,11 @@ namespace Jasily.Reflection
 {
     public sealed class JasilyMemberWriter<T>
     {
-        public Dictionary<string, Action<object, object>> Mapped;
+        Dictionary<string, Action<object, object>> mapped;
 
         public void Mapping()
         {
-            if (this.Mapped != null) return;
+            if (this.mapped != null) return;
 
             var mapping = new Dictionary<string, Action<object, object>>();
 
@@ -32,16 +32,19 @@ namespace Jasily.Reflection
                 }
             }
 
-            Interlocked.CompareExchange(ref this.Mapped, mapping, null);
+            Interlocked.CompareExchange(ref this.mapped, mapping, null);
         }
 
-        public void Write(T obj, string name, object value)
+        public bool TryWrite(T obj, string name, object value)
         {
-            var mapped = this.Mapped;
+            var mapped = this.mapped;
             if (mapped == null)
                 throw new InvalidOperationException("please call Mapping() before write");
 
-            mapped.GetValueOrDefault(name)?.Invoke(obj, value);
+            var setter = mapped.GetValueOrDefault(name);
+            if (setter == null) return false;
+            setter(obj, value);
+            return true;
         }
     }
 }
