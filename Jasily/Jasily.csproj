@@ -56,6 +56,11 @@
     <Compile Include="Diagnostics\TestAttribute.cs" />
     <Compile Include="IO\MemoryTributary.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reflection\JasilyMemberWriter.cs" />
+    <Compile Include="Reflection\IJasilyMemberInfo.cs" />
+    <Compile Include="Reflection\IJasilyMemberInfoExtensions.cs" />
+    <Compile Include="Reflection\JasilyMemberType.cs" />
+    <Compile Include="Reflection\WriteableMemberAttribute.cs" />
     <Compile Include="Threading\Tasks\JasilySingleTaskManager.cs" />
     <Compile Include="Windows\JasilyClipboard.cs" />
   </ItemGroup>
