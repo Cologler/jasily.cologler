@@ -77,16 +77,13 @@ namespace Jasily.Diagnostics
 
         private static string FormatException(Exception e) => e.ToString();
 
-        private void WriteLine(JasilyLoggerMode mode, Type type, string messageType, string message,
-            [CallerMemberName] string member = "", [CallerLineNumber] int line = 0)
+        private void WriteLine(JasilyLoggerMode mode, Type type, string messageType, string message, string member, int line)
         {
             if (this.NeedLog(mode))
             {
                 this.RawOutput(mode, new JasilyLoggerData(messageType, message, type, member, line));
             }
         }
-
-        public static string GetCallerFilePath([CallerFilePath] string path = "") => path;
 
         private void RawOutput(JasilyLoggerMode mode, JasilyLoggerData data)
         {
