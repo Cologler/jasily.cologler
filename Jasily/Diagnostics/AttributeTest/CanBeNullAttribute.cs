@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Jasily.Diagnostics
+namespace Jasily.Diagnostics.AttributeTest
 {
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
     public sealed class CanBeNullAttribute : TestAttribute

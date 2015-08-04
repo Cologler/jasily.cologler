@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
 
-namespace Jasily.Diagnostics
+namespace Jasily.Diagnostics.AttributeTest
 {
     public static class AttributeTestor
     {

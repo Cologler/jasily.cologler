@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Jasily.Diagnostics
+namespace Jasily.Diagnostics.AttributeTest
 {
     public abstract class TestAttribute : Attribute
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 
-namespace Jasily.Diagnostics
+namespace Jasily.Diagnostics.AttributeTest
 {
     public sealed class SizeRangeAttribute : TestAttribute
     {

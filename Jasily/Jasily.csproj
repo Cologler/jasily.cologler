@@ -43,9 +43,9 @@
   <ItemGroup>
     <Compile Include="ComponentModel\EditableFieldAttribute.cs" />
     <Compile Include="ComponentModel\JasilyEditableViewModel.cs" />
-    <Compile Include="Diagnostics\AttributeTestor.cs" />
-    <Compile Include="Diagnostics\CanBeNullAttribute.cs" />
-    <Compile Include="Diagnostics\DateTimeKindAttribute.cs" />
+    <Compile Include="Diagnostics\AttributeTest\AttributeTestor.cs" />
+    <Compile Include="Diagnostics\AttributeTest\CanBeNullAttribute.cs" />
+    <Compile Include="Diagnostics\AttributeTest\DateTimeKindAttribute.cs" />
     <Compile Include="Collections\IDataPage.cs" />
     <Compile Include="Collections\IItemPage.cs" />
     <Compile Include="Collections\ItemPageEntity.cs" />
@@ -57,8 +57,8 @@
     <Compile Include="Diagnostics\JasilyLogger.cs" />
     <Compile Include="Diagnostics\JasilyLoggerData.cs" />
     <Compile Include="Diagnostics\JasilyLoggerMode.cs" />
-    <Compile Include="Diagnostics\SizeRangeAttribute.cs" />
-    <Compile Include="Diagnostics\TestAttribute.cs" />
+    <Compile Include="Diagnostics\AttributeTest\SizeRangeAttribute.cs" />
+    <Compile Include="Diagnostics\AttributeTest\TestAttribute.cs" />
     <Compile Include="IO\MemoryTributary.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reflection\JasilyMemberReader.cs" />
