@@ -3,7 +3,7 @@ using System.Threading;
 
 namespace System.Linq
 {
-    public static class LinqExtensions
+    public static class EnumerableExtensions
     {
         /// <summary>
         /// 从 System.Collections.Generic.IEnumerable&lt;T&gt; 创建一个数组。
@@ -150,6 +150,19 @@ namespace System.Linq
                 yield return source.Skip(index).Take(chunkSize);
                 index += chunkSize;
             }
+        }
+
+        public static bool All<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate, bool continueOnFailed)
+        {
+            return continueOnFailed
+                ? source.Aggregate(true, (current, item) => current & predicate(item))
+                : source.All(predicate);
+        }
+        public static bool Any<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate, bool continueOnFailed)
+        {
+            return continueOnFailed
+                ? source.Aggregate(false, (current, item) => current | predicate(item))
+                : source.Any(predicate);
         }
     }
 }

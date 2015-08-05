@@ -81,6 +81,7 @@
     <Compile Include="ByteArrayExtensions.cs" />
     <Compile Include="JasilyChar.cs" />
     <Compile Include="JasilyDateTime.cs" />
+    <Compile Include="Linq\AsyncEnumerableExtensions.cs" />
     <Compile Include="Net\Http\RangeHeader.cs" />
     <Compile Include="Net\HttpWebRequestExtensions.cs" />
     <Compile Include="Net\Sockets\Port.cs" />
@@ -108,7 +109,7 @@
     <Compile Include="Text\StringLine.cs" />
     <Compile Include="UsingAnything.cs" />
     <Compile Include="Linq\Expressions\JasilyExpression.cs" />
-    <Compile Include="Linq\LinqExtensions.cs" />
+    <Compile Include="Linq\EnumerableExtensions.cs" />
     <Compile Include="Net\HttpWebRequestResourceString.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Text\PinYinManager.cs" />
