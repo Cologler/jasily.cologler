@@ -1,5 +1,5 @@
 ﻿
-namespace System.ComponentModel
+namespace Jasily.ComponentModel
 {
     public class JasilyViewModel : NotifyPropertyChangedObject
     {

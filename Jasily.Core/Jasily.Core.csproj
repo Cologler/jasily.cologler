@@ -53,9 +53,6 @@
     <Compile Include="Collections\ObjectModel\CollectionChangedEventArgs.cs" />
     <Compile Include="Collections\ObjectModel\ObservableCollectionGroup.cs" />
     <Compile Include="ComponentModel\INotifyPropertyChangedExtensions.cs" />
-    <Compile Include="ComponentModel\JasilyViewModel.cs" />
-    <Compile Include="ComponentModel\NotifyPropertyChangedAttribute.cs" />
-    <Compile Include="ComponentModel\NotifyPropertyChangedObject.cs" />
     <Compile Include="Data\IJasilyEntity.cs" />
     <Compile Include="Data\IJasilyEntitySetProvider.cs" />
     <Compile Include="Data\IJasilyEntitySetReader.cs" />

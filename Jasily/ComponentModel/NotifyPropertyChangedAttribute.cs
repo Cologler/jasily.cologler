@@ -1,4 +1,6 @@
-﻿namespace System.ComponentModel
+﻿using System;
+
+namespace Jasily.ComponentModel
 {
     [AttributeUsage(AttributeTargets.Property)]
     public class NotifyPropertyChangedAttribute : Attribute
