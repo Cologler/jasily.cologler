@@ -55,6 +55,11 @@ namespace Jasily.Net
 
     public class WebResult<T> : WebResult
     {
+        /// <summary>
+        /// set the default value for WebResult if throw WebException. like you can set to Enumerable.Empty().!!
+        /// </summary>
+        public static T DefaultResultValue { get; set; }
+
         public WebResult(WebResponse response, T result)
             : base(response)
         {
@@ -66,6 +71,7 @@ namespace Jasily.Net
         public WebResult(WebException e)
             : base(e)
         {
+            this.Result = DefaultResultValue;
         }
 
         public T Result { get; }
