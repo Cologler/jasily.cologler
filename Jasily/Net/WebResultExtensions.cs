@@ -2,6 +2,7 @@
 using System.IO;
 using System.Net;
 using System.Runtime.Serialization.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
@@ -77,9 +78,28 @@ namespace Jasily.Net
             return await request.GetResultAsync();
         }
 
+        public static async Task<WebResult> SendAndGetResultAsync(this HttpWebRequest request, Stream input, CancellationToken cancellationToken)
+        {
+            try
+            {
+                await request.SendAsync(input, cancellationToken);
+            }
+            catch (WebException e)
+            {
+                return new WebResult(e);
+            }
+
+            return await request.GetResultAsync();
+        }
+
         public static async Task<WebResult<byte[]>> SendAndGetResultAsBytesAsync(this HttpWebRequest request, Stream input)
         {
             return await request.SendAndGetResultAsync(input, AsBytes);
+        }
+
+        public static async Task<WebResult<byte[]>> SendAndGetResultAsBytesAsync(this HttpWebRequest request, Stream input, CancellationToken cancellationToken)
+        {
+            return await request.SendAndGetResultAsync(input, AsBytes, cancellationToken);
         }
 
         public static async Task<WebResult<T>> SendAndGetResultAsync<T>(this HttpWebRequest request, Stream input, Func<Stream, T> selector)
@@ -87,6 +107,19 @@ namespace Jasily.Net
             try
             {
                 await request.SendAsync(input);
+                return await request.GetResultAsync<T>(selector);
+            }
+            catch (WebException e)
+            {
+                return new WebResult<T>(e);
+            }
+        }
+
+        public static async Task<WebResult<T>> SendAndGetResultAsync<T>(this HttpWebRequest request, Stream input, Func<Stream, T> selector, CancellationToken cancellationToken)
+        {
+            try
+            {
+                await request.SendAsync(input, cancellationToken);
                 return await request.GetResultAsync<T>(selector);
             }
             catch (WebException e)
