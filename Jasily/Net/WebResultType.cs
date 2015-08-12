@@ -1,4 +1,4 @@
-﻿namespace System.Net
+﻿namespace Jasily.Net
 {
     public enum WebResultType
     {

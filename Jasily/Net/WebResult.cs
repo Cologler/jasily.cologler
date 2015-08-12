@@ -1,13 +1,15 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
+using System.Net;
 
-namespace System.Net
+namespace Jasily.Net
 {
     public class WebResult : IDisposable
     {
         /// <summary>
         /// maybe null if not contain response.
         /// </summary>
-        public WebResponse Response { get; private set; }
+        public WebResponse Response { get; }
 
         /// <summary>
         /// 
@@ -16,7 +18,7 @@ namespace System.Net
         /// <param name="response"></param>
         public WebResult(WebResponse response)
         {
-            if (response == null) throw new ArgumentNullException("response");
+            if (response == null) throw new ArgumentNullException(nameof(response));
 
             this.Type = WebResultType.Succeed;
             this.Response = response;
@@ -29,24 +31,21 @@ namespace System.Net
         /// <param name="e"></param>
         public WebResult(WebException e)
         {
-            if (e == null) throw new ArgumentNullException("e");
+            if (e == null) throw new ArgumentNullException(nameof(e));
 
             this.Type = WebResultType.WebException;
             this.WebException = e;
             this.Response = e.Response;
         }
 
-        public bool IsSuccess
-        {
-            get { return this.Type == WebResultType.Succeed; }
-        }
+        public bool IsSuccess => this.Type == WebResultType.Succeed;
 
         public WebResultType Type { get; protected set; }
 
         /// <summary>
         /// return null if this.Type != WebResultType.WebException
         /// </summary>
-        public WebException WebException { get; private set; }
+        public WebException WebException { get; }
 
         public void Dispose()
         {
@@ -69,7 +68,7 @@ namespace System.Net
         {
         }
 
-        public T Result { get; private set; }
+        public T Result { get; }
 
         /// <summary>
         /// throw System.Net.WebException if this.WebException not null.

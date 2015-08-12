@@ -100,9 +100,6 @@
     <Compile Include="JasilyWeakReference.cs" />
     <Compile Include="IO\SeekableStringReader.cs" />
     <Compile Include="Net\HttpUriBuilder.cs" />
-    <Compile Include="Net\WebResultExtensions.cs" />
-    <Compile Include="Net\WebResult.cs" />
-    <Compile Include="Net\WebResultType.cs" />
     <Compile Include="Runtime\Serialization\Json\DataContractJsonSerializerExtensions.cs" />
     <Compile Include="Text\StringLine.cs" />
     <Compile Include="UsingAnything.cs" />
