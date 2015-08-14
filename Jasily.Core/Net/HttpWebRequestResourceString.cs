@@ -9,6 +9,7 @@ namespace System.Net
             public const string Post = "POST";
             public const string Put = "PUT";
             public const string Patch = "PATCH";
+            public const string Delete = "DELETE";
         }
 
         public static class ContentType
