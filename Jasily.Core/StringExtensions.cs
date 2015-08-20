@@ -7,7 +7,7 @@ namespace System
 {
     public static class StringExtensions
     {
-        #region byte[]
+        #region encoding & decoding
 
         /// <summary>
         /// get bytes using special encoding
@@ -28,6 +28,20 @@ namespace System
         public static byte[] GetBytes(this string text)
         {
             return text.GetBytes(Encoding.UTF8);
+        }
+
+        public static string UrlEncode(this string str)
+        {
+            if (str == null) throw new ArgumentNullException(nameof(str));
+
+            return System.Net.WebUtility.UrlEncode(str);
+        }
+
+        public static string UrlDecode(this string str)
+        {
+            if (str == null) throw new ArgumentNullException(nameof(str));
+
+            return System.Net.WebUtility.UrlDecode(str);
         }
 
         #endregion
@@ -167,14 +181,16 @@ namespace System
         }
 
         /// <summary>
-        /// use spliter to split text. default value was '\r\n'
+        /// use spliter to split text. default value was '\r\n' or '\r' or '\n'
         /// </summary>
         /// <param name="text"></param>
         /// <param name="spliter"></param>
         /// <returns></returns>
-        public static IEnumerable<string> AsLines(this string text, string spliter = "\r\n")
+        public static IEnumerable<string> AsLines(this string text, string spliter = null)
         {
-            return text == null ? null : text.Split(new string[] {spliter}, StringSplitOptions.None);
+            return spliter == null
+                ? text?.Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None)
+                : text?.Split(new string[] { spliter }, StringSplitOptions.None);
         }
 
         /// <summary>
@@ -219,5 +235,67 @@ namespace System
         }
 
         #endregion
+
+        public static string TrimStart(this string str, params string[] trimStrings)
+        {
+            if (str == null) throw new ArgumentNullException(nameof(str));
+
+            if (trimStrings == null || trimStrings.Length == 0)
+                return str;
+
+            if (trimStrings.Any(z => z.IsNullOrEmpty()))
+                throw new ArgumentException();
+
+            string start;
+            while ((start = trimStrings.FirstOrDefault(z => str.StartsWith(z))) != null)
+            {
+                str = str.Substring(start.Length);
+            }
+            return str;
+        }
+
+        public static string AfterFirst(this string str, string spliter)
+        {
+            if (str == null) throw new ArgumentNullException(nameof(str));
+
+            var index = str.IndexOf(spliter);
+            return index < 1 ? str : str.Substring(index + 1);
+        }
+        public static string AfterFirst(this string str, char spliter)
+        {
+            if (str == null) throw new ArgumentNullException(nameof(str));
+
+            var index = str.IndexOf(spliter);
+            return index < 1 ? str : str.Substring(index + 1);
+        }
+        public static string AfterFirst(this string str, params char[] spliter)
+        {
+            if (str == null) throw new ArgumentNullException(nameof(str));
+
+            var index = str.LastIndexOfAny(spliter);
+            return index < 1 ? str : str.Substring(index + 1);
+        }
+
+        public static string AfterLast(this string str, string spliter)
+        {
+            if (str == null) throw new ArgumentNullException(nameof(str));
+
+            var index = str.LastIndexOf(spliter);
+            return index < 1 ? str : str.Substring(index + 1);
+        }
+        public static string AfterLast(this string str, char spliter)
+        {
+            if (str == null) throw new ArgumentNullException(nameof(str));
+
+            var index = str.LastIndexOf(spliter);
+            return index < 1 ? str : str.Substring(index + 1);
+        }
+        public static string AfterLast(this string str, params char[] spliter)
+        {
+            if (str == null) throw new ArgumentNullException(nameof(str));
+
+            var index = str.LastIndexOfAny(spliter);
+            return index < 1 ? str : str.Substring(index + 1);
+        }
     }
 }

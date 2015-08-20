@@ -14,10 +14,29 @@ namespace System.Net
 
         public HttpUriBuilder(string uriString)
         {
+            if (uriString == null) throw new ArgumentNullException(nameof(uriString));
+            
             this.QueryStringParameters = new List<KeyValuePair<string, string>>();
-            this._uriString = uriString;
             this.IsEncodeParameterKey = true;
             this.IsEncodeParameterValue = true;
+
+            int index;
+            if ((index = uriString.IndexOf("?", StringComparison.Ordinal)) != -1)
+            {
+                this._uriString = uriString.Substring(0, index);
+                var parameters = uriString.Substring(index + 1);
+                if (parameters.Length > 0)
+                {
+                    foreach (var pair in parameters.Split('&'))
+                    {
+                        var kvp = pair.Split('=');
+                        if (kvp.Length != 2) throw new FormatException();
+                        this.AddQueryStringParameter(kvp[0], kvp[1]);
+                    }
+                }
+            }
+            else
+                this._uriString = uriString;
         }
 
         public void AddQueryStringParameter(string key, string value)

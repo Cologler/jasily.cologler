@@ -1,5 +1,6 @@
 ﻿
 using System.Runtime.CompilerServices;
+using static System.Diagnostics.Debug;
 
 namespace System
 {
@@ -16,28 +17,10 @@ namespace System
         /// <returns></returns>
         public static bool NormalEquals<T>(this T obj, T other)
         {
-            if (obj == null) return other == null;
-
-            if (other == null) return false;
-
             if (ReferenceEquals(obj, other)) return true;
-
-            var equ = obj as IEquatable<T>;
-
-            return equ != null ? equ.Equals(other) : obj.Equals(other);
-        }
-
-        /// <summary>
-        /// performance test can see: http://www.evernote.com/l/ALKIesUPaCJEv6WcQs1MqMeZN8hcMympy1U/, fast than 'as'
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        [Obsolete("if not inline, should slow than 'as', wtf.")]
-        public static T As<T>(this T obj)
-        {
-            return obj;
+            if (ReferenceEquals(obj, null) || ReferenceEquals(other, null)) return false;
+            
+            return (obj as IEquatable<T>)?.Equals(other) ?? obj.Equals(other);
         }
 
         /// <summary>
@@ -51,8 +34,7 @@ namespace System
         {
             var t = obj as T;
 
-            if (t != null)
-                action(t);
+            if (t != null) action(t);
         }
         /// <summary>
         /// if obj is special type, selector, or return def
@@ -68,10 +50,7 @@ namespace System
         {
             var t = obj as TIn;
 
-            if (t != null)
-                return selector(t);
-            else
-                return def;
+            return t == null ? def : selector(t);
         }
         /// <summary>
         /// if obj is special type, selector, or call def()
@@ -87,15 +66,7 @@ namespace System
         {
             var t = obj as TIn;
 
-            if (t != null)
-                return selector(t);
-            else
-                return def();
-        }
-
-        public static T Cast<T>(this object obj)
-        {
-            return (T) obj;
+            return t == null ? def() : selector(t);
         }
 
         #region type convert
@@ -210,5 +181,43 @@ namespace System
         }
 
         #endregion
+
+        /// <summary>
+        /// 为链式编程提供支持
+        /// </summary>
+        /// <typeparam name="TIn"></typeparam>
+        /// <typeparam name="TOut"></typeparam>
+        /// <param name="obj"></param>
+        /// <param name="selector"></param>
+        /// <returns></returns>
+        public static TOut CastWith<TIn, TOut>(this TIn obj, Func<TIn, TOut> selector)
+        {
+            Assert(selector != null);
+
+            return selector(obj);
+        }
+
+        /// <summary>
+        /// 拆箱操作 @_@
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static T? TryCast<T>(this object obj)
+            where T : struct
+        {
+            return obj as T?;
+        }
+
+        /// <summary>
+        /// return a single item array : new[] { obj }.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static T[] IntoArray<T>(this T obj)
+        {
+            return new[] { obj };
+        }
     }
 }

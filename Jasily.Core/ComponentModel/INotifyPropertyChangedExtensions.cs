@@ -13,9 +13,9 @@ namespace System.ComponentModel
         /// <param name="propertyName"></param>
         public static void Fire(this PropertyChangedEventHandler e, object sender, string propertyName)
         {
-            if (e != null)
-                e(sender, new PropertyChangedEventArgs(propertyName));
+            e?.Invoke(sender, new PropertyChangedEventArgs(propertyName));
         }
+
         /// <summary>
         /// if e != null, call e() with mulit propertyNames
         /// </summary>

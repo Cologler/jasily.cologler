@@ -11,7 +11,7 @@ namespace System.ComponentModel
 
         public JasilyViewModel(TSource source)
         {
-            this.Source = source;
+            this.source = source;
         }
 
         [NotifyPropertyChanged(Order = -1)]

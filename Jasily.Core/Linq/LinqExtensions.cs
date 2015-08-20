@@ -1,13 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 
 namespace System.Linq
 {
     public static class LinqExtensions
     {
-        #region to
-
         /// <summary>
         /// 从 System.Collections.Generic.IEnumerable&lt;T&gt; 创建一个数组。
         /// </summary>
@@ -138,19 +135,6 @@ namespace System.Linq
         }
 
         /// <summary>
-        /// return a single item array.
-        /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <param name="source"></param>
-        /// <returns></returns>
-        public static IEnumerable<TSource> GetIEnumerable<TSource>(this TSource source)
-        {
-            return new[] { source };
-        }
-
-        #endregion
-
-        /// <summary>
         /// 从 System.Collections.Generic.IEnumerable&lt;T&gt; 创建指定步长的多个 System.Collections.Generic.IEnumerable&lt;T&gt;
         /// </summary>
         /// <typeparam name="TSource">source 中的元素的类型。</typeparam>
@@ -167,55 +151,5 @@ namespace System.Linq
                 index += chunkSize;
             }
         }
-
-        #region order
-
-        /// <summary>
-        /// order by self.
-        /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <param name="source"></param>
-        /// <returns></returns>
-        public static IOrderedEnumerable<TSource> Order<TSource>(this IEnumerable<TSource> source)
-        {
-            return source.OrderBy(z => z);
-        }
-
-        public static IOrderedEnumerable<TSource> OrderBy<TSource>(this IEnumerable<TSource> source,
-            Comparison<TSource> comparison)
-        {
-            return source.OrderBy(z => z, Comparer<TSource>.Create(comparison.ThrowIfNull("comparison")));
-        }
-
-        public static IOrderedEnumerable<TSource> OrderBy<TSource, TKey>(this IEnumerable<TSource> source,
-            Func<TSource, TKey> keySelector, Comparison<TKey> comparison)
-        {
-            return source.OrderBy(keySelector, Comparer<TKey>.Create(comparison.ThrowIfNull("comparison")));
-        }
-
-        /// <summary>
-        /// descending order by self.
-        /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <param name="source"></param>
-        /// <returns></returns>
-        public static IOrderedEnumerable<TSource> OrderDescending<TSource>(this IEnumerable<TSource> source)
-        {
-            return source.OrderByDescending(z => z);
-        }
-
-        public static IOrderedEnumerable<TSource> OrderByDescending<TSource>(this IEnumerable<TSource> source,
-            Comparison<TSource> comparison)
-        {
-            return source.OrderByDescending(z => z, Comparer<TSource>.Create(comparison.ThrowIfNull("comparison")));
-        }
-
-        public static IOrderedEnumerable<TSource> OrderByDescending<TSource, TKey>(this IEnumerable<TSource> source,
-            Func<TSource, TKey> keySelector, Comparison<TKey> comparison)
-        {
-            return source.OrderByDescending(keySelector, Comparer<TKey>.Create(comparison.ThrowIfNull("comparison")));
-        }
-
-        #endregion
     }
 }

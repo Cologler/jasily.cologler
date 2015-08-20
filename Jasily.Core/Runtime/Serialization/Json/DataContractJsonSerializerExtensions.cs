@@ -6,6 +6,15 @@ namespace System.Runtime.Serialization.Json
 {
     public static class DataContractJsonSerializerExtensions 
     {
+        public static DataContractJsonSerializerSettings SerializerSettings { get; set; }
+
+        private static DataContractJsonSerializer GetSerializer<T>()
+        {
+            return SerializerSettings == null
+                ? new DataContractJsonSerializer(typeof(T))
+                : new DataContractJsonSerializer(typeof(T), SerializerSettings);
+        }
+
         public static T JsonToObject<T>(this Stream stream)
         {
 #if DEBUG
@@ -15,7 +24,7 @@ namespace System.Runtime.Serialization.Json
 
             try
             {
-                var ser = new DataContractJsonSerializer(typeof(T));
+                var ser = GetSerializer<T>();
                 var obj = (T)ser.ReadObject(stream);
                 return obj;
             }

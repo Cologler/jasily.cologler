@@ -43,5 +43,14 @@ namespace System.Reflection
                     type.GenericTypeArguments.Select(GetCSharpName).AsLines(", "))
                 : type.Name;
         }
+
+        #region get
+
+        public static ParameterInfo GetParameter(this MethodBase method, string name)
+        {
+            return method.GetParameters().FirstOrDefault(z => z.Name == name);
+        }
+
+        #endregion
     }
 }
