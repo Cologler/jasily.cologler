@@ -257,8 +257,9 @@ namespace System
         public static string AfterFirst(this string str, string spliter)
         {
             if (str == null) throw new ArgumentNullException(nameof(str));
+            if (spliter == null) throw new ArgumentNullException(nameof(spliter));
 
-            var index = str.IndexOf(spliter);
+            var index = str.IndexOf(spliter, StringComparison.Ordinal);
             return index < 1 ? str : str.Substring(index + 1);
         }
         public static string AfterFirst(this string str, char spliter)

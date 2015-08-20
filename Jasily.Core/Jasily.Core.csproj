@@ -43,6 +43,7 @@
     <Compile Include="Collections\Generic\ICollectionExtensions.cs" />
     <Compile Include="Collections\Generic\IReadOnlyDictionaryExtensions.cs" />
     <Compile Include="Collections\Generic\TryGetValueExtensions.cs" />
+    <Compile Include="Collections\Interval.cs" />
     <Compile Include="Diagnostics\IJasilyPrinter.cs" />
     <Compile Include="EnumExtensions.cs" />
     <Compile Include="Enums\SupportedFlagsAttribute.cs" />
