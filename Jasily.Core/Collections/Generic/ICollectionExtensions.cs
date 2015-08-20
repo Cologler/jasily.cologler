@@ -54,8 +54,7 @@ namespace System.Collections.Generic
             collection.Add(item);
             return item;
         }
-        public static TEnumerable AddAndReturn<T, TEnumerable>(this ICollection<T> collection, TEnumerable items)
-            where TEnumerable : IEnumerable<T>
+        public static IEnumerable<T> AddAndReturn<T>(this ICollection<T> collection, IEnumerable<T> items)
         {
             if (collection == null) throw new ArgumentNullException(nameof(collection));
 
