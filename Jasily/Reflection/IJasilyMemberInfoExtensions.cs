@@ -29,113 +29,121 @@ namespace Jasily.Reflection
             return (JasilyPropertyInfo)property;
         }
 
-        private struct JasilyFieldInfo : IJasilyMemberInfo
+        private abstract class JasilyMemberInfo : IJasilyMemberInfo 
+        {
+            protected JasilyMemberInfo(MemberInfo memberInfo)
+            {
+                this.IsCompilerGenerated = memberInfo.HasCustomAttribute<CompilerGeneratedAttribute>();
+            }
+
+            public abstract MemberInfo Member { get; }
+
+            public abstract bool CanRead { get; }
+
+            public abstract bool CanWrite { get; }
+
+            public abstract bool IsStatic { get; }
+
+            public abstract Type ValueType { get; }
+            
+            public abstract JasilyMemberType MemberType { get; }
+
+            public bool IsCompilerGenerated { get; }
+
+            public T GetCustomAttribute<T>() where T : Attribute
+                => this.Member.GetCustomAttribute<T>();
+
+            public IEnumerable<Attribute> GetCustomAttributes()
+                => this.Member.GetCustomAttributes();
+
+            public IEnumerable<T> GetCustomAttributes<T>() where T : Attribute
+                => this.Member.GetCustomAttributes<T>();
+
+            public bool HasCustomAttribute<T>() where T : Attribute
+                => this.Member.HasCustomAttribute<T>();
+
+            public abstract object GetInstanceValue(object instance);
+
+            public abstract T GetInstanceValue<T>(object instance);
+
+            public abstract void SetInstanceValue(object instance, object value);
+        }
+
+        private class JasilyFieldInfo : JasilyMemberInfo
         {
             #region field
 
             private readonly FieldInfo member;
 
             private JasilyFieldInfo(FieldInfo field)
+                : base(field)
             {
                 this.member = field;
-                this.IsCompilerGenerated = field.HasCustomAttribute<CompilerGeneratedAttribute>();
             }
 
             public static implicit operator JasilyFieldInfo(FieldInfo value) => new JasilyFieldInfo(value);
 
             #endregion
 
-            public T GetCustomAttribute<T>() where T : Attribute
-                => this.member.GetCustomAttribute<T>();
+            public override MemberInfo Member => this.member;
 
-            public IEnumerable<Attribute> GetCustomAttributes()
-                => this.member.GetCustomAttributes();
+            public override bool CanRead => !this.member.IsLiteral && !this.member.IsInitOnly;
 
-            public IEnumerable<T> GetCustomAttributes<T>() where T : Attribute
-                => this.member.GetCustomAttributes<T>();
+            public override bool CanWrite => !this.member.IsLiteral && !this.member.IsInitOnly;
 
-            public bool HasCustomAttribute<T>() where T : Attribute
-                => this.member.HasCustomAttribute<T>();
+            public override bool IsStatic => this.member.IsStatic;
 
-            public string Name => this.member.Name;
+            public override Type ValueType => this.member.FieldType;
 
-            public bool CanRead => true;
+            public override JasilyMemberType MemberType => JasilyMemberType.Field;
 
-            public bool CanWrite => !this.member.IsLiteral && !this.member.IsInitOnly;
-
-            public bool IsStatic => this.member.IsStatic;
-
-            public Type ValueType => this.member.FieldType;
-
-            public Type DeclaringType => this.member.DeclaringType;
-
-            public JasilyMemberType MemberType => JasilyMemberType.Field;
-
-            public object GetInstanceValue(object instance)
+            public override object GetInstanceValue(object instance)
                 => this.member.GetValue(instance);
 
-            public T GetInstanceValue<T>(object instance)
+            public override T GetInstanceValue<T>(object instance)
                 => (T)this.member.GetValue(instance);
 
-            public void SetInstanceValue(object instance, object value)
+            public override void SetInstanceValue(object instance, object value)
                 => this.member.SetValue(instance, value);
-
-            public bool IsCompilerGenerated { get; }
         }
 
-        private struct JasilyPropertyInfo : IJasilyMemberInfo
+        private class JasilyPropertyInfo : JasilyMemberInfo
         {
             #region property
 
             private readonly PropertyInfo member;
 
             private JasilyPropertyInfo(PropertyInfo property)
+                : base(property)
             {
                 this.member = property;
                 this.IsStatic = (property.CanRead ? property.GetMethod : property.SetMethod).IsStatic;
-                this.IsCompilerGenerated = property.HasCustomAttribute<CompilerGeneratedAttribute>();
             }
 
             public static implicit operator JasilyPropertyInfo(PropertyInfo value) => new JasilyPropertyInfo(value);
 
             #endregion
 
-            public T GetCustomAttribute<T>() where T : Attribute
-                => this.member.GetCustomAttribute<T>();
+            public override MemberInfo Member => this.member;
 
-            public IEnumerable<Attribute> GetCustomAttributes()
-                => this.member.GetCustomAttributes();
+            public override bool CanRead => this.member.CanRead;
 
-            public IEnumerable<T> GetCustomAttributes<T>() where T : Attribute
-                => this.member.GetCustomAttributes<T>();
-
-            public bool HasCustomAttribute<T>() where T : Attribute
-                => this.member.HasCustomAttribute<T>();
-
-            public string Name => this.member.Name;
-
-            public bool CanRead => this.member.CanRead;
-
-            public bool CanWrite => this.member.CanWrite;
+            public override bool CanWrite => this.member.CanWrite;
             
-            public bool IsStatic { get; }
+            public override bool IsStatic { get; }
 
-            public Type ValueType => this.member.PropertyType;
+            public override Type ValueType => this.member.PropertyType;
 
-            public Type DeclaringType => this.member.DeclaringType;
+            public override JasilyMemberType MemberType => JasilyMemberType.Property;
 
-            public JasilyMemberType MemberType => JasilyMemberType.Property;
-
-            public object GetInstanceValue(object instance)
+            public override object GetInstanceValue(object instance)
                 => this.member.GetValue(instance);
 
-            public T GetInstanceValue<T>(object instance)
+            public override T GetInstanceValue<T>(object instance)
                 => (T)this.member.GetValue(instance);
 
-            public void SetInstanceValue(object instance, object value)
+            public override void SetInstanceValue(object instance, object value)
                 => this.member.SetValue(instance, value);
-
-            public bool IsCompilerGenerated { get; }
         }
     }
 }
