@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading;
 
 namespace System.Diagnostics
@@ -35,7 +36,7 @@ namespace System.Diagnostics
             [CallerLineNumber] int line = 0)
         {
 #if !DEBUG
-            if (mode == UCLoggerMode.Debug) return;
+            if (mode == LoggerMode.Debug) return;
 #endif
 
             this.WriteLine(mode, message, typeof(T), member, line);
@@ -49,7 +50,7 @@ namespace System.Diagnostics
             [CallerLineNumber] int line = 0)
         {
 #if !DEBUG
-            if (mode == UCLoggerMode.Debug) return;
+            if (mode == LoggerMode.Debug) return;
 #endif
 
             this.RawWriteLine(Format(type.FullName, mode, message, member, line));
