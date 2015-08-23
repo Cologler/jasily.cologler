@@ -12,7 +12,6 @@ namespace Jasily.Reflection
             Func<FieldInfo, bool> fieldFilter = null,
             Func<PropertyInfo, bool> propertyFilter = null)
         {
-
             foreach (var member in fieldFilter == null ? type.GetRuntimeFields() : type.GetRuntimeFields().Where(fieldFilter))
                 yield return member.AsJasilyMemberInfo();
 
@@ -36,16 +35,13 @@ namespace Jasily.Reflection
 
             private readonly FieldInfo member;
 
-            public JasilyFieldInfo(FieldInfo field)
+            private JasilyFieldInfo(FieldInfo field)
             {
                 this.member = field;
                 this.IsCompilerGenerated = field.HasCustomAttribute<CompilerGeneratedAttribute>();
             }
 
-            public static implicit operator JasilyFieldInfo(FieldInfo value)
-            {
-                return new JasilyFieldInfo(value);
-            }
+            public static implicit operator JasilyFieldInfo(FieldInfo value) => new JasilyFieldInfo(value);
 
             #endregion
 
@@ -93,17 +89,14 @@ namespace Jasily.Reflection
 
             private readonly PropertyInfo member;
 
-            public JasilyPropertyInfo(PropertyInfo property)
+            private JasilyPropertyInfo(PropertyInfo property)
             {
                 this.member = property;
                 this.IsStatic = (property.CanRead ? property.GetMethod : property.SetMethod).IsStatic;
                 this.IsCompilerGenerated = property.HasCustomAttribute<CompilerGeneratedAttribute>();
             }
 
-            public static implicit operator JasilyPropertyInfo(PropertyInfo value)
-            {
-                return new JasilyPropertyInfo(value);
-            }
+            public static implicit operator JasilyPropertyInfo(PropertyInfo value) => new JasilyPropertyInfo(value);
 
             #endregion
 
