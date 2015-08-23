@@ -18,16 +18,9 @@ namespace System.Diagnostics
         }
 
 #if !DEBUG
-        object SyncRoot;
-        private List<string> Logs;
+        readonly object SyncRoot = new object();
+        private readonly List<string> logs = new List<string>();
 #endif
-
-        public JasilyLogger()
-        {
-#if !DEBUG
-            Logs = new List<string>();
-#endif
-        }
 
         public void WriteLine<T>(
             LoggerMode mode,
@@ -71,9 +64,9 @@ namespace System.Diagnostics
 #if DEBUG
             Debug.WriteLine(message);
 #else
-            lock (SyncRoot)
+            lock (this.SyncRoot)
             {
-                Logs.Add(String.Concat(DateTime.Now.ToString("HH:mm:ss"), " ", message));
+                this.logs.Add(String.Concat(DateTime.Now.ToString("HH:mm:ss"), " ", message));
             }
 #endif
         }
