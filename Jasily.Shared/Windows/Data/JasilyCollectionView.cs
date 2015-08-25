@@ -1,7 +1,10 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows.Data;
+using Jasily.ComponentModel;
 
-namespace System.Windows.Data
+namespace Jasily.Windows.Data
 {
     public class JasilyCollectionView<T> : JasilyViewModel
     {

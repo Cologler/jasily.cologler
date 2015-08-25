@@ -1,7 +1,8 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 
-namespace System.Windows.Data
+namespace Jasily.Windows.Data
 {
     public class JasilySelectorCollectionView<T> : JasilyCollectionView<T>
     {
@@ -12,7 +13,7 @@ namespace System.Windows.Data
             this.Filter = this.OnFilter;
         }
 
-        void SelectedItems_CollectionChanged(object sender, Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        void SelectedItems_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             switch (e.Action)
             {

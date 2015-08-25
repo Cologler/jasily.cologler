@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.ComponentModel;
+using Jasily.ComponentModel;
 
 namespace UnitTest.Desktop.ComponentModel
 {
@@ -45,20 +46,20 @@ namespace UnitTest.Desktop.ComponentModel
 
             public NotifyPropertyChangedObjectInstance()
             {
-                LastChangedPropertyName = new List<string>();
+                this.LastChangedPropertyName = new List<string>();
 
-                this.PropertyChanged += NotifyPropertyChangedObjectInstance_PropertyChanged;
+                this.PropertyChanged += this.NotifyPropertyChangedObjectInstance_PropertyChanged;
             }
 
             void NotifyPropertyChangedObjectInstance_PropertyChanged(object sender, PropertyChangedEventArgs e)
             {
-                LastChangedPropertyName.Add(e.PropertyName);
+                this.LastChangedPropertyName.Add(e.PropertyName);
             }
 
             public string Name
             {
-                get { return _name; }
-                set { SetPropertyRef(ref _name, value); }
+                get { return this._name; }
+                set { this.SetPropertyRef(ref this._name, value); }
             }
         }
     }
