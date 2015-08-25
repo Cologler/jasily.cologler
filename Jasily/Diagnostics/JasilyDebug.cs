@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using static System.String;
 
 namespace Jasily.Diagnostics
 {
@@ -57,5 +59,11 @@ namespace Jasily.Diagnostics
         }
 
         #endregion
+
+        [Conditional("DEBUG")]
+        public static void Pointer([CallerFilePath] string path = "", [CallerMemberName] string member = "", [CallerLineNumber] int line = 0)
+        {
+            Debug.WriteLine(Concat("[POINTER] {", path, "} (", line.ToString(), ") ", member));
+        }
     }
 }

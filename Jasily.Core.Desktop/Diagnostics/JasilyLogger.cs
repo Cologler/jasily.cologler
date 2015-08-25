@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading;
 
 namespace System.Diagnostics
@@ -17,16 +18,9 @@ namespace System.Diagnostics
         }
 
 #if !DEBUG
-        object SyncRoot;
-        private List<string> Logs;
+        readonly object SyncRoot = new object();
+        private readonly List<string> logs = new List<string>();
 #endif
-
-        public JasilyLogger()
-        {
-#if !DEBUG
-            Logs = new List<string>();
-#endif
-        }
 
         public void WriteLine<T>(
             LoggerMode mode,
@@ -35,7 +29,7 @@ namespace System.Diagnostics
             [CallerLineNumber] int line = 0)
         {
 #if !DEBUG
-            if (mode == UCLoggerMode.Debug) return;
+            if (mode == LoggerMode.Debug) return;
 #endif
 
             this.WriteLine(mode, message, typeof(T), member, line);
@@ -49,7 +43,7 @@ namespace System.Diagnostics
             [CallerLineNumber] int line = 0)
         {
 #if !DEBUG
-            if (mode == UCLoggerMode.Debug) return;
+            if (mode == LoggerMode.Debug) return;
 #endif
 
             this.RawWriteLine(Format(type.FullName, mode, message, member, line));
@@ -70,9 +64,9 @@ namespace System.Diagnostics
 #if DEBUG
             Debug.WriteLine(message);
 #else
-            lock (SyncRoot)
+            lock (this.SyncRoot)
             {
-                Logs.Add(String.Concat(DateTime.Now.ToString("HH:mm:ss"), " ", message));
+                this.logs.Add(String.Concat(DateTime.Now.ToString("HH:mm:ss"), " ", message));
             }
 #endif
         }
