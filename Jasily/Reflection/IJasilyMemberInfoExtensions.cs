@@ -19,15 +19,9 @@ namespace Jasily.Reflection
                 yield return member.AsJasilyMemberInfo();
         }
 
-        public static IJasilyMemberInfo AsJasilyMemberInfo(this FieldInfo field)
-        {
-            return (JasilyFieldInfo)field;
-        }
+        public static IJasilyMemberInfo AsJasilyMemberInfo(this FieldInfo field) => (JasilyFieldInfo)field;
 
-        public static IJasilyMemberInfo AsJasilyMemberInfo(this PropertyInfo property)
-        {
-            return (JasilyPropertyInfo)property;
-        }
+        public static IJasilyMemberInfo AsJasilyMemberInfo(this PropertyInfo property) => (JasilyPropertyInfo)property;
 
         private abstract class JasilyMemberInfo : IJasilyMemberInfo 
         {
