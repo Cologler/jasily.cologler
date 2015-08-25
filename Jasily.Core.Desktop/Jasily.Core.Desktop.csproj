@@ -25,7 +25,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;DESKTOP</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -94,6 +94,9 @@
     </Compile>
     <Compile Include="..\Jasily.Core.CSShared\Shell\MicrosoftSingleInstanceProvider.cs">
       <Link>Shell\MicrosoftSingleInstanceProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Jasily.Core.CSShared\Windows\Data\EmptyCollapsedValueConverter.cs">
+      <Link>Windows\Data\EmptyCollapsedValueConverter.cs</Link>
     </Compile>
     <Compile Include="..\Jasily.Core.CSShared\Windows\Data\JasilyCollectionView.cs">
       <Link>Windows\Data\JasilyCollectionView.cs</Link>

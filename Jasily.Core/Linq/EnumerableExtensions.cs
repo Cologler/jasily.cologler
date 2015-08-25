@@ -164,5 +164,34 @@ namespace System.Linq
                 ? source.Aggregate(false, (current, item) => current | predicate(item))
                 : source.Any(predicate);
         }
+        #region orderby
+
+        public static IOrderedEnumerable<T> OrderBy<T>(this IEnumerable<T> source, IComparer<T> comparer)
+        {
+            return source.OrderBy(z => z, comparer);
+        }
+        public static IOrderedEnumerable<T> OrderBy<T>(this IEnumerable<T> source, Comparison<T> comparison)
+        {
+            return source.OrderBy(z => z, Comparer<T>.Create(comparison));
+        }
+        public static IOrderedEnumerable<TSource> OrderBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, Comparison<TKey> comparison)
+        {
+            return source.OrderBy(keySelector, Comparer<TKey>.Create(comparison));
+        }
+
+        public static IOrderedEnumerable<T> OrderByDescending<T>(this IEnumerable<T> source, IComparer<T> comparer)
+        {
+            return source.OrderByDescending(z => z, comparer);
+        }
+        public static IOrderedEnumerable<T> OrderByDescending<T>(this IEnumerable<T> source, Comparison<T> comparison)
+        {
+            return source.OrderByDescending(z => z, Comparer<T>.Create(comparison));
+        }
+        public static IOrderedEnumerable<TSource> OrderByDescending<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, Comparison<TKey> comparison)
+        {
+            return source.OrderByDescending(keySelector, Comparer<TKey>.Create(comparison));
+        }
+
+        #endregion
     }
 }

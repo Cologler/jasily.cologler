@@ -64,6 +64,7 @@
     <Compile Include="Security\Cryptography\HashType.cs" />
     <Compile Include="Security\Cryptography\JasilyHash.cs" />
     <Compile Include="Shell\MicrosoftSingleInstanceProvider.cs" />
+    <Compile Include="Windows\Data\EmptyCollapsedValueConverter.cs" />
     <Compile Include="Windows\Data\JasilyCollectionView.cs" />
     <Compile Include="Windows\Data\JasilySelectorCollectionView.cs" />
     <Compile Include="Windows\Data\NullCollapsedValueConverter.cs" />

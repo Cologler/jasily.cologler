@@ -24,7 +24,7 @@ namespace Jasily.Reflection
                     if (!member.CanWrite) throw new NotSupportedException("member not support write.");
                     if (member.IsStatic) throw new NotSupportedException("static member was not supported.");
 
-                    var name = attr.Name.IsNullOrWhiteSpace() ? member.Name : attr.Name;
+                    var name = attr.Name.IsNullOrWhiteSpace() ? member.Member.Name : attr.Name;
 
                     if (mapping.ContainsKey(name)) throw new InvalidOperationException("has two same member name.");
 

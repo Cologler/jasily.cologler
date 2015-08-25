@@ -84,6 +84,9 @@ namespace System.IO
             progressChangedWatcher.OnCompleted();
         }
 
+        public static async Task CopyToAsync(this Stream stream, Stream destination, CancellationToken cancellationToken)
+            => await stream.CopyToAsync(destination, DefaultCopyBufferSize, cancellationToken);
+
         public static async Task CopyToAsync(this Stream stream, Stream destination, IObserver<long> progressChangedWatcher)
             => await CopyToAsync(stream, destination, DefaultCopyBufferSize, progressChangedWatcher);
 

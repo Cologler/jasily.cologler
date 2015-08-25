@@ -37,11 +37,13 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionExtensions.cs" />
     <Compile Include="ActivatorPro.cs" />
     <Compile Include="Attributes\PrintAttribute.cs" />
     <Compile Include="Collections\Generic\ICollectionExtensions.cs" />
     <Compile Include="Collections\Generic\IReadOnlyDictionaryExtensions.cs" />
     <Compile Include="Collections\Generic\TryGetValueExtensions.cs" />
+    <Compile Include="Collections\Interval.cs" />
     <Compile Include="Diagnostics\IJasilyPrinter.cs" />
     <Compile Include="EnumExtensions.cs" />
     <Compile Include="Enums\SupportedFlagsAttribute.cs" />
@@ -99,9 +101,6 @@
     <Compile Include="JasilyWeakReference.cs" />
     <Compile Include="IO\SeekableStringReader.cs" />
     <Compile Include="Net\HttpUriBuilder.cs" />
-    <Compile Include="Net\WebResultExtensions.cs" />
-    <Compile Include="Net\WebResult.cs" />
-    <Compile Include="Net\WebResultType.cs" />
     <Compile Include="Runtime\Serialization\Json\DataContractJsonSerializerExtensions.cs" />
     <Compile Include="Text\StringLine.cs" />
     <Compile Include="UsingAnything.cs" />

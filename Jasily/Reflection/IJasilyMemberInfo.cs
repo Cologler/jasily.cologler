@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace Jasily.Reflection
 {
@@ -7,7 +8,7 @@ namespace Jasily.Reflection
     {
         #region meta
 
-        string Name { get; }
+        MemberInfo Member { get; }
 
         bool CanRead { get; }
 
@@ -16,8 +17,6 @@ namespace Jasily.Reflection
         bool IsStatic { get; }
 
         Type ValueType { get; }
-
-        Type DeclaringType { get; }
 
         JasilyMemberType MemberType { get; }
 
