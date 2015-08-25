@@ -116,31 +116,17 @@ namespace System
 
         #endregion
 
-        #region format
-
-        public static string Format(this string format, params object[] args)
-        {
-            return String.Format(format, args);
-        }
-
-        public static string Format(this string format, IFormatProvider provider, params object[] args)
-        {
-            return String.Format(format, provider, args);
-        }
-
-        #endregion
-
         #region parse
 
         public static int? TryParseInt32(string s)
         {
             int n;
-            return Int32.TryParse(s, out n) ? (int?) n : null;
+            return int.TryParse(s, out n) ? (int?) n : null;
         }
         public static int? TryParseInt32(string s, NumberStyles style, IFormatProvider provider)
         {
             int n;
-            return Int32.TryParse(s, style, provider, out n) ? (int?)n : null;
+            return int.TryParse(s, style, provider, out n) ? (int?)n : null;
         }
 
         public static long? TryParseInt64(string s)
@@ -175,9 +161,9 @@ namespace System
         /// <param name="texts"></param>
         /// <param name="spliter"></param>
         /// <returns></returns>
-        public static string AsLines(this IEnumerable<string> texts, string spliter = "\r\n")
+        public static string AsLines(this IEnumerable<string> texts, string spliter = null)
         {
-            return String.Join(spliter, texts);
+            return String.Join(spliter ?? Environment.NewLine, texts);
         }
 
         /// <summary>
@@ -189,8 +175,8 @@ namespace System
         public static IEnumerable<string> AsLines(this string text, string spliter = null)
         {
             return spliter == null
-                ? text?.Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None)
-                : text?.Split(new string[] { spliter }, StringSplitOptions.None);
+                ? text?.Split(new [] { "\r\n", "\r", "\n" }, StringSplitOptions.None)
+                : text?.Split(new [] { spliter }, StringSplitOptions.None);
         }
 
         /// <summary>
