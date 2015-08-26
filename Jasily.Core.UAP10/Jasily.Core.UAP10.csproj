@@ -115,6 +115,7 @@
   <ItemGroup>
     <Compile Include="Net\Http\HttpClientExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Security\Cryptography\IbufferExtensions.cs" />
     <Compile Include="System\Profile\AnalyticsVersionInfoExtensions.cs" />
     <Compile Include="System\Profile\DeviceFamilyType.cs" />
     <Content Include="Properties\Jasily.Core.UAP10.rd.xml" />

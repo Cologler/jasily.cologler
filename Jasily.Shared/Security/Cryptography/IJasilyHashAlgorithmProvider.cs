@@ -1,6 +1,6 @@
 namespace Jasily.Security.Cryptography
 {
-    public interface IJasilyHashProvider
+    public interface IJasilyHashAlgorithmProvider
     {
         string ComputeHashString(byte[] text);
     }

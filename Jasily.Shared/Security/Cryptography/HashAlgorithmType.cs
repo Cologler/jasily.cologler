@@ -1,6 +1,9 @@
 ﻿namespace Jasily.Security.Cryptography
 {
-    public enum HashType
+    /// <summary>
+    /// 哈希算法类型
+    /// </summary>
+    public enum HashAlgorithmType
     {
         CRC32,
 

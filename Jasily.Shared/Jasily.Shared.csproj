@@ -44,9 +44,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Security\Cryptography\HashType.cs" />
-    <Compile Include="Security\Cryptography\IJasilyHashProvider.cs" />
-    <Compile Include="Security\Cryptography\JasilyHashFactory.cs" />
+    <Compile Include="Security\Cryptography\AsymmetricAlgorithmType.cs" />
+    <Compile Include="Security\Cryptography\IJasilyEncryptAlgorithmProvider.cs" />
+    <Compile Include="Security\Cryptography\HashAlgorithmType.cs" />
+    <Compile Include="Security\Cryptography\IJasilyAsymmetricKeyAlgorithmProvider.cs" />
+    <Compile Include="Security\Cryptography\IJasilyHashAlgorithmProvider.cs" />
+    <Compile Include="Security\Cryptography\BaseOn\JasilyEncryptAlgorithmProvider.cs" />
+    <Compile Include="Security\Cryptography\IJasilySymmetricKeyAlgorithmProvider.cs" />
+    <Compile Include="Security\Cryptography\JasilyCryptographyFactory.cs" />
+    <Compile Include="Security\Cryptography\SymmetricAlgorithmType.cs" />
     <Compile Include="Windows\Data\JasilyCollectionView.cs" />
     <Compile Include="Windows\Data\JasilySelectorCollectionView.cs" />
   </ItemGroup>

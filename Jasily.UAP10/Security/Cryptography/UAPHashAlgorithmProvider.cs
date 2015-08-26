@@ -5,7 +5,7 @@ using Windows.Security.Cryptography.Core;
 
 namespace Jasily.Security.Cryptography
 {
-    internal sealed class UAPHashAlgorithmProvider : IJasilyHashProvider
+    internal sealed class UAPHashAlgorithmProvider : IJasilyHashAlgorithmProvider
     {
         private readonly HashAlgorithmProvider provider;
 
