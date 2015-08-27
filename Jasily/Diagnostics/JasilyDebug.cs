@@ -60,10 +60,14 @@ namespace Jasily.Diagnostics
 
         #endregion
 
+        #region pointer
+
         [Conditional("DEBUG")]
         public static void Pointer([CallerFilePath] string path = "", [CallerMemberName] string member = "", [CallerLineNumber] int line = 0)
         {
             Debug.WriteLine(Concat("[POINTER] {", path, "} (", line.ToString(), ") ", member));
         }
+
+        #endregion
     }
 }
