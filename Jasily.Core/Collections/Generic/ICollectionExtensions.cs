@@ -82,6 +82,18 @@ namespace System.Collections.Generic
             if (source == null) throw new ArgumentNullException(nameof(source));
             if (dest == null) throw new ArgumentNullException(nameof(dest));
 
+            return InnerMoveTo(source, item, dest);
+        }
+        public static int MoveTo<T>(this ICollection<T> source, IEnumerable<T> items, ICollection<T> dest)
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            if (items == null) throw new ArgumentNullException(nameof(items));
+            if (dest == null) throw new ArgumentNullException(nameof(dest));
+
+            return items.Count(z => InnerMoveTo(source, z, dest));
+        }
+        private static bool InnerMoveTo<T>(ICollection<T> source, T item, ICollection<T> dest)
+        {
             if (source.Remove(item))
             {
                 dest.Add(item);

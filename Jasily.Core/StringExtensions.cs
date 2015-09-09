@@ -10,39 +10,28 @@ namespace System
         #region encoding & decoding
 
         /// <summary>
+        /// return UTF-8 encoding
+        /// </summary>
+        public static Encoding DefaultEncoding { get; set; } = Encoding.UTF8;
+
+        /// <summary>
         /// get bytes using special encoding
         /// </summary>
         /// <param name="text"></param>
         /// <param name="encoding"></param>
         /// <returns></returns>
-        public static byte[] GetBytes(this string text, Encoding encoding)
-        {
-            return encoding.GetBytes(text);
-        }
+        public static byte[] GetBytes(this string text, Encoding encoding) => encoding.GetBytes(text);
 
         /// <summary>
-        /// get bytes using utf-8
+        /// get bytes using DefaultEncoding
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
-        public static byte[] GetBytes(this string text)
-        {
-            return text.GetBytes(Encoding.UTF8);
-        }
+        public static byte[] GetBytes(this string text) => text.GetBytes(DefaultEncoding);
 
-        public static string UrlEncode(this string str)
-        {
-            if (str == null) throw new ArgumentNullException(nameof(str));
+        public static string UrlEncode(this string str) => Net.WebUtility.UrlEncode(str);
 
-            return System.Net.WebUtility.UrlEncode(str);
-        }
-
-        public static string UrlDecode(this string str)
-        {
-            if (str == null) throw new ArgumentNullException(nameof(str));
-
-            return System.Net.WebUtility.UrlDecode(str);
-        }
+        public static string UrlDecode(this string str) => Net.WebUtility.UrlDecode(str);
 
         #endregion
 
@@ -53,20 +42,14 @@ namespace System
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
-        public static bool IsNullOrEmpty(this string text)
-        {
-            return String.IsNullOrEmpty(text);
-        }
+        public static bool IsNullOrEmpty(this string text) => String.IsNullOrEmpty(text);
 
         /// <summary>
         /// return String.IsNullOrWhiteSpace(text)
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
-        public static bool IsNullOrWhiteSpace(this string text)
-        {
-            return String.IsNullOrWhiteSpace(text);
-        }
+        public static bool IsNullOrWhiteSpace(this string text) => String.IsNullOrWhiteSpace(text);
 
         #endregion
 
@@ -162,9 +145,7 @@ namespace System
         /// <param name="spliter"></param>
         /// <returns></returns>
         public static string AsLines(this IEnumerable<string> texts, string spliter = null)
-        {
-            return String.Join(spliter ?? Environment.NewLine, texts);
-        }
+            => String.Join(spliter ?? Environment.NewLine, texts);
 
         /// <summary>
         /// use spliter to split text. default value was '\r\n' or '\r' or '\n'
@@ -173,11 +154,9 @@ namespace System
         /// <param name="spliter"></param>
         /// <returns></returns>
         public static IEnumerable<string> AsLines(this string text, string spliter = null)
-        {
-            return spliter == null
-                ? text?.Split(new [] { "\r\n", "\r", "\n" }, StringSplitOptions.None)
-                : text?.Split(new [] { spliter }, StringSplitOptions.None);
-        }
+            => spliter == null
+            ? text?.Split(new [] { "\r\n", "\r", "\n" }, StringSplitOptions.None)
+            : text?.Split(new [] { spliter }, StringSplitOptions.None);
 
         /// <summary>
         /// repeat this like ( string * int ) in python
@@ -187,9 +166,7 @@ namespace System
         /// <exception cref="System.ArgumentOutOfRangeException">count &lt; 0</exception>
         /// <returns></returns>
         public static string Repeat(this string str, int count)
-        {
-            return str == null ? null : string.Concat(Enumerable.Repeat(str, count));
-        }
+            => str == null ? null : string.Concat(Enumerable.Repeat(str, count));
 
         /// <summary>
         /// return first line from text
@@ -200,7 +177,7 @@ namespace System
         {
             if (text == null)
                 return null;
-
+            
             var index = text.IndexOf('\n');
 
             if (index == -1)
@@ -283,6 +260,54 @@ namespace System
 
             var index = str.LastIndexOfAny(spliter);
             return index < 1 ? str : str.Substring(index + 1);
+        }
+
+        public static string Childs(this string str, int? leftIndex = null, int? rightIndex = null)
+        {
+            if (str == null) throw new ArgumentNullException(nameof(str));
+
+            return (new JasilyStringChild()).Result(str, leftIndex, rightIndex);
+        }
+
+        private struct JasilyStringChild : IChild<string, string>
+        {
+            public int Count(string source) => source.Length;
+
+            public string Empty => string.Empty;
+
+            public string GetChilds(string source, int leftIndex, int rightIndex)
+                => source.Substring(leftIndex, rightIndex - leftIndex);
+        }
+    }
+
+    internal interface IChild<TSource, TResult>
+    {
+        int Count(TSource source);
+
+        TResult Empty { get; }
+
+        TResult GetChilds(TSource source, int leftIndex, int rightIndex);
+    }
+
+    internal static class IChildExtensions
+    {
+        public static TResult Result<TSource, TResult>(this IChild<TSource, TResult> child,
+            TSource source, int? leftIndex, int? rightIndex)
+        {
+            var li = child.Count(source) - 1;
+            if (li == -1) return child.Empty;
+
+            var l = leftIndex ?? 0;
+            if (l < 0) l = li + l;
+            if (l < 0) l = 0;
+            if (l > li) return child.Empty;
+
+            var r = rightIndex ?? li;
+            if (r < 0) r = li + r;
+            if (r < 0) r = 0;
+            if (l >= r) return child.Empty;
+
+            return child.GetChilds(source, l, r);
         }
     }
 }

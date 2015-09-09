@@ -4,13 +4,19 @@ namespace System
 {
     public static class RandomExtensions
     {
-        public static T Random<T>(this T[] t)
+        public static T Random<T>(this T[] t) => t[new Random().Next(t.Length)];
+
+        public static T Random<T>(this IList<T> t) => t[new Random().Next(t.Count)];
+
+        public static byte[] NextBytes(this Random random, int byteCount)
         {
-            return t[new Random().Next(t.Length)];
+            var buffer = new byte[byteCount];
+            random.NextBytes(buffer);
+            return buffer;
         }
-        public static T Random<T>(this IList<T> t)
-        {
-            return t[new Random().Next(t.Count)];
-        }
+
+        public static long NextInt32(Random random) => BitConverter.ToInt32(random.NextBytes(4), 0);
+
+        public static long NextInt64(Random random) => BitConverter.ToInt64(random.NextBytes(8), 0);
     }
 }
