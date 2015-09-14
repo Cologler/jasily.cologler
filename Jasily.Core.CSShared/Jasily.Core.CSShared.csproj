@@ -67,6 +67,7 @@
     <Compile Include="Windows\Data\EmptyCollapsedValueConverter.cs" />
     <Compile Include="Windows\Data\NullCollapsedValueConverter.cs" />
     <Compile Include="Windows\DispatcherExtensions.cs" />
+    <Compile Include="Windows\JasilyDispatcher.cs" />
     <Compile Include="Windows\VisibilityExtensions.cs" />
     <Compile Include="Windows\Media\Animation\JasilyStoryboard.cs" />
     <Compile Include="Windows\Media\Animation\StoryboardFactory.cs" />

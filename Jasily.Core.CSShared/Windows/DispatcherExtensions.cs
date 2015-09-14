@@ -1,17 +1,15 @@
 ﻿
+#if DESKTOP
+
 using System.Windows.Threading;
+
+#endif
 
 namespace System.Windows
 {
     public static class DispatcherExtensions
     {
 #if DESKTOP
-        /// <summary>
-        /// 用在其上创建了 System.Windows.Threading.Dispatcher 的线程的指定参数异步执行指定委托。
-        /// </summary>
-        /// <param name="dispatcher"></param>
-        /// <param name="a">对采用 args 中指定参数的方法的委托，该委托将被推送到 System.Windows.Threading.Dispatcher 事件队列中。</param>
-        /// <returns></returns>
         public static DispatcherOperation BeginInvoke(this Dispatcher dispatcher, Action a)
         {
             return dispatcher.BeginInvoke(a, null);
@@ -74,35 +72,8 @@ namespace System.Windows
 
             return false;
         }
-
-        public static Dispatcher GetUIDispatcher()
-        {
-            return Application.Current.Dispatcher;
-        }
-
-#elif WINDOWS_PHONE_80
-        /// <summary>
-        /// get UI dispatcher
-        /// </summary>
-        /// <returns></returns>
-        public static System.Windows.Threading.Dispatcher GetUIDispatcher()
-        {
-            return Deployment.Current.Dispatcher;
-        }
-#else
-        public static Dispatcher GetUIDispatcher()
-        {
-            throw new NotSupportedException();
-        }
 #endif
 
-        /// <summary>
-        /// get UI dispatcher
-        /// </summary>
-        /// <returns></returns>
-        public static Dispatcher GetUIDispatcher(this object obj)
-        {
-            return GetUIDispatcher();
-        }
+        public static JasilyDispatcher GetUIDispatcher(this object obj) => JasilyDispatcher.GetUIDispatcher();
     }
 }

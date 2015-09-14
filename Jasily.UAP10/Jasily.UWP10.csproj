@@ -151,9 +151,9 @@
     <Content Include="Properties\Jasily.UAP10.rd.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Jasily.Core.UAP10\Jasily.Core.UAP10.csproj">
+    <ProjectReference Include="..\Jasily.Core.UAP10\Jasily.Core.UWP10.csproj">
       <Project>{33923b08-eda0-4acc-9818-17f01cd1a89f}</Project>
-      <Name>Jasily.Core.UAP10</Name>
+      <Name>Jasily.Core.UWP10</Name>
     </ProjectReference>
     <ProjectReference Include="..\Jasily.Core\Jasily.Core.csproj">
       <Project>{8442e8e7-d515-4481-8a36-71711b1fbf79}</Project>
