@@ -113,6 +113,9 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Jasily.Core.CSShared\JasilyDeviceInfo.cs">
+      <Link>JasilyDeviceInfo.cs</Link>
+    </Compile>
     <Compile Include="..\Jasily.Core.CSShared\Windows\DispatcherExtensions.cs">
       <Link>Windows\DispatcherExtensions.cs</Link>
     </Compile>

@@ -59,6 +59,9 @@
     <Compile Include="..\Jasily.Core.CSShared\IO\FileSystemTestType.cs">
       <Link>IO\FileSystemTestType.cs</Link>
     </Compile>
+    <Compile Include="..\Jasily.Core.CSShared\JasilyDeviceInfo.cs">
+      <Link>JasilyDeviceInfo.cs</Link>
+    </Compile>
     <Compile Include="..\Jasily.Core.CSShared\Performance\CodeTimer.cs">
       <Link>Performance\CodeTimer.cs</Link>
     </Compile>
