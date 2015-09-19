@@ -42,6 +42,18 @@ namespace System.IO
             await stream.WriteAsync(buffer, 0, buffer.Length);
         }
 
+        public static byte[] ReadBytesOrThrow(this Stream stream, int count)
+            => stream.ReadBytesOrThrow<IOException>(count);
+
+        public static byte[] ReadBytesOrThrow<TException>(this Stream stream, int count)
+            where TException : Exception, new ()
+        {
+            var buffer = new byte[count];
+            if (stream.Read(buffer, 0, count) != count)
+                throw new TException();
+            return buffer;
+        }
+
         #endregion
 
         #region read & write JasilyBuffer
