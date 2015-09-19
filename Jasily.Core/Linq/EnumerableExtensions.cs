@@ -164,6 +164,8 @@ namespace System.Linq
                 ? source.Aggregate(false, (current, item) => current | predicate(item))
                 : source.Any(predicate);
         }
+        
+        
         #region orderby
 
         public static IOrderedEnumerable<T> OrderBy<T>(this IEnumerable<T> source, IComparer<T> comparer)
@@ -191,6 +193,19 @@ namespace System.Linq
         {
             return source.OrderByDescending(keySelector, Comparer<TKey>.Create(comparison));
         }
+
+        #endregion
+
+        #region
+
+        public static IEnumerable<T> ForEach<T>(this IEnumerable<T> source, Action<T> action)
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+
+            foreach (var item in source)
+                action(item);
+            return source;
+        } 
 
         #endregion
     }
