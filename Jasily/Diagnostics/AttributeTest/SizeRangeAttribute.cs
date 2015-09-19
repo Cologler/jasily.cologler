@@ -17,22 +17,11 @@ namespace Jasily.Diagnostics.AttributeTest
 
         public override bool Test(object obj)
         {
-            if (ReferenceEquals(obj, null)) return false;
-
-            return obj.TryCast<int>()?.CastWith(this.Test)
-                ?? obj.TryCast<long>()?.CastWith(this.Test)
-                ?? (obj as Array)?.Length.CastWith(this.Test)
-                ?? (obj as ICollection)?.Count.CastWith(this.Test)
-                ?? false;
+            throw new NotImplementedException();
         }
 
-        private bool Test(int number)
-        {
-            return this.Test(System.Convert.ToInt64(number));
-        }
-        private bool Test(long number)
-        {
-            return number >= this.Min && number <= this.Max;
-        }
+        private bool Test(int number) => this.Test(Convert.ToInt64(number));
+
+        private bool Test(long number) => number >= this.Min && number <= this.Max;
     }
 }

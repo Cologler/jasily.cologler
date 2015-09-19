@@ -198,18 +198,6 @@ namespace System
         }
 
         /// <summary>
-        /// 拆箱操作 @_@
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public static T? TryCast<T>(this object obj)
-            where T : struct
-        {
-            return obj as T?;
-        }
-
-        /// <summary>
         /// return a single item array : new[] { obj }.
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -219,5 +207,12 @@ namespace System
         {
             return new[] { obj };
         }
+
+        #region is
+
+        public static bool IsBetween<T>(this T self, T lower, T upper) where T : IComparable<T>
+            => self.CompareTo(lower) >= 0 && self.CompareTo(upper) < 0;
+
+        #endregion
     }
 }

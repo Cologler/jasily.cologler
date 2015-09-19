@@ -12,12 +12,10 @@ namespace Jasily.Diagnostics.AttributeTest
 
         public DateTimeKind Kind { get; }
 
-        public override bool Test(object obj)
-        {
-            if (ReferenceEquals(obj, null))
-                return true;
+        public bool Test(DateTime dt)
+            => dt.CastWith(z => z.Kind == this.Kind);
 
-            return obj.TryCast<DateTime>()?.CastWith(z => z.Kind == this.Kind) ?? false;
-        }
+        public override bool Test(object obj)
+            => this.CanNull && ReferenceEquals(obj, null) || obj is DateTime && this.Test((DateTime) obj);
     }
 }

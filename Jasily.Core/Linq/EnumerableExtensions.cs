@@ -143,12 +143,21 @@ namespace System.Linq
         /// <returns></returns>
         public static IEnumerable<IEnumerable<TSource>> Split<TSource>(this IEnumerable<TSource> source, int chunkSize)
         {
-            var count = source.Count();
-            int index = 0;
-            while (index < count)
+            if (source == null) throw new ArgumentNullException(nameof(source));
+
+            using (var itor = source.GetEnumerator())
             {
-                yield return source.Skip(index).Take(chunkSize);
-                index += chunkSize;
+                var list = new List<TSource>(chunkSize);
+                while (itor.MoveNext())
+                {
+                    list.Add(itor.Current);
+                    if (list.Count == chunkSize)
+                    {
+                        yield return list;
+                        list = new List<TSource>(chunkSize);
+                    }
+                }
+                if (list.Count > 0) yield return list;
             }
         }
 
@@ -164,8 +173,10 @@ namespace System.Linq
                 ? source.Aggregate(false, (current, item) => current | predicate(item))
                 : source.Any(predicate);
         }
-        
-        
+
+
+        public static bool IsNotNullOrEmpty<TSource>(this IEnumerable<TSource> source) => source != null && source.Any();
+
         #region orderby
 
         public static IOrderedEnumerable<T> OrderBy<T>(this IEnumerable<T> source, IComparer<T> comparer)
@@ -196,7 +207,7 @@ namespace System.Linq
 
         #endregion
 
-        #region
+        #region foreach
 
         public static IEnumerable<T> ForEach<T>(this IEnumerable<T> source, Action<T> action)
         {

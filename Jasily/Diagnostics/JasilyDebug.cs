@@ -7,6 +7,8 @@ namespace Jasily.Diagnostics
 {
     public static class JasilyDebug
     {
+        #region assert type
+
         [Conditional("DEBUG")]
         public static void Assert(Func<bool> condition)
         {
@@ -22,6 +24,20 @@ namespace Jasily.Diagnostics
         {
             Debug.Assert(condition(), message());
         }
+
+        [Conditional("DEBUG")]
+        public static void AssertType<T>(this object obj)
+        {
+            Debug.Assert(obj != null);
+            AssertType<T>(obj.GetType());
+        }
+        [Conditional("DEBUG")]
+        public static void AssertType<T>(this Type type)
+        {
+            Debug.Assert(type == typeof(T), $"assert type failed. {type.FullName} not {typeof(T).FullName}");
+        }
+
+        #endregion
 
         [Conditional("DEBUG")]
         public static void WriteLine(Func<string> message)
@@ -45,20 +61,13 @@ namespace Jasily.Diagnostics
             Debug.WriteLineIf(condition(), message());
         }
 
-        #region assert type
-
         [Conditional("DEBUG")]
-        public static void AssertType<T>(this object obj)
+        public static void NotImplemented(string message = null)
         {
-            AssertType<T>(obj.GetType());
+            if (Debugger.IsAttached) Debugger.Break();
+            
+            throw new NotImplementedException(message);
         }
-        [Conditional("DEBUG")]
-        public static void AssertType<T>(this Type type)
-        {
-            Debug.Assert(type == typeof(T), $"assert type failed. {type.FullName} not {typeof(T).FullName}");
-        }
-
-        #endregion
 
         #region pointer
 

@@ -1,10 +1,40 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Reflection;
 
 namespace Jasily.Diagnostics.AttributeTest
 {
     public static class AttributeTestor
     {
+        private static List<Type> FieldTestAttributes;
+        private static List<Type> PropertyTestAttributes;
+
+        static AttributeTestor()
+        {
+            //Initialize();
+        }
+
+        [Conditional("DEBUG")]
+        public static void Initialize()
+        {
+            FieldTestAttributes = new List<Type>();
+            PropertyTestAttributes = new List<Type>();
+
+            foreach (var typeInfo in typeof(AttributeTestor).GetTypeInfo().Assembly.DefinedTypes)
+            {
+                if (typeInfo.IsSubclassOf(typeof(TestAttribute)))
+                {
+                    var attr = typeInfo.GetCustomAttribute<AttributeUsageAttribute>();
+                    if (attr == null) throw new NotImplementedException();
+                    if ((attr.ValidOn & AttributeTargets.Field) == AttributeTargets.Field)
+                        FieldTestAttributes.Add(typeInfo.AsType());
+                    if ((attr.ValidOn & AttributeTargets.Property) == AttributeTargets.Property)
+                        PropertyTestAttributes.Add(typeInfo.AsType());
+                }
+            }
+        }
+
         [Conditional("DEBUG")]
         public static void Test(this IJasilyTestable obj)
         {
