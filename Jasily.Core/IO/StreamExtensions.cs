@@ -16,25 +16,20 @@ namespace System.IO
         {
             using (var ms = new MemoryStream())
             {
-                if (stream.CanSeek)
-                {
-                    stream.Position = 0;
-                }
-
+                stream.Position = 0;
                 stream.CopyTo(ms);
                 return ms.ToArray();
             }
         }
+
+        #region read & write
 
         /// <summary>
         /// write whole buffer into stream
         /// </summary>
         /// <param name="stream"></param>
         /// <param name="buffer"></param>
-        public static void Write(this Stream stream, byte[] buffer)
-        {
-            stream.Write(buffer, 0, buffer.Length);
-        }
+        public static void Write(this Stream stream, byte[] buffer) => stream.Write(buffer, 0, buffer.Length);
 
         /// <summary>
         /// write whole buffer into stream
@@ -47,7 +42,9 @@ namespace System.IO
             await stream.WriteAsync(buffer, 0, buffer.Length);
         }
 
-        #region read & write
+        #endregion
+
+        #region read & write JasilyBuffer
 
         public static async Task<int> ReadAsync(this Stream stream, JasilyBuffer buffer)
             => await stream.ReadAsync(buffer.Buffer, buffer.Offset, buffer.Count);

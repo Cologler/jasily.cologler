@@ -31,9 +31,6 @@ namespace System.IO
             return new JasilyBuffer(buffer, 0, this.Count);
         }
 
-        public JasilyBuffer Clone()
-        {
-            return new JasilyBuffer(this.Buffer, 0, this.Count);
-        }
+        public JasilyBuffer Clone() => new JasilyBuffer(this.Buffer, 0, this.Count);
     }
 }
