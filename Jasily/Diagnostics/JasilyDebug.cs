@@ -39,33 +39,28 @@ namespace Jasily.Diagnostics
 
         #endregion
 
-        [Conditional("DEBUG")]
-        public static void WriteLine(Func<string> message)
-        {
-            Debug.WriteLine(message());
-        }
-        [Conditional("DEBUG")]
-        public static void WriteLine(Func<object> value)
-        {
-            Debug.WriteLine(value());
-        }
+        #region write line
 
         [Conditional("DEBUG")]
-        public static void WriteLineIf(Func<bool> condition, string message)
-        {
-            Debug.WriteLineIf(condition(), message);
-        }
-        [Conditional("DEBUG")]
-        public static void WriteLineIf(Func<bool> condition, Func<string> message)
-        {
-            Debug.WriteLineIf(condition(), message());
-        }
+        public static void WriteLine(Func<string> message) => Debug.WriteLine(message());
 
         [Conditional("DEBUG")]
-        public static void NotImplemented(string message = null)
+        public static void WriteLine(Func<object> value) => Debug.WriteLine(value());
+
+        [Conditional("DEBUG")]
+        public static void WriteLineIf(Func<bool> condition, string message) => Debug.WriteLineIf(condition(), message);
+
+        [Conditional("DEBUG")]
+        public static void WriteLineIf(Func<bool> condition, Func<string> message) => Debug.WriteLineIf(condition(), message());
+
+        #endregion
+
+        [Conditional("DEBUG")]
+        public static void NotImplemented(string message = null, bool @continue = false)
         {
             if (Debugger.IsAttached) Debugger.Break();
-            
+            if (@continue) return;
+            Debug.Assert(false, message);
             throw new NotImplementedException(message);
         }
 
@@ -74,7 +69,7 @@ namespace Jasily.Diagnostics
         [Conditional("DEBUG")]
         public static void Pointer([CallerFilePath] string path = "", [CallerMemberName] string member = "", [CallerLineNumber] int line = 0)
         {
-            Debug.WriteLine(Concat("[POINTER] {", path, "} (", line.ToString(), ") ", member));
+            Debug.WriteLine($"[POINTER] {path} ({line.ToString()}) {member}");
         }
 
         #endregion
