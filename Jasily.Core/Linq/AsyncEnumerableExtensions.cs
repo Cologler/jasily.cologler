@@ -5,6 +5,8 @@ namespace System.Linq
 {
     public static class AsyncEnumerableExtensions
     {
+        #region all or any
+
         public static async Task<bool> AllAsync<TSource>(this IEnumerable<TSource> source, Func<TSource, Task<bool>> predicateAsync)
         {
             foreach (var item in source)
@@ -29,11 +31,11 @@ namespace System.Linq
         {
             foreach (var item in source)
             {
-                if (!await predicateAsync(item))
-                    return false;
+                if (await predicateAsync(item))
+                    return true;
             }
 
-            return true;
+            return false;
         }
         public static async Task<bool> AnyAsync<TSource>(this IEnumerable<TSource> source, Func<TSource, Task<bool>> predicateAsync, bool continueOnFailed)
         {
@@ -44,5 +46,7 @@ namespace System.Linq
                 result |= await predicateAsync(item);
             return result;
         }
+
+        #endregion
     }
 }
