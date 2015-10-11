@@ -14,6 +14,8 @@ namespace System.Windows
             this.Dispatcher = dispatcher;
         }
 
+        public override void Invoke(Action action) => this.Dispatcher.Invoke(action);
+
         public override async Task InvokeAsync(Action action) => await this.Dispatcher.InvokeAsync(action);
 
         public override void BeginInvoke(Action action) => this.Dispatcher.BeginInvoke(action);

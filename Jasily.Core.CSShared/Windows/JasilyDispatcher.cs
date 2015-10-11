@@ -10,6 +10,8 @@ namespace System.Windows
 {
     public abstract class JasilyDispatcher
     {
+        public abstract void Invoke(Action action);
+
         public abstract Task InvokeAsync(Action action);
 
         public abstract void BeginInvoke(Action action);

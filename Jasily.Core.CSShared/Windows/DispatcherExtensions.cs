@@ -22,8 +22,8 @@ namespace System.Windows
         {
             return dispatcher.BeginInvoke(a, arg1, arg2);
         }
-
-        public static bool CheckAccessOrInvoke(this Dispatcher dispatcher, Action action)
+#endif
+        public static bool CheckAccessOrInvoke(this JasilyDispatcher dispatcher, Action action)
         {
             if (dispatcher.CheckAccess()) return true;
 
@@ -31,24 +31,24 @@ namespace System.Windows
 
             return false;
         }
-        public static bool CheckAccessOrInvoke<T>(this Dispatcher dispatcher, Action<T> action, T t)
+        public static bool CheckAccessOrInvoke<T>(this JasilyDispatcher dispatcher, Action<T> action, T t)
         {
             if (dispatcher.CheckAccess()) return true;
 
-            dispatcher.Invoke(action, t);
+            dispatcher.Invoke(() => action(t));
 
             return false;
         }
-        public static bool CheckAccessOrInvoke<T1, T2>(this Dispatcher dispatcher, Action<T1, T2> action, T1 t1, T2 t2)
+        public static bool CheckAccessOrInvoke<T1, T2>(this JasilyDispatcher dispatcher, Action<T1, T2> action, T1 t1, T2 t2)
         {
             if (dispatcher.CheckAccess()) return true;
 
-            dispatcher.Invoke(action, t1, t2);
+            dispatcher.Invoke(() => action(t1, t2));
 
             return false;
         }
 
-        public static bool CheckAccessOrBeginInvoke(this Dispatcher dispatcher, Action action)
+        public static bool CheckAccessOrBeginInvoke(this JasilyDispatcher dispatcher, Action action)
         {
             if (dispatcher.CheckAccess()) return true;
 
@@ -56,23 +56,22 @@ namespace System.Windows
 
             return false;
         }
-        public static bool CheckAccessOrBeginInvoke<T>(this Dispatcher dispatcher, Action<T> action, T t)
+        public static bool CheckAccessOrBeginInvoke<T>(this JasilyDispatcher dispatcher, Action<T> action, T t)
         {
             if (dispatcher.CheckAccess()) return true;
 
-            dispatcher.BeginInvoke(action, t);
+            dispatcher.BeginInvoke(() => action(t));
 
             return false;
         }
-        public static bool CheckAccessOrBeginInvoke<T1, T2>(this Dispatcher dispatcher, Action<T1, T2> action, T1 t1, T2 t2)
+        public static bool CheckAccessOrBeginInvoke<T1, T2>(this JasilyDispatcher dispatcher, Action<T1, T2> action, T1 t1, T2 t2)
         {
             if (dispatcher.CheckAccess()) return true;
 
-            dispatcher.BeginInvoke(action, t1, t2);
+            dispatcher.BeginInvoke(() => action(t1, t2));
 
             return false;
         }
-#endif
 
         public static JasilyDispatcher GetUIDispatcher(this object obj) => JasilyDispatcher.GetUIDispatcher();
     }

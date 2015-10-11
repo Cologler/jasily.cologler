@@ -15,6 +15,11 @@ namespace System.Windows
             this.Dispatcher = dispatcher;
         }
 
+        public override void Invoke(Action action)
+        {
+            throw new NotSupportedException();
+        }
+
         public override Task InvokeAsync(Action action)
         {
             throw new NotSupportedException();

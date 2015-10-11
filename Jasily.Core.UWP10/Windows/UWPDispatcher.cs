@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Windows.UI.Core;
 
@@ -13,6 +14,11 @@ namespace System.Windows
         public UWPDispatcher(CoreDispatcher dispatcher)
         {
             this.Dispatcher = dispatcher;
+        }
+
+        public override void Invoke(Action action)
+        {
+            throw new NotSupportedException();
         }
 
         public override async Task InvokeAsync(Action action)
