@@ -5,6 +5,8 @@ namespace System.Linq
 {
     public static class EnumerableExtensions
     {
+        #region to
+
         /// <summary>
         /// 从 System.Collections.Generic.IEnumerable&lt;T&gt; 创建一个数组。
         /// </summary>
@@ -134,23 +136,42 @@ namespace System.Linq
             return result;
         }
 
-        /// <summary>
-        /// 从 System.Collections.Generic.IEnumerable&lt;T&gt; 创建指定步长的多个 System.Collections.Generic.IEnumerable&lt;T&gt;
-        /// </summary>
-        /// <typeparam name="TSource">source 中的元素的类型。</typeparam>
-        /// <param name="source">要从其创建多个 System.Collections.Generic.IEnumerable&lt;T&gt; 的 System.Collections.Generic.IEnumerable&lt;T&gt;。</param>
-        /// <param name="chunkSize">步长</param>
-        /// <returns></returns>
+        #endregion
+
+        #region split
+
         public static IEnumerable<IEnumerable<TSource>> Split<TSource>(this IEnumerable<TSource> source, int chunkSize)
         {
-            var count = source.Count();
-            int index = 0;
-            while (index < count)
+            if (chunkSize < 1) throw new ArgumentOutOfRangeException(nameof(chunkSize), chunkSize, "must > 0.");
+
+            var array = new List<TSource>(chunkSize);
+            foreach (var item in source)
             {
-                yield return source.Skip(index).Take(chunkSize);
-                index += chunkSize;
+                array.Add(item);
+                if (array.Count == chunkSize)
+                {
+                    yield return array;
+                    array = new List<TSource>(chunkSize);
+                }
             }
+            if (array.Count != 0) yield return array;
         }
+
+        #endregion
+
+        #region Foreach
+
+        public static IEnumerable<T> Foreach<T>(this IEnumerable<T> source, Action<T> action)
+        {
+            if (action == null) throw new ArgumentNullException(nameof(action));
+
+            foreach (var item in source) action(item);
+            return source;
+        }
+
+        #endregion
+
+        #region all or any
 
         public static bool All<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate, bool continueOnFailed)
         {
@@ -158,12 +179,16 @@ namespace System.Linq
                 ? source.Aggregate(true, (current, item) => current & predicate(item))
                 : source.All(predicate);
         }
+
         public static bool Any<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate, bool continueOnFailed)
         {
             return continueOnFailed
                 ? source.Aggregate(false, (current, item) => current | predicate(item))
                 : source.Any(predicate);
         }
+
+        #endregion
+
         #region orderby
 
         public static IOrderedEnumerable<T> OrderBy<T>(this IEnumerable<T> source, IComparer<T> comparer)
