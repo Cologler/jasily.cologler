@@ -2,9 +2,9 @@
 {
     public sealed class ChangingEventArgs<T> : EventArgs
     {
-        public T Old { get; private set; }
+        public T Old { get; }
 
-        public T New { get; private set; }
+        public T New { get; }
 
         public ChangingEventArgs(T old, T @new)
         {
