@@ -3,18 +3,15 @@ namespace System.Collections.Generic
 {
     public struct NameValuePair<TName, TValue> : IEquatable<NameValuePair<TName, TValue>>
     {
-        private TName _name;
-        private TValue _value;
-        
         public NameValuePair(TName name, TValue value)
         {
-            this._name = name;
-            this._value = value;
+            this.Name = name;
+            this.Value = value;
         }
 
-        public TName Name { get { return this._name; } }
+        public TName Name { get; }
 
-        public TValue Value { get { return this._value; } }
+        public TValue Value { get; }
 
         /// <summary>
         /// 指示当前对象是否等于同一类型的另一个对象。
@@ -31,12 +28,6 @@ namespace System.Collections.Generic
             return Equals(this.Name, other.Name) && Equals(this.Value, other.Value);
         }
 
-        public override string ToString()
-        {
-            if (this.Name != null)
-                return this.Name.ToString();
-            else
-                return this.ToString();
-        }
+        public override string ToString() => this.Name?.ToString() ?? this.ToString();
     }
 }

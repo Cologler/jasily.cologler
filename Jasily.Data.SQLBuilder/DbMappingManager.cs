@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Jasily.Data.SQLBuilder.Attributes;
+using Jasily.Data.SQLBuilder.DbProvider;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Threading;
-using Jasily.Data.SQLBuilder.Attributes;
-using Jasily.Data.SQLBuilder.DbProvider;
 
 namespace Jasily.Data.SQLBuilder
 {
@@ -13,7 +13,7 @@ namespace Jasily.Data.SQLBuilder
         private static readonly Dictionary<Type, Lazy<DbTableMapping<TDbProvider>>> mapped =
             new Dictionary<Type, Lazy<DbTableMapping<TDbProvider>>>();
 
-        public static DbTableMapping <TDbProvider> GetMapping<T>()
+        public static DbTableMapping<TDbProvider> GetMapping<T>()
             where T : new()
         {
             var type = typeof(T);
