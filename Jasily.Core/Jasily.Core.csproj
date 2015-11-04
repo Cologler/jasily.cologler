@@ -78,7 +78,6 @@
     <Compile Include="Net\Http\RangeHeader.cs" />
     <Compile Include="Net\HttpWebRequestExtensions.cs" />
     <Compile Include="Net\Sockets\Port.cs" />
-    <Compile Include="NotNull.cs" />
     <Compile Include="PrintExtensions.cs" />
     <Compile Include="RandomExtensions.cs" />
     <Compile Include="Reflection\JasilyCustomAttributeExtensions.cs" />
