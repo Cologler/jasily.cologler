@@ -45,6 +45,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collections\JasilyIncrementBits.cs" />
     <Compile Include="ComponentModel\EditableFieldAttribute.cs" />
     <Compile Include="ComponentModel\JasilyEditableViewModel.cs" />
     <Compile Include="ComponentModel\JasilyViewModel.cs" />
