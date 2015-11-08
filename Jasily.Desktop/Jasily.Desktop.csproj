@@ -48,6 +48,7 @@
     <Compile Include="..\Jasily.Shared\Windows\Data\JasilySelectorCollectionView.cs">
       <Link>Windows\Data\JasilySelectorCollectionView.cs</Link>
     </Compile>
+    <Compile Include="ConsoleTempEnvironment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
