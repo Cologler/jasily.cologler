@@ -71,6 +71,19 @@ namespace System.Linq
             return result;
         }
 
+        public static Dictionary<int, T> ToIncrementDictionary<T>(this IEnumerable<T> source)
+        {
+            var enumerable = source as ICollection<T> ?? source.ToList();
+            var dict = new Dictionary<int, T>(enumerable.Count);
+            var index = 0;
+            foreach (var item in enumerable)
+            {
+                dict.Add(index, item);
+                index++;
+            }
+            return dict;
+        }
+
         #endregion
 
         #region split
@@ -126,31 +139,29 @@ namespace System.Linq
 
         #region orderby
 
-        public static IOrderedEnumerable<T> OrderBy<T>(this IEnumerable<T> source, IComparer<T> comparer)
-        {
-            return source.OrderBy(z => z, comparer);
-        }
-        public static IOrderedEnumerable<T> OrderBy<T>(this IEnumerable<T> source, Comparison<T> comparison)
-        {
-            return source.OrderBy(z => z, Comparer<T>.Create(comparison));
-        }
-        public static IOrderedEnumerable<TSource> OrderBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, Comparison<TKey> comparison)
-        {
-            return source.OrderBy(keySelector, Comparer<TKey>.Create(comparison));
-        }
+        public static IOrderedEnumerable<T> OrderBy<T>(
+            this IEnumerable<T> source, IComparer<T> comparer)
+            => source.OrderBy(z => z, comparer);
 
-        public static IOrderedEnumerable<T> OrderByDescending<T>(this IEnumerable<T> source, IComparer<T> comparer)
-        {
-            return source.OrderByDescending(z => z, comparer);
-        }
-        public static IOrderedEnumerable<T> OrderByDescending<T>(this IEnumerable<T> source, Comparison<T> comparison)
-        {
-            return source.OrderByDescending(z => z, Comparer<T>.Create(comparison));
-        }
-        public static IOrderedEnumerable<TSource> OrderByDescending<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, Comparison<TKey> comparison)
-        {
-            return source.OrderByDescending(keySelector, Comparer<TKey>.Create(comparison));
-        }
+        public static IOrderedEnumerable<T> OrderBy<T>(
+            this IEnumerable<T> source, Comparison<T> comparison)
+            => source.OrderBy(z => z, Comparer<T>.Create(comparison));
+
+        public static IOrderedEnumerable<TSource> OrderBy<TSource, TKey>(
+            this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, Comparison<TKey> comparison)
+            => source.OrderBy(keySelector, Comparer<TKey>.Create(comparison));
+
+        public static IOrderedEnumerable<T> OrderByDescending<T>(
+            this IEnumerable<T> source, IComparer<T> comparer)
+            => source.OrderByDescending(z => z, comparer);
+
+        public static IOrderedEnumerable<T> OrderByDescending<T>(
+            this IEnumerable<T> source, Comparison<T> comparison)
+            => source.OrderByDescending(z => z, Comparer<T>.Create(comparison));
+
+        public static IOrderedEnumerable<TSource> OrderByDescending<TSource, TKey>(
+            this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, Comparison<TKey> comparison)
+            => source.OrderByDescending(keySelector, Comparer<TKey>.Create(comparison));
 
         #endregion 
     }
