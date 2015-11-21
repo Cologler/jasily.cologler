@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+// ReSharper disable InconsistentNaming
 
 namespace Jasily.Data
 {
@@ -65,7 +66,7 @@ namespace Jasily.Data
                     if (extensionName == null)
                         throw new ArgumentNullException();
 
-                    if (extensionName.IsNullOrWhiteSpace())
+                    if (string.IsNullOrEmpty(extensionName))
                         return false;
 
                     extensionName = extensionName.TrimStart('.').ToLower();

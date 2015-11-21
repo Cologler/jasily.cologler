@@ -57,7 +57,6 @@
     <Compile Include="Collections\IDataPage.cs" />
     <Compile Include="Collections\IItemPage.cs" />
     <Compile Include="Collections\ItemPageEntity.cs" />
-    <Compile Include="Data\JasilyExtensionName.cs" />
     <Compile Include="Diagnostics\IJasilyLoggerExtensions.cs" />
     <Compile Include="Diagnostics\IJasilyLoggerObject.cs" />
     <Compile Include="Diagnostics\IJasilyTestable.cs" />
