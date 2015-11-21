@@ -25,7 +25,6 @@ namespace Jasily.Threading
         /// </summary>
         private static uint CurrentTickCount => (uint)Environment.TickCount;
 
-
         public int Value { get; }
 
         /// <summary>
