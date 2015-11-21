@@ -54,9 +54,9 @@
     <Compile Include="Diagnostics\AttributeTest\AttributeTestor.cs" />
     <Compile Include="Diagnostics\AttributeTest\CanBeNullAttribute.cs" />
     <Compile Include="Diagnostics\AttributeTest\DateTimeKindAttribute.cs" />
-    <Compile Include="Collections\IDataPage.cs" />
-    <Compile Include="Collections\IItemPage.cs" />
-    <Compile Include="Collections\ItemPageEntity.cs" />
+    <Compile Include="Data\IDataPage.cs" />
+    <Compile Include="Data\IItemPage.cs" />
+    <Compile Include="Data\ItemPageEntity.cs" />
     <Compile Include="Diagnostics\IJasilyLoggerExtensions.cs" />
     <Compile Include="Diagnostics\IJasilyLoggerObject.cs" />
     <Compile Include="Diagnostics\IJasilyTestable.cs" />
