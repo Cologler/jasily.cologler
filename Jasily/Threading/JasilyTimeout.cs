@@ -11,6 +11,7 @@ namespace Jasily.Threading
     public class JasilyTimeout
     {
         private readonly uint created;
+        private readonly uint timeout;
 
         private JasilyTimeout(int origin)
         {
@@ -18,6 +19,7 @@ namespace Jasily.Threading
 
             this.Value = origin;
             this.created = CurrentTickCount;
+            this.timeout = (uint)origin + this.created;
         }
 
         /// <summary>
@@ -30,7 +32,7 @@ namespace Jasily.Threading
         /// <summary>
         /// 返回从 JasilyTimeout 构造开始到当前的毫秒时间
         /// </summary>
-        public uint TimeOffset => CurrentTickCount - this.created;
+        public uint TimeOffset => (uint)Environment.TickCount - this.created; // 为了性能，不调用 CurrentTickCount 了
 
         /// <summary>
         /// 剩下的时间
@@ -44,7 +46,7 @@ namespace Jasily.Threading
             }
         }
 
-        public bool IsTimeout => this.TimeOffset >= this.Value;
+        public bool IsTimeout => (uint)Environment.TickCount >= this.timeout; // 为了性能，不调用 CurrentTickCount 了
 
         public static implicit operator JasilyTimeout(int milliseconds)
         {
