@@ -39,6 +39,7 @@
   <ItemGroup>
     <Compile Include="Collections\Generic\ICollectionExtensions.cs" />
     <Compile Include="Collections\Generic\IDictionaryExtensions.cs" />
+    <Compile Include="Collections\Generic\ItemExtensions.cs" />
     <Compile Include="Linq\AsyncEnumerableExtensions.cs" />
     <Compile Include="Linq\EnumerableExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
