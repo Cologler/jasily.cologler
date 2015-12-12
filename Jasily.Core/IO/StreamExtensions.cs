@@ -14,13 +14,9 @@ namespace System.IO
         /// <returns>新字节数组。</returns>
         public static byte[] ToArray(this Stream stream)
         {
-            using (var ms = new MemoryStream())
+            using (var ms = stream.CanSeek ? new MemoryStream(Convert.ToInt32(stream.Length)) : new MemoryStream())
             {
-                if (stream.CanSeek)
-                {
-                    stream.Position = 0;
-                }
-
+                if (stream.CanSeek && stream.Position != 0) stream.Position = 0;
                 stream.CopyTo(ms);
                 return ms.ToArray();
             }
@@ -128,7 +124,7 @@ namespace System.IO
 
             using (var copyer = new DoubleThreadStreamCopyer(stream, destination, bufferSize, poolSize, progressChangedWatcher))
                 await copyer.Start();
-        }        
+        }
 
         public static async Task CopyToObserveOnTimeAsync(this Stream stream, Stream destination, int bufferSize,
             IObserver<long> progressChangedWatcher, int milliseconds)
@@ -136,7 +132,7 @@ namespace System.IO
             if (stream == null) throw new ArgumentNullException(nameof(stream));
             if (destination == null) throw new ArgumentNullException(nameof(destination));
             if (bufferSize <= 0) throw new ArgumentOutOfRangeException($"{nameof(bufferSize)} must >= 0.");
-            if (progressChangedWatcher == null) throw new ArgumentNullException(nameof(progressChangedWatcher));            
+            if (progressChangedWatcher == null) throw new ArgumentNullException(nameof(progressChangedWatcher));
             if (milliseconds <= 0) throw new ArgumentOutOfRangeException($"{nameof(milliseconds)} must > 0.");
 
             var copyer = new StreamCopyTimeObserver(stream, destination, bufferSize, progressChangedWatcher, milliseconds);
@@ -380,7 +376,7 @@ namespace System.IO
 
             protected override void OnRead()
             {
-                
+
             }
         }
 
