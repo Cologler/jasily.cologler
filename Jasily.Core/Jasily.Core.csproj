@@ -65,6 +65,7 @@
     <Compile Include="EventArgses\JasilyProgressChangedEventArgs.cs" />
     <Compile Include="IBuilder.cs" />
     <Compile Include="ICopy.cs" />
+    <Compile Include="IO\BinaryReaderExtensions.cs" />
     <Compile Include="IO\JasilyBuffer.cs" />
     <Compile Include="IO\JasilyStreamCopyObserver.cs" />
     <Compile Include="IO\StreamExtensions.cs" />
@@ -83,7 +84,6 @@
     <Compile Include="Reflection\JasilyCustomAttributeExtensions.cs" />
     <Compile Include="Reflection\JasilyReflectionExtensions.cs" />
     <Compile Include="RequestActionEventArgs.cs" />
-    <Compile Include="Runtime\CompilerServices\Caller.cs" />
     <Compile Include="Services\IServiceProvider.cs" />
     <Compile Include="Services\IServiceProviderFactory.cs" />
     <Compile Include="UfDateTimeConverter.cs" />
