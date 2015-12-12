@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -12,21 +13,23 @@ namespace Jasily.Threading.Tasks
     {
         public static JasilySingleTaskManager<T> Default { get; } = new JasilySingleTaskManager<T>();
 
-        private readonly object SyncRoot = new object();
-        private readonly Dictionary<string, Task<T>> Pool = new Dictionary<string, Task<T>>();
+        private readonly object syncRoot = new object();
+        private readonly Dictionary<string, Task<T>> pool = new Dictionary<string, Task<T>>();
 
-        public async Task<T> RunAsync(string id, Task<T> task)
+        public async Task<T> RunAsync([NotNull] string id, [NotNull] Func<T> func)
         {
-            if (task == null)
-                throw new ArgumentNullException();
+            if (id == null) throw new ArgumentNullException(nameof(id));
+            if (func == null) throw new ArgumentNullException(nameof(func));
 
             Task<T> t;
-            lock (this.SyncRoot)
+            var created = false;
+            lock (this.syncRoot)
             {
-                if (!this.Pool.TryGetValue(id, out t))
+                if (!this.pool.TryGetValue(id, out t))
                 {
-                    t = task;
-                    this.Pool.Add(id, t);
+                    created = true;
+                    t = Task.Run(func);
+                    this.pool.Add(id, t);
                 }
             }
 
@@ -36,22 +39,21 @@ namespace Jasily.Threading.Tasks
             }
             finally
             {
-                if (t == task)
+                if (created)
                 {
-                    lock (this.SyncRoot)
+                    lock (this.syncRoot)
                     {
-                        this.Pool.Remove(id);
+                        this.pool.Remove(id);
                     }
                 }
             }
         }
-        public async Task<T> RunAsync(string id, Func<Task<T>> taskFactory)
+        public async Task<T> RunAsync([NotNull] string id, [NotNull] Func<Task<T>> taskFactory)
         {
-            return await this.RunAsync(id, taskFactory());
-        }        
-        public async Task<T> RunAsync(string id, Func<T> func)
-        {
-            return await this.RunAsync(id, Task.Run(() => func()));
+            if (id == null) throw new ArgumentNullException(nameof(id));
+            if (taskFactory == null) throw new ArgumentNullException(nameof(taskFactory));
+
+            return await this.RunAsync(id, taskFactory);
         }
     }
 
@@ -59,24 +61,27 @@ namespace Jasily.Threading.Tasks
     {
         public static new JasilySingleTaskManager Default { get; } = new JasilySingleTaskManager();
 
-        public async Task RunAsync(string id, Task task)
+        public async Task RunAsync([NotNull] string id, [NotNull] Action action)
         {
-            if (task == null)
-                throw new ArgumentNullException();
+            if (id == null) throw new ArgumentNullException(nameof(id));
+            if (action == null) throw new ArgumentNullException(nameof(action));
 
-            await this.RunAsync(id, async () =>
+            await this.RunAsync(id, () =>
             {
-                await task;
+                action();
                 return true;
             });
         }
-        public async Task RunAsync(string id, Func<Task> taskFactory)
+        public async Task RunAsync([NotNull] string id, [NotNull] Func<Task> taskFactory)
         {
-            await this.RunAsync(id, taskFactory());
-        }
-        public async Task RunAsync(string id, Action action)
-        {
-            await this.RunAsync(id, Task.Run(() => action()));
+            if (id == null) throw new ArgumentNullException(nameof(id));
+            if (taskFactory == null) throw new ArgumentNullException(nameof(taskFactory));
+
+            await this.RunAsync(id, async () =>
+            {
+                await taskFactory();
+                return true;
+            });
         }
     }
 }

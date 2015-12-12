@@ -2,8 +2,6 @@
 {
     public static class TryGetValueExtensions
     {
-        public delegate bool TryGetVauleDelegate<in TKey, TValue>(TKey key, out TValue value);
-
         public static TValue? GetValueOrNull<TKey, TValue>(this TryGetVauleDelegate<TKey, TValue> func, TKey key)
             where TValue : struct
         {

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
+using System.EventArgses;
+using System.Threading;
 
 namespace Jasily.Windows
 {
@@ -7,81 +9,89 @@ namespace Jasily.Windows
     {
         public static JasilyClipboard<T> Default { get; } = new JasilyClipboard<T>();
 
-        private object SyncRoot = new object();
-        private bool HasValue;
-        private T CurrentItem;
-        private Action<T> PasteCallback;
-        private ClipMode Mode;
+        private readonly object syncRoot = new object();
 
-        public event EventHandler ContentChanged;
+        private ClipboardValueContainer container;
 
-        private void SetValue(ClipMode mode, T item, Action<T> pasteCallback)
+        public event EventHandler<ChangingEventArgs<T>> ContentChanged;
+
+        private void SetValue(ClipMode mode, T item)
         {
-            lock (this.SyncRoot)
+            var @new = new ClipboardValueContainer(item, mode);
+            var old = Interlocked.Exchange(ref this.container, @new);
+            this.ContentChanged.BeginFire(this, new ChangingEventArgs<T>(old != null ? old.Value : default(T), item));
+        }
+
+        public void Copy(T item)
+        {
+            Debug.Assert(!ReferenceEquals(item, null));
+            this.SetValue(ClipMode.Copy, item);
+        }
+
+        public void Cut(T item)
+        {
+            Debug.Assert(!ReferenceEquals(item, null));
+            this.SetValue(ClipMode.Cut, item);
+        }
+
+        public bool HasValue => this.container != null;
+
+        /// <summary>
+        /// read value
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public bool TryReadValue(out T value)
+        {
+            var container = this.container;
+            if (container != null)
             {
-                this.HasValue = true;
-                this.Mode = mode;
-                this.CurrentItem = item;
-                this.PasteCallback = pasteCallback;
+                value = container.Value;
+                return true;
             }
-
-            this.ContentChanged.Fire(typeof(JasilyClipboard<T>));
-        }
-
-        public void Copy(T item, Action<T> pasteCallback = null)
-        {
-            Debug.Assert(!ReferenceEquals(item, null));
-
-            this.SetValue(ClipMode.Copy, item, pasteCallback);
-        }
-
-        public void Cut(T item, Action<T> pasteCallback = null)
-        {
-            Debug.Assert(!ReferenceEquals(item, null));
-
-            this.SetValue(ClipMode.Cut, item, pasteCallback);
-        }
-
-        public bool IsExist()
-        {
-            return this.HasValue;
+            else
+            {
+                value = default(T);
+                return false;
+            }
         }
 
         public T Paste()
         {
-            if (!this.HasValue)
-                throw new InvalidOperationException();
-            
-            lock (this.SyncRoot)
+            bool isCutMode;
+            T value;
+
+            lock (this.syncRoot)
             {
-                if (!this.HasValue)
-                    throw new InvalidOperationException();
-
-                try
-                {
-                    return this.CurrentItem;
-                }
-                finally
-                {
-                    this.PasteCallback.BeginFire(this.CurrentItem);
-
-                    if (this.Mode == ClipMode.Cut)
-                    {
-                        this.HasValue = false;
-                        this.CurrentItem = default(T);
-                        this.PasteCallback = null;
-
-                        this.ContentChanged.BeginFire(typeof(JasilyClipboard<T>));
-                    }
-                }
+                if (this.container == null) return default(T);
+                value = this.container.Value;
+                isCutMode = this.container.Mode == ClipMode.Cut;
+                if (isCutMode) this.container = null;
             }
+
+            if (isCutMode)
+                this.ContentChanged.BeginFire(this, new ChangingEventArgs<T>(value, default(T)));
+
+            return value;
         }
 
         private enum ClipMode
         {
             Copy,
-
             Cut
+        }
+
+        private class ClipboardValueContainer
+        {
+            internal ClipMode Mode { get; }
+
+            internal T Value { get; }
+
+            internal ClipboardValueContainer(T value, ClipMode mode)
+            {
+                this.Value = value;
+                this.Mode = mode;
+            }
         }
     }
 }

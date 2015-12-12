@@ -14,22 +14,23 @@ namespace System.IO
         /// <returns>新字节数组。</returns>
         public static byte[] ToArray(this Stream stream)
         {
-            using (var ms = new MemoryStream())
+            using (var ms = stream.CanSeek ? new MemoryStream(Convert.ToInt32(stream.Length)) : new MemoryStream())
             {
-                stream.Position = 0;
+                if (stream.CanSeek && stream.Position != 0) stream.Position = 0;
                 stream.CopyTo(ms);
                 return ms.ToArray();
             }
         }
-
-        #region read & write
 
         /// <summary>
         /// write whole buffer into stream
         /// </summary>
         /// <param name="stream"></param>
         /// <param name="buffer"></param>
-        public static void Write(this Stream stream, byte[] buffer) => stream.Write(buffer, 0, buffer.Length);
+        public static void Write(this Stream stream, byte[] buffer)
+        {
+            stream.Write(buffer, 0, buffer.Length);
+        }
 
         /// <summary>
         /// write whole buffer into stream
@@ -42,21 +43,7 @@ namespace System.IO
             await stream.WriteAsync(buffer, 0, buffer.Length);
         }
 
-        public static byte[] ReadBytesOrThrow(this Stream stream, int count)
-            => stream.ReadBytesOrThrow<IOException>(count);
-
-        public static byte[] ReadBytesOrThrow<TException>(this Stream stream, int count)
-            where TException : Exception, new ()
-        {
-            var buffer = new byte[count];
-            if (stream.Read(buffer, 0, count) != count)
-                throw new TException();
-            return buffer;
-        }
-
-        #endregion
-
-        #region read & write JasilyBuffer
+        #region read & write
 
         public static async Task<int> ReadAsync(this Stream stream, JasilyBuffer buffer)
             => await stream.ReadAsync(buffer.Buffer, buffer.Offset, buffer.Count);
@@ -137,7 +124,7 @@ namespace System.IO
 
             using (var copyer = new DoubleThreadStreamCopyer(stream, destination, bufferSize, poolSize, progressChangedWatcher))
                 await copyer.Start();
-        }        
+        }
 
         public static async Task CopyToObserveOnTimeAsync(this Stream stream, Stream destination, int bufferSize,
             IObserver<long> progressChangedWatcher, int milliseconds)
@@ -145,7 +132,7 @@ namespace System.IO
             if (stream == null) throw new ArgumentNullException(nameof(stream));
             if (destination == null) throw new ArgumentNullException(nameof(destination));
             if (bufferSize <= 0) throw new ArgumentOutOfRangeException($"{nameof(bufferSize)} must >= 0.");
-            if (progressChangedWatcher == null) throw new ArgumentNullException(nameof(progressChangedWatcher));            
+            if (progressChangedWatcher == null) throw new ArgumentNullException(nameof(progressChangedWatcher));
             if (milliseconds <= 0) throw new ArgumentOutOfRangeException($"{nameof(milliseconds)} must > 0.");
 
             var copyer = new StreamCopyTimeObserver(stream, destination, bufferSize, progressChangedWatcher, milliseconds);
@@ -389,7 +376,7 @@ namespace System.IO
 
             protected override void OnRead()
             {
-                
+
             }
         }
 

@@ -35,12 +35,17 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
+    <ProjectReference Include="..\Jasily.Core.Linq\Jasily.Core.Linq.csproj">
+      <Project>{801800ea-fe7c-40ad-838d-f2a887de03de}</Project>
+      <Name>Jasily.Core.Linq</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Jasily.Core\Jasily.Core.csproj">
       <Project>{8442e8e7-d515-4481-8a36-71711b1fbf79}</Project>
       <Name>Jasily.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collections\JasilyIncrementBits.cs" />
     <Compile Include="ComponentModel\EditableFieldAttribute.cs" />
     <Compile Include="ComponentModel\JasilyEditableViewModel.cs" />
     <Compile Include="ComponentModel\JasilyViewModel.cs" />
@@ -49,10 +54,9 @@
     <Compile Include="Diagnostics\AttributeTest\AttributeTestor.cs" />
     <Compile Include="Diagnostics\AttributeTest\CanBeNullAttribute.cs" />
     <Compile Include="Diagnostics\AttributeTest\DateTimeKindAttribute.cs" />
-    <Compile Include="Collections\IDataPage.cs" />
-    <Compile Include="Collections\IItemPage.cs" />
-    <Compile Include="Collections\ItemPageEntity.cs" />
-    <Compile Include="Data\JasilyExtensionName.cs" />
+    <Compile Include="Data\IDataPage.cs" />
+    <Compile Include="Data\IItemPage.cs" />
+    <Compile Include="Data\ItemPageEntity.cs" />
     <Compile Include="Diagnostics\IJasilyLoggerExtensions.cs" />
     <Compile Include="Diagnostics\IJasilyLoggerObject.cs" />
     <Compile Include="Diagnostics\IJasilyTestable.cs" />
@@ -79,7 +83,15 @@
     <Compile Include="Threading\Tasks\JasilySingleTaskManager.cs" />
     <Compile Include="Windows\JasilyClipboard.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Reference Include="JetBrains.Annotations.PCL328, Version=10.0.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>..\packages\JetBrains.Annotations.10.0.0\lib\portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1\JetBrains.Annotations.PCL328.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
