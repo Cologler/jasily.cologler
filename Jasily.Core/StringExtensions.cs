@@ -279,21 +279,24 @@ namespace System
 
         #endregion
 
-        public static string Childs(this string str, int? leftIndex = null, int? rightIndex = null)
+        public static string Childs(this string str, int? firstIndex = null, int? lastIndex = null)
         {
             if (str == null) throw new ArgumentNullException(nameof(str));
+            if (str.Length == 0) return string.Empty;
 
-            return (new JasilyStringChild()).Result(str, leftIndex, rightIndex);
+            return JasilyStringChild.Instance.Result(str, firstIndex, lastIndex);
         }
 
-        private struct JasilyStringChild : IChild<string, string>
+        private class JasilyStringChild : IChild<string, string>
         {
+            public static readonly JasilyStringChild Instance = new JasilyStringChild();
+
             public int Count(string source) => source.Length;
 
             public string Empty => string.Empty;
 
-            public string GetChilds(string source, int leftIndex, int rightIndex)
-                => source.Substring(leftIndex, rightIndex - leftIndex);
+            public string GetChilds(string source, int firstIndex, int lastIndex)
+                => source.Substring(firstIndex, lastIndex - firstIndex + 1);
         }
     }
 
@@ -303,28 +306,29 @@ namespace System
 
         TResult Empty { get; }
 
-        TResult GetChilds(TSource source, int leftIndex, int rightIndex);
+        TResult GetChilds(TSource source, int firstIndex, int lastIndex);
     }
 
     internal static class IChildExtensions
     {
         public static TResult Result<TSource, TResult>(this IChild<TSource, TResult> child,
-            TSource source, int? leftIndex, int? rightIndex)
+            TSource source, int? firstIndex, int? lastIndex)
         {
-            var li = child.Count(source) - 1;
-            if (li == -1) return child.Empty;
+            var length = child.Count(source);
+            if (length == 0) return child.Empty;
 
-            var l = leftIndex ?? 0;
-            if (l < 0) l = li + l;
-            if (l < 0) l = 0;
-            if (l > li) return child.Empty;
+            var left = firstIndex ?? 0;
+            if (left > length) return child.Empty;
+            if (left < 0) left = length + left;
+            if (left < 0) left = 0;
 
-            var r = rightIndex ?? li;
-            if (r < 0) r = li + r;
-            if (r < 0) r = 0;
-            if (l >= r) return child.Empty;
+            var right = lastIndex ?? length - 1;
+            if (right >= length) return child.Empty;
+            if (right < 0) right = length + right;
+            if (right < 0) right = 0;
+            if (left >= right) return child.Empty;
 
-            return child.GetChilds(source, l, r);
+            return child.GetChilds(source, left, right);
         }
     }
 }
