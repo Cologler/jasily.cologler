@@ -54,16 +54,22 @@
     <Compile Include="ComponentModel\UnitTestForNotifyPropertyChangedObject.cs" />
     <Compile Include="IO\UnitTestForFileSystemTest.cs" />
     <Compile Include="Linq\Expressions\UnitTestForJasilyExpression.cs" />
+    <Compile Include="Linq\UnitTestForJasilyExpression.cs" />
     <Compile Include="Performance\UnitTestForCodeTimer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnitTestForNumber.cs" />
     <Compile Include="UnitTestForObject.cs" />
     <Compile Include="UnitTestForPrint.cs" />
+    <Compile Include="UnitTestForString.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Jasily.Core.Desktop\Jasily.Core.Desktop.csproj">
       <Project>{e90943e3-39c3-4649-9fe7-17096cbcd95e}</Project>
       <Name>Jasily.Core.Desktop</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Jasily.Core.Linq\Jasily.Core.Linq.csproj">
+      <Project>{801800ea-fe7c-40ad-838d-f2a887de03de}</Project>
+      <Name>Jasily.Core.Linq</Name>
     </ProjectReference>
     <ProjectReference Include="..\Jasily.Core\Jasily.Core.csproj">
       <Project>{8442e8e7-d515-4481-8a36-71711b1fbf79}</Project>

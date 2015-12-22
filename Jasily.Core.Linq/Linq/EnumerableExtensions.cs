@@ -107,6 +107,41 @@ namespace System.Linq
 
         #endregion
 
+        #region giveup
+
+        public static IEnumerable<T> Giveup<T>(this IEnumerable<T> source, int giveup)
+        {
+            var collection = source as ICollection<T>;
+            if (collection != null)
+            {
+                if (collection.Count <= giveup) yield break;
+                foreach (var item in collection.Take(collection.Count - giveup))
+                {
+                    yield return item;
+                }
+            }
+            else
+            {
+                var queue = new Queue<T>(giveup);
+                using (var itor = source.GetEnumerator())
+                {
+                    while (giveup > 0)
+                    {
+                        if (!itor.MoveNext()) yield break;
+                        giveup--;
+                        queue.Enqueue(itor.Current);
+                    }
+                    while (itor.MoveNext())
+                    {
+                        yield return queue.Dequeue();
+                        queue.Enqueue(itor.Current);
+                    }
+                }
+            }
+        }
+
+        #endregion
+
         #region Foreach
 
         public static IEnumerable<T> ForEach<T>(this IEnumerable<T> source, Action<T> action)

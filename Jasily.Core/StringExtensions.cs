@@ -94,7 +94,7 @@ namespace System
 
         public static string[] Split(this string text, string separator, int count, StringSplitOptions options = StringSplitOptions.None)
         {
-            return text.Split(new [] { separator }, count, options);
+            return text.Split(new[] { separator }, count, options);
         }
 
         #endregion
@@ -104,7 +104,7 @@ namespace System
         public static int? TryParseInt32(string s)
         {
             int n;
-            return int.TryParse(s, out n) ? (int?) n : null;
+            return int.TryParse(s, out n) ? (int?)n : null;
         }
         public static int? TryParseInt32(string s, NumberStyles style, IFormatProvider provider)
         {
@@ -155,8 +155,8 @@ namespace System
         /// <returns></returns>
         public static IEnumerable<string> AsLines(this string text, string spliter = null)
             => spliter == null
-            ? text?.Split(new [] { "\r\n", "\r", "\n" }, StringSplitOptions.None)
-            : text?.Split(new [] { spliter }, StringSplitOptions.None);
+            ? text?.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None)
+            : text?.Split(new[] { spliter }, StringSplitOptions.None);
 
         /// <summary>
         /// repeat this like ( string * int ) in python
@@ -177,7 +177,7 @@ namespace System
         {
             if (text == null)
                 return null;
-            
+
             var index = text.IndexOf('\n');
 
             if (index == -1)
@@ -199,6 +199,8 @@ namespace System
 
         #endregion
 
+        #region
+
         public static string TrimStart(this string str, params string[] trimStrings)
         {
             if (str == null) throw new ArgumentNullException(nameof(str));
@@ -217,10 +219,22 @@ namespace System
             return str;
         }
 
+        #endregion
+
+        #region get string
+
+        public static string GetString(this char[] array) => new string(array);
+
+        public static string GetString(this IEnumerable<char> array) => new string(array.ToArray());
+
+        #endregion
+
+        #region after first and last
+
         public static string AfterFirst(this string str, string spliter)
         {
             if (str == null) throw new ArgumentNullException(nameof(str));
-            if (spliter == null) throw new ArgumentNullException(nameof(spliter));
+            if (string.IsNullOrEmpty(spliter)) throw new ArgumentNullException(nameof(spliter));
 
             var index = str.IndexOf(spliter, StringComparison.Ordinal);
             return index < 1 ? str : str.Substring(index + 1);
@@ -243,8 +257,9 @@ namespace System
         public static string AfterLast(this string str, string spliter)
         {
             if (str == null) throw new ArgumentNullException(nameof(str));
+            if (string.IsNullOrEmpty(spliter)) throw new ArgumentNullException(nameof(spliter));
 
-            var index = str.LastIndexOf(spliter);
+            var index = str.LastIndexOf(spliter, StringComparison.Ordinal);
             return index < 1 ? str : str.Substring(index + 1);
         }
         public static string AfterLast(this string str, char spliter)
@@ -261,6 +276,8 @@ namespace System
             var index = str.LastIndexOfAny(spliter);
             return index < 1 ? str : str.Substring(index + 1);
         }
+
+        #endregion
 
         public static string Childs(this string str, int? leftIndex = null, int? rightIndex = null)
         {
