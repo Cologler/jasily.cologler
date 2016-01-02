@@ -229,6 +229,54 @@ namespace System
 
         #endregion
 
+        #region same
+
+        public static string CommonStart(this string[] source)
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            if (source.Length == 0) return string.Empty;
+            if (source.Length == 1) return source[0];
+
+            var exp = source[0];
+            var end = source.Min(z => z.Length); // length
+            foreach (var item in source.Skip(1))
+            {
+                for (var i = 0; i < end; i++)
+                {
+                    if (item[i] != exp[i])
+                    {
+                        end = i;
+                        break;
+                    }
+                }
+            }
+            return exp.Substring(0, end);
+        }
+
+        public static string CommonEnd(this string[] source)
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            if (source.Length == 0) return string.Empty;
+            if (source.Length == 1) return source[0];
+
+            var exp = source[0];
+            var len = source.Select(z => z.Length).Min();
+            foreach (var item in source.Skip(1))
+            {
+                for (var i = 0; i < len; i++)
+                {
+                    if (exp[exp.Length - i - 1] != item[item.Length - i - 1])
+                    {
+                        len = i;
+                        break;
+                    }
+                }
+            }
+            return exp.Substring(exp.Length - len);
+        }
+
+        #endregion
+
         #region after first and last
 
         public static string AfterFirst(this string str, string spliter)
