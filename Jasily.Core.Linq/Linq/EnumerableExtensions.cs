@@ -90,6 +90,7 @@ namespace System.Linq
 
         public static IEnumerable<IEnumerable<TSource>> Split<TSource>(this IEnumerable<TSource> source, int chunkSize)
         {
+            if (source == null) throw new ArgumentNullException(nameof(source));
             if (chunkSize < 1) throw new ArgumentOutOfRangeException(nameof(chunkSize), chunkSize, "must > 0.");
 
             var list = new List<TSource>(chunkSize);
@@ -103,6 +104,14 @@ namespace System.Linq
                 }
             }
             if (list.Count != 0) yield return list;
+        }
+
+        public static Tuple<IEnumerable<T>, IEnumerable<T>> Split<T>(this IEnumerable<T> source, Func<T, bool> trueToLeft)
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            if (trueToLeft == null) throw new ArgumentNullException(nameof(trueToLeft));
+
+            return Tuple.Create(source.Where(trueToLeft), source.Where(z => !trueToLeft(z)));
         }
 
         #endregion
