@@ -21,14 +21,21 @@ namespace Jasily.Threading.Tasks
             if (id == null) throw new ArgumentNullException(nameof(id));
             if (func == null) throw new ArgumentNullException(nameof(func));
 
+            return await this.RunAsync(id, () => Task.Run(func));
+        }
+        public async Task<T> RunAsync([NotNull] string id, [NotNull] Func<Task<T>> taskFactory)
+        {
+            if (id == null) throw new ArgumentNullException(nameof(id));
+            if (taskFactory == null) throw new ArgumentNullException(nameof(taskFactory));
+
             Task<T> t;
-            var created = false;
+            var isNew = false;
             lock (this.syncRoot)
             {
                 if (!this.pool.TryGetValue(id, out t))
                 {
-                    created = true;
-                    t = Task.Run(func);
+                    isNew = true;
+                    t = taskFactory();
                     this.pool.Add(id, t);
                 }
             }
@@ -39,7 +46,7 @@ namespace Jasily.Threading.Tasks
             }
             finally
             {
-                if (created)
+                if (isNew)
                 {
                     lock (this.syncRoot)
                     {
@@ -47,13 +54,6 @@ namespace Jasily.Threading.Tasks
                     }
                 }
             }
-        }
-        public async Task<T> RunAsync([NotNull] string id, [NotNull] Func<Task<T>> taskFactory)
-        {
-            if (id == null) throw new ArgumentNullException(nameof(id));
-            if (taskFactory == null) throw new ArgumentNullException(nameof(taskFactory));
-
-            return await this.RunAsync(id, taskFactory);
         }
     }
 
