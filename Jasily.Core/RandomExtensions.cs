@@ -4,9 +4,19 @@ namespace System
 {
     public static class RandomExtensions
     {
-        public static T Random<T>(this T[] t) => t[new Random().Next(t.Length)];
+        public static T Random<T>(this T[] t)
+        {
+            if (t.Length == 0) return default(T);
+            if (t.Length == 1) return t[0];
+            return t[new Random().Next(t.Length)];
+        }
 
-        public static T Random<T>(this IList<T> t) => t[new Random().Next(t.Count)];
+        public static T Random<T>(this IList<T> t)
+        {
+            if (t.Count == 0) return default(T);
+            if (t.Count == 1) return t[0];
+            return t[new Random().Next(t.Count)];
+        }
 
         public static byte[] NextBytes(this Random random, int byteCount)
         {
