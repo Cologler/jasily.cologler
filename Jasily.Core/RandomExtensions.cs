@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace System
 {
@@ -16,6 +17,21 @@ namespace System
             if (t.Count == 0) return default(T);
             if (t.Count == 1) return t[0];
             return t[new Random().Next(t.Count)];
+        }
+
+        public static IEnumerable<T> RandomSort<T>(this IEnumerable<T> source)
+        {
+            var array = source.ToArray();
+            var count = array.Length;
+            var random = new Random();
+            while (count > 0)
+            {
+                var index = random.Next(count);
+                yield return array[index];
+                array[index] = array[count - 1];
+                array[count - 1] = default(T);
+                count--;
+            }
         }
 
         public static byte[] NextBytes(this Random random, int byteCount)
