@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 
 namespace System.Reflection
 {
@@ -40,7 +39,7 @@ namespace System.Reflection
             return type.IsConstructedGenericType
                 ? String.Format("{0}<{1}>",
                     type.Name.Substring(0, type.Name.IndexOf("`", StringComparison.Ordinal)),
-                    type.GenericTypeArguments.Select(GetCSharpName).AsLines(", "))
+                    type.GenericTypeArguments.Select(GetCSharpName).JoinWith(", "))
                 : type.Name;
         }
 

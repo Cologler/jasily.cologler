@@ -7,12 +7,15 @@ namespace System
 {
     public static class StringExtensions
     {
+        private static Encoding defaultEncoding = Encoding.UTF8;
+
         #region encoding & decoding
 
-        /// <summary>
-        /// return UTF-8 encoding
-        /// </summary>
-        public static Encoding DefaultEncoding { get; set; } = Encoding.UTF8;
+        public static Encoding DefaultEncoding
+        {
+            get { return defaultEncoding ?? Encoding.UTF8; }
+            set { defaultEncoding = value; }
+        }
 
         /// <summary>
         /// get bytes using special encoding
@@ -20,14 +23,8 @@ namespace System
         /// <param name="text"></param>
         /// <param name="encoding"></param>
         /// <returns></returns>
-        public static byte[] GetBytes(this string text, Encoding encoding) => encoding.GetBytes(text);
-
-        /// <summary>
-        /// get bytes using DefaultEncoding
-        /// </summary>
-        /// <param name="text"></param>
-        /// <returns></returns>
-        public static byte[] GetBytes(this string text) => text.GetBytes(DefaultEncoding);
+        public static byte[] GetBytes(this string text, Encoding encoding = null)
+            => (encoding ?? DefaultEncoding).GetBytes(text);
 
         public static string UrlEncode(this string str) => Net.WebUtility.UrlEncode(str);
 
@@ -64,14 +61,7 @@ namespace System
         /// <returns></returns>
         public static string ThrowIfNullOrEmpty(this string text, string paramName, string message = null)
         {
-            if (text == null)
-            {
-                if (message == null)
-                    throw new ArgumentNullException(paramName);
-                else
-                    throw new ArgumentNullException(paramName, message);
-            }
-            else if (text.Length == 0)
+            if (string.IsNullOrEmpty(text))
             {
                 if (message == null)
                     throw new ArgumentException(paramName);
@@ -79,22 +69,27 @@ namespace System
                     throw new ArgumentException(paramName, message);
             }
 
-
             return text;
         }
 
-        #endregion
-
-        #region split
-
-        public static string[] Split(this string text, string separator, StringSplitOptions options = StringSplitOptions.None)
+        /// <summary>
+        /// throw if current text is null or empty.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="paramName"></param>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public static string ThrowIfNullOrWhiteSpace(this string text, string paramName, string message = null)
         {
-            return text.Split(new[] { separator }, options);
-        }
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                if (message == null)
+                    throw new ArgumentException(paramName);
+                else
+                    throw new ArgumentException(paramName, message);
+            }
 
-        public static string[] Split(this string text, string separator, int count, StringSplitOptions options = StringSplitOptions.None)
-        {
-            return text.Split(new[] { separator }, count, options);
+            return text;
         }
 
         #endregion
@@ -136,30 +131,21 @@ namespace System
 
         #endregion
 
-        #region other
+        #region repeat
 
         /// <summary>
-        /// use spliter to join texts. default value was '\r\n'
+        /// repeat this char.   
+        /// just like ( string * int ) in python.
         /// </summary>
-        /// <param name="texts"></param>
-        /// <param name="spliter"></param>
+        /// <param name="ch"></param>
+        /// <param name="count"></param>
+        /// <exception cref="System.ArgumentOutOfRangeException">count &lt; 0</exception>
         /// <returns></returns>
-        public static string AsLines(this IEnumerable<string> texts, string spliter = null)
-            => String.Join(spliter ?? Environment.NewLine, texts);
+        public static string Repeat(this char ch, int count) => new string(ch, count);
 
         /// <summary>
-        /// use spliter to split text. default value was '\r\n' or '\r' or '\n'
-        /// </summary>
-        /// <param name="text"></param>
-        /// <param name="spliter"></param>
-        /// <returns></returns>
-        public static IEnumerable<string> AsLines(this string text, string spliter = null)
-            => spliter == null
-            ? text?.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None)
-            : text?.Split(new[] { spliter }, StringSplitOptions.None);
-
-        /// <summary>
-        /// repeat this like ( string * int ) in python
+        /// repeat this string. 
+        /// just like ( string * int ) in python
         /// </summary>
         /// <param name="str"></param>
         /// <param name="count"></param>
@@ -168,6 +154,40 @@ namespace System
         public static string Repeat(this string str, int count)
             => str == null ? null : string.Concat(Enumerable.Repeat(str, count));
 
+        #endregion
+
+        #region split & join
+
+        public static string[] Split(this string text, string separator, StringSplitOptions options = StringSplitOptions.None)
+            => text.Split(new[] { separator }, options);
+
+        public static string[] Split(this string text, string separator, int count, StringSplitOptions options = StringSplitOptions.None)
+            => text.Split(new[] { separator }, count, options);
+
+        public static string JoinWith(this IEnumerable<string> texts, string spliter)
+            => string.Join(spliter, texts);
+
+        /// <summary>
+        /// use '\r\n' or '\n' to split text.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        public static IEnumerable<string> AsLines(this string text)
+            => text?.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
+
+        /// <summary>
+        /// use Environment.NewLine to join texts.
+        /// </summary>
+        /// <param name="texts"></param>
+        /// <param name="spliter"></param>
+        /// <returns></returns>
+        public static string AsLines(this IEnumerable<string> texts)
+            => string.Join(Environment.NewLine, texts);
+
+        #endregion
+
+        #region other
+
         /// <summary>
         /// return first line from text
         /// </summary>
@@ -175,26 +195,9 @@ namespace System
         /// <returns></returns>
         public static string FirstLine(this string text)
         {
-            if (text == null)
-                return null;
-
+            if (text == null) return null;
             var index = text.IndexOf('\n');
-
-            if (index == -1)
-            {
-                return text;
-            }
-            else
-            {
-                if (index > 0 && text[index - 1] == '\r')
-                {
-                    return text.Substring(0, index - 1);
-                }
-                else
-                {
-                    return text.Substring(0, index);
-                }
-            }
+            return index == -1 ? text : text.Substring(0, index > 0 && text[index - 1] == '\r' ? index - 1 : index);
         }
 
         #endregion
@@ -229,7 +232,7 @@ namespace System
 
         #endregion
 
-        #region same
+        #region common part
 
         public static string CommonStart(this string[] source)
         {

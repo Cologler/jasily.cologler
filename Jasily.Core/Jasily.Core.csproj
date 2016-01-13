@@ -73,7 +73,6 @@
     <Compile Include="IO\MergeReadonlyStream.cs" />
     <Compile Include="IPrint.cs" />
     <Compile Include="ByteArrayExtensions.cs" />
-    <Compile Include="JasilyChar.cs" />
     <Compile Include="JasilyDateTime.cs" />
     <Compile Include="JasilyEnum.cs" />
     <Compile Include="Net\Http\RangeHeader.cs" />
@@ -88,7 +87,7 @@
     <Compile Include="Services\IServiceProvider.cs" />
     <Compile Include="Services\IServiceProviderFactory.cs" />
     <Compile Include="UfDateTimeConverter.cs" />
-    <Compile Include="JasilyEvent.cs" />
+    <Compile Include="EventExtensions.cs" />
     <Compile Include="JasilyException.cs" />
     <Compile Include="ObjectExtensions.cs" />
     <Compile Include="StringExtensions.cs" />
