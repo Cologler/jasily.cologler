@@ -98,7 +98,6 @@
     <Compile Include="Runtime\Serialization\Json\DataContractJsonSerializerExtensions.cs" />
     <Compile Include="Text\StringLine.cs" />
     <Compile Include="UsingAnything.cs" />
-    <Compile Include="Linq\Expressions\JasilyExpression.cs" />
     <Compile Include="Net\HttpWebRequestResourceString.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Text\PinYinManager.cs" />

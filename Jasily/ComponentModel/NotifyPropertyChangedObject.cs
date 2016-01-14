@@ -15,11 +15,10 @@ namespace Jasily.ComponentModel
 
         private string ParseProperty<T>(Expression<Func<T, object>> propertySelector)
         {
-            if (this.GetType() != typeof(T) &&
-                !this.GetType().GetTypeInfo().IsSubclassOf(typeof(T)))
+            if (this.GetType() != typeof(T) && !this.GetType().GetTypeInfo().IsSubclassOf(typeof(T)))
                 throw new NotSupportedException("type of source in propertySelector must be current type.");
 
-            return propertySelector.PropertySelector();
+            return PropertySelector<T>.Start(propertySelector);
         }
 
         /// <summary>
@@ -99,21 +98,12 @@ namespace Jasily.ComponentModel
 
         protected void NotifyPropertyChanged<T>(Expression<Func<T, object>> propertySelector)
         {
-            var propertyName = this.ParseProperty(propertySelector);
+            var propertyName = PropertySelector<T>.Start(propertySelector);
             this.PropertyChanged.Fire(this, propertyName);
         }
-        protected void NotifyPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            this.PropertyChanged.Fire(this, propertyName);
-        }
-        protected void NotifyPropertyChanged(params string[] propertyNames)
-        {
-            this.PropertyChanged.Fire(this, propertyNames);
-        }
-        protected void NotifyPropertyChanged(IEnumerable<string> propertyNames)
-        {
-            this.PropertyChanged.Fire(this, propertyNames);
-        }
+        protected void NotifyPropertyChanged(string propertyName) => this.PropertyChanged.Fire(this, propertyName);
+        protected void NotifyPropertyChanged(params string[] propertyNames) => this.PropertyChanged.Fire(this, propertyNames);
+        protected void NotifyPropertyChanged(IEnumerable<string> propertyNames) => this.PropertyChanged.Fire(this, propertyNames);
 
         public event PropertyChangedEventHandler PropertyChanged;
 

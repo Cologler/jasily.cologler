@@ -51,6 +51,7 @@
     <Compile Include="ComponentModel\JasilyViewModel.cs" />
     <Compile Include="ComponentModel\NotifyPropertyChangedAttribute.cs" />
     <Compile Include="ComponentModel\NotifyPropertyChangedObject.cs" />
+    <Compile Include="ComponentModel\PropertySelector.cs" />
     <Compile Include="Diagnostics\AttributeTest\AttributeTestor.cs" />
     <Compile Include="Diagnostics\AttributeTest\CanBeNullAttribute.cs" />
     <Compile Include="Diagnostics\AttributeTest\DateTimeKindAttribute.cs" />

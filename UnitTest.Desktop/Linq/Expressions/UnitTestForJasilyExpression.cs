@@ -5,6 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using Jasily.ComponentModel;
 
 namespace UnitTest.Desktop.Linq.Expressions
 {
@@ -14,39 +15,17 @@ namespace UnitTest.Desktop.Linq.Expressions
         [TestMethod]
         public void TestForParsePathFromPropertySelector()
         {
-            Assert.AreEqual(JasilyExpression.PropertySelector<int[]>(
-                z => z.Length),
-                "Length");
-            Assert.AreEqual(JasilyExpression.PropertySelector<Tuple<Tuple<string, string>, string>>(
-                z => z.Item1.Item1),
-                "Item1.Item1");
-            Assert.AreEqual(JasilyExpression.PropertySelector<Tuple<Tuple<int[], string>, string>>(
-                z => z.Item1.Item1 as int[]).Length,
-                "Item1.Item1.Length");
-            Assert.AreEqual(JasilyExpression.PropertySelector<Tuple<Tuple<int[], string>, string>>(
-                z => (int[])z.Item1.Item1 as int[]).Length,
-                "Item1.Item1.Length");
-            Assert.AreEqual(JasilyExpression.PropertySelector<Tuple<Tuple<int[], string>, string>>(
-                z => (int[])((Tuple<int[], string>)z.Item1).Item1 as int[]).Length,
-                "Item1.Item1.Length");
-
-            // exception
-
-            try
-            {
-                object nulobj = null;
-                JasilyExpression.PropertySelector<object>(z => nulobj.Equals(null));
-                Assert.Fail("should throw.");
-            }
-            catch (ArgumentException) { }
-
-            try
-            {
-                object single = new object();
-                JasilyExpression.PropertySelector<object>(z => single.Equals(null));
-                Assert.Fail("should throw.");
-            }
-            catch (ArgumentException) { }
+            Assert.AreEqual("Length",
+                PropertySelector<int[]>.Start(z => z.Length));
+            Assert.AreEqual("Item1.Item1",
+                PropertySelector<Tuple<Tuple<string, string>>>.Start(z => z.Item1.Item1));
+            Assert.AreEqual("Item1.Item1.Length",
+                PropertySelector<Tuple<Tuple<int[], string>>>.Start(z => (((object)z.Item1.Item1) as int[]).Length));
+            Assert.AreEqual("Item1.Item1.Length",
+                PropertySelector<Tuple<Tuple<int[], string>>>.Start(z => ((int[])(object)z.Item1.Item1).Length));
+            Assert.AreEqual("Item1.Item1.Length",
+                PropertySelector<Tuple<Tuple<int[], string>>>.Start(z => ((int[])((Tuple<int[], string>)z.Item1).Item1 as int[]).Length));
+            Assert.AreEqual("Item1.Length", PropertySelector<Tuple<string[], string>>.Start(z => z.Item1).SelectMany(z => z).Select(z => z.Length));
         }
     }
 }
