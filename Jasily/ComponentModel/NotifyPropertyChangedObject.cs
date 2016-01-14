@@ -102,7 +102,7 @@ namespace Jasily.ComponentModel
             var propertyName = this.ParseProperty(propertySelector);
             this.PropertyChanged.Fire(this, propertyName);
         }
-        protected void NotifyPropertyChanged(string propertyName)
+        protected void NotifyPropertyChanged([CallerMemberName] string propertyName = null)
         {
             this.PropertyChanged.Fire(this, propertyName);
         }
@@ -114,7 +114,7 @@ namespace Jasily.ComponentModel
         {
             this.PropertyChanged.Fire(this, propertyNames);
         }
-        
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void ClearPropertyChangedInvocationList()
