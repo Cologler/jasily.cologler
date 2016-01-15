@@ -94,6 +94,8 @@ namespace Jasily.ComponentModel
                 .OrderBy(z => z.Item1.Order)
                 .Select(z => z.Item2.Name)
                 .ToArray());
+
+            this.PropertiesRefreshed?.Invoke(this);
         }
 
         protected void NotifyPropertyChanged<T>(Expression<Func<T, object>> propertySelector)
@@ -106,6 +108,7 @@ namespace Jasily.ComponentModel
         protected void NotifyPropertyChanged(IEnumerable<string> propertyNames) => this.PropertyChanged.Fire(this, propertyNames);
 
         public event PropertyChangedEventHandler PropertyChanged;
+        public event EventHandler PropertiesRefreshed;
 
         public void ClearPropertyChangedInvocationList()
         {
