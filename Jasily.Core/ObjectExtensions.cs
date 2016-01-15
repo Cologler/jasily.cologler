@@ -1,5 +1,5 @@
 ﻿
-using System.Runtime.CompilerServices;
+using System.Collections.Generic;
 using static System.Diagnostics.Debug;
 
 namespace System
@@ -19,7 +19,7 @@ namespace System
         {
             if (ReferenceEquals(obj, other)) return true;
             if (ReferenceEquals(obj, null) || ReferenceEquals(other, null)) return false;
-            
+
             return (obj as IEquatable<T>)?.Equals(other) ?? obj.Equals(other);
         }
 
@@ -210,9 +210,19 @@ namespace System
 
         #region is
 
+        /// <summary>
+        /// return self in [lower, upper) 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="self"></param>
+        /// <param name="lower"></param>
+        /// <param name="upper"></param>
+        /// <returns></returns>
         public static bool IsBetween<T>(this T self, T lower, T upper) where T : IComparable<T>
             => self.CompareTo(lower) >= 0 && self.CompareTo(upper) < 0;
 
         #endregion
+
+        public static NameValuePair<string, T> WithName<T>(this T obj, string name) => new NameValuePair<string, T>(name, obj);
     }
 }
