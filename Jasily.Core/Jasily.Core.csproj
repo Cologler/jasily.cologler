@@ -34,7 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="ActionExtensions.cs" />
+    <Compile Include="DelegateExtensions.cs" />
     <Compile Include="Attributes\PrintAttribute.cs" />
     <Compile Include="Collections\Generic\TryGetValueExtensions.cs" />
     <Compile Include="Collections\Generic\TryGetVauleDelegate.cs" />
