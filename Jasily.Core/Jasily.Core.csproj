@@ -35,7 +35,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ActionExtensions.cs" />
-    <Compile Include="ActivatorPro.cs" />
     <Compile Include="Attributes\PrintAttribute.cs" />
     <Compile Include="Collections\Generic\TryGetValueExtensions.cs" />
     <Compile Include="Collections\Generic\TryGetVauleDelegate.cs" />
@@ -86,6 +85,7 @@
     <Compile Include="RequestActionEventArgs.cs" />
     <Compile Include="Services\IServiceProvider.cs" />
     <Compile Include="Services\IServiceProviderFactory.cs" />
+    <Compile Include="TypeExtensions.cs" />
     <Compile Include="UfDateTimeConverter.cs" />
     <Compile Include="EventExtensions.cs" />
     <Compile Include="JasilyException.cs" />
