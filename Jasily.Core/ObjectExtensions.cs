@@ -203,10 +203,7 @@ namespace System
         /// <typeparam name="T"></typeparam>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public static T[] IntoArray<T>(this T obj)
-        {
-            return new[] { obj };
-        }
+        public static T[] IntoArray<T>(this T obj) => new[] { obj };
 
         #region is
 
