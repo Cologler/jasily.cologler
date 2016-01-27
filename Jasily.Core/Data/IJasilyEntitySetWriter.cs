@@ -21,6 +21,13 @@ namespace System.Data
         Task<bool> InsertAsync(IEnumerable<TEntity> items);
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        Task<bool> InsertOrUpdateAsync(TEntity entity);
+
+        /// <summary>
         /// update entity by Id
         /// </summary>
         /// <param name="entity"></param>
