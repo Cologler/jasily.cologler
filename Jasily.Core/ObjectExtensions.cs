@@ -1,5 +1,7 @@
 ﻿
+using JetBrains.Annotations;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using static System.Diagnostics.Debug;
 
 namespace System
@@ -221,5 +223,41 @@ namespace System
         #endregion
 
         public static NameValuePair<string, T> WithName<T>(this T obj, string name) => new NameValuePair<string, T>(name, obj);
+
+        #region try
+
+        public static T Try<TSource, T>(this TSource obj, [NotNull] Func<T> func, [NotNull] Func<T, bool> match, int maxTryCount)
+        {
+            if (func == null) throw new ArgumentNullException(nameof(func));
+            if (match == null) throw new ArgumentNullException(nameof(match));
+            if (maxTryCount < 1) throw new ArgumentOutOfRangeException();
+
+            T r;
+            do
+            {
+                r = func();
+                if (match(r)) return r;
+                maxTryCount--;
+            } while (maxTryCount > 0);
+            return r;
+        }
+
+        public static async Task<T> TryAsync<TSource, T>(this TSource obj, [NotNull] Func<Task<T>> func, [NotNull] Func<T, bool> match, int maxTryCount)
+        {
+            if (func == null) throw new ArgumentNullException(nameof(func));
+            if (match == null) throw new ArgumentNullException(nameof(match));
+            if (maxTryCount < 1) throw new ArgumentOutOfRangeException();
+
+            T r;
+            do
+            {
+                r = await func();
+                if (match(r)) return r;
+                maxTryCount--;
+            } while (maxTryCount > 0);
+            return r;
+        }
+
+        #endregion
     }
 }
