@@ -27,5 +27,7 @@ namespace System.Data
         /// <param name="take"></param>
         /// <returns></returns>
         Task<IEnumerable<TEntity>> ListAsync(int skip, int take);
+
+        Task CursorAsync(Action<TEntity> callback);
     }
 }
