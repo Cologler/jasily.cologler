@@ -71,19 +71,6 @@ namespace System.Linq
             return result;
         }
 
-        public static Dictionary<int, T> ToIncrementDictionary<T>(this IEnumerable<T> source)
-        {
-            var enumerable = source as ICollection<T> ?? source.ToList();
-            var dict = new Dictionary<int, T>(enumerable.Count);
-            var index = 0;
-            foreach (var item in enumerable)
-            {
-                dict.Add(index, item);
-                index++;
-            }
-            return dict;
-        }
-
         #endregion
 
         #region split

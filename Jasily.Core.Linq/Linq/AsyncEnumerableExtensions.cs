@@ -7,34 +7,57 @@ namespace System.Linq
 {
     public static class AsyncEnumerableExtensions
     {
-        #region to
+        #region to async
 
-        public static async Task<T[]> ToArrayAsync<T>(this IEnumerable<Task<T>> source)
+        public static async Task<T[]> ToArrayAsync<T>(this IEnumerable<T> source)
+            => await Task.Run(() => source.ToArray());
+
+        public static async Task<Dictionary<TKey, TSource>> ToDictionaryAsync<TKey, TSource>(
+            this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
+            => await Task.Run(() => source.ToDictionary(keySelector));
+
+        public static async Task<Dictionary<TKey, TSource>> ToDictionaryAsync<TKey, TSource>(
+            this IEnumerable<TSource> source, Func<TSource, TKey> keySelector,
+            IEqualityComparer<TKey> comparer)
+            => await Task.Run(() => source.ToDictionary(keySelector, comparer));
+
+        public static async Task<Dictionary<TKey, TElement>> ToDictionaryAsync<TKey, TSource, TElement>(
+            this IEnumerable<TSource> source, Func<TSource, TKey> keySelector,
+            Func<TSource, TElement> elementSelector)
+            => await Task.Run(() => source.ToDictionary(keySelector, elementSelector));
+
+        public static async Task<Dictionary<TKey, TElement>> ToDictionaryAsync<TKey, TSource, TElement>(
+            this IEnumerable<TSource> source, Func<TSource, TKey> keySelector,
+            Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer)
+            => await Task.Run(() => source.ToDictionary(keySelector, elementSelector, comparer));
+
+        public static async Task<List<T>> ToListAsync<T>(this IEnumerable<T> source)
+            => await Task.Run(() => source.ToList());
+
+        #endregion
+
+        #region combine task
+
+        public static async Task<T[]> CombineToArrayAsync<T>(this IEnumerable<Task<T>> source)
         {
             if (source == null) throw new ArgumentNullException(nameof(source));
 
             return await Task.WhenAll(source);
         }
-        public static async Task<T[]> ToArrayAsync<T>(this IEnumerable<Task<T>> source, CancellationToken token)
+        public static async Task<T[]> CombineToArrayAsync<T>(this IEnumerable<Task<T>> source, CancellationToken token)
         {
             if (source == null) throw new ArgumentNullException(nameof(source));
 
-            return (await source.ToListAsync(token)).ToArray();
+            return (await source.CombineToListAsync(token)).ToArray();
         }
 
-        public static async Task<List<T>> ToListAsync<T>(this IEnumerable<Task<T>> source)
+        public static async Task<List<T>> CombineToListAsync<T>(this IEnumerable<Task<T>> source)
         {
             if (source == null) throw new ArgumentNullException(nameof(source));
 
-            var collection = source as ICollection;
-            var result = collection == null ? new List<T>() : new List<T>(collection.Count);
-            foreach (var item in source)
-            {
-                result.Add(await item);
-            }
-            return result;
+            return (await source.CombineToArrayAsync()).ToList();
         }
-        public static async Task<List<T>> ToListAsync<T>(this IEnumerable<Task<T>> source, CancellationToken token)
+        public static async Task<List<T>> CombineToListAsync<T>(this IEnumerable<Task<T>> source, CancellationToken token)
         {
             if (source == null) throw new ArgumentNullException(nameof(source));
 
@@ -52,44 +75,54 @@ namespace System.Linq
 
         #region all or any
 
-        public static async Task<bool> AllAsync<TSource>(this IEnumerable<TSource> source, Func<TSource, Task<bool>> predicateAsync)
+        public static async Task<bool> AllAsync<TSource>(this IEnumerable<TSource> source,
+            Func<TSource, bool> predicate, bool continueOnFailed = false)
+            => await Task.Run(() => source.All(predicate, continueOnFailed));
+
+        public static async Task<bool> AllAsync<TSource>(this IEnumerable<TSource> source,
+            Func<TSource, Task<bool>> predicateAsync, bool continueOnFailed = false)
         {
-            foreach (var item in source)
+            if (continueOnFailed)
             {
-                if (!await predicateAsync(item))
-                    return false;
+                var result = true;
+                foreach (var item in source)
+                    result &= await predicateAsync(item);
+                return result;
             }
-
-            return true;
-        }
-        public static async Task<bool> AllAsync<TSource>(this IEnumerable<TSource> source, Func<TSource, Task<bool>> predicateAsync, bool continueOnFailed)
-        {
-            if (!continueOnFailed) return await source.AllAsync(predicateAsync);
-
-            var result = true;
-            foreach (var item in source)
-                result &= await predicateAsync(item);
-            return result;
-        }
-
-        public static async Task<bool> AnyAsync<TSource>(this IEnumerable<TSource> source, Func<TSource, Task<bool>> predicateAsync)
-        {
-            foreach (var item in source)
+            else
             {
-                if (await predicateAsync(item))
-                    return true;
+                foreach (var item in source)
+                {
+                    if (!await predicateAsync(item))
+                        return false;
+                }
+                return true;
             }
-
-            return false;
         }
-        public static async Task<bool> AnyAsync<TSource>(this IEnumerable<TSource> source, Func<TSource, Task<bool>> predicateAsync, bool continueOnFailed)
-        {
-            if (!continueOnFailed) return await source.AnyAsync(predicateAsync);
 
-            var result = false;
-            foreach (var item in source)
-                result |= await predicateAsync(item);
-            return result;
+        public static async Task<bool> AnyAsync<TSource>(this IEnumerable<TSource> source,
+            Func<TSource, bool> predicate, bool continueOnFailed = false)
+            => await Task.Run(() => source.Any(predicate, continueOnFailed));
+
+        public static async Task<bool> AnyAsync<TSource>(this IEnumerable<TSource> source,
+            Func<TSource, Task<bool>> predicateAsync, bool continueOnFailed = false)
+        {
+            if (continueOnFailed)
+            {
+                var result = false;
+                foreach (var item in source)
+                    result |= await predicateAsync(item);
+                return result;
+            }
+            else
+            {
+                foreach (var item in source)
+                {
+                    if (await predicateAsync(item))
+                        return true;
+                }
+                return false;
+            }
         }
 
         #endregion
