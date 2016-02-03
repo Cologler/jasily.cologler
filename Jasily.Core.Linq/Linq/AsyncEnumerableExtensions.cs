@@ -7,7 +7,7 @@ namespace System.Linq
 {
     public static class AsyncEnumerableExtensions
     {
-        #region to async
+        #region to
 
         public static async Task<T[]> ToArrayAsync<T>(this IEnumerable<T> source)
             => await Task.Run(() => source.ToArray());
@@ -36,7 +36,7 @@ namespace System.Linq
 
         #endregion
 
-        #region combine task
+        #region combine
 
         public static async Task<T[]> CombineToArrayAsync<T>(this IEnumerable<Task<T>> source)
         {
