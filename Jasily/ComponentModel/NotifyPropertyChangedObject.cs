@@ -13,14 +13,6 @@ namespace Jasily.ComponentModel
         readonly object syncRootForEndRefresh = new object();
         readonly List<string> registeredPropertyForEndRefresh = new List<string>();
 
-        private string ParseProperty<T>(Expression<Func<T, object>> propertySelector)
-        {
-            if (this.GetType() != typeof(T) && !this.GetType().GetTypeInfo().IsSubclassOf(typeof(T)))
-                throw new NotSupportedException("type of source in propertySelector must be current type.");
-
-            return PropertySelector<T>.Start(propertySelector);
-        }
-
         /// <summary>
         /// please always call on background thread.
         /// </summary>
@@ -28,9 +20,9 @@ namespace Jasily.ComponentModel
         /// <param name="propertySelector"></param>
         public void RegisterForEndRefresh<T>(Expression<Func<T, object>> propertySelector)
         {
-            var property = this.ParseProperty(propertySelector);
+            var propertyName = PropertySelector<T>.Start(propertySelector);
             lock (this.syncRootForEndRefresh)
-                this.registeredPropertyForEndRefresh.Add(property);
+                this.registeredPropertyForEndRefresh.Add(propertyName);
         }
 
         /// <summary>
@@ -83,17 +75,15 @@ namespace Jasily.ComponentModel
         /// </summary>
         public virtual void RefreshProperties()
         {
-            var list = (
+            var properties = (
                 from property in this.GetType().GetRuntimeProperties()
                 let attr = property.GetCustomAttribute<NotifyPropertyChangedAttribute>()
                 where attr != null
-                select new Tuple<NotifyPropertyChangedAttribute, PropertyInfo>(attr, property)
-            ).ToList();
+                orderby attr.Order
+                select property.Name
+            ).ToArray();
 
-            this.NotifyPropertyChanged(list
-                .OrderBy(z => z.Item1.Order)
-                .Select(z => z.Item2.Name)
-                .ToArray());
+            this.NotifyPropertyChanged(properties);
 
             this.PropertiesRefreshed?.Invoke(this);
         }
