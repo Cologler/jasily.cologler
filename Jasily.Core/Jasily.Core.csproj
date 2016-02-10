@@ -75,9 +75,7 @@
     <Compile Include="ByteArrayExtensions.cs" />
     <Compile Include="JasilyDateTime.cs" />
     <Compile Include="JasilyEnum.cs" />
-    <Compile Include="Net\Http\RangeHeader.cs" />
     <Compile Include="Net\HttpWebRequestExtensions.cs" />
-    <Compile Include="Net\Sockets\Port.cs" />
     <Compile Include="NumberExtensions.cs" />
     <Compile Include="PrintExtensions.cs" />
     <Compile Include="RandomExtensions.cs" />
@@ -95,7 +93,6 @@
     <Compile Include="JasilyThrow.cs" />
     <Compile Include="WeakReferenceExtensions.cs" />
     <Compile Include="IO\SeekableStringReader.cs" />
-    <Compile Include="Net\HttpUriBuilder.cs" />
     <Compile Include="Runtime\Serialization\Json\DataContractJsonSerializerExtensions.cs" />
     <Compile Include="Text\StringLine.cs" />
     <Compile Include="UsingAnything.cs" />
