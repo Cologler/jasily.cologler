@@ -1,6 +1,8 @@
-﻿namespace System.Net.Http
+﻿using System;
+
+namespace Jasily.Net.Http
 {
-    public struct RangeHeader
+    public struct RangeHeader : IBuilder<string>
     {
         public long From { get; private set; }
 
@@ -18,7 +20,7 @@
             this.From = from;
         }
 
-        public override string ToString() => $"bytes={this.From}-{this.To}";
+        public override string ToString() => this.Build();
 
         public static RangeHeader? TryParse(string rangeHeader)
         {
@@ -48,5 +50,7 @@
 
             return null;
         }
+
+        public string Build() => $"bytes={this.From}-{this.To}";
     }
 }
