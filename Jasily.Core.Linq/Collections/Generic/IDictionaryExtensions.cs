@@ -73,8 +73,7 @@ namespace System.Collections.Generic
             return ret;
         }
 
-
-        public static TValue GetOrSetValue<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key)
+        public static TValue GetOrCreateValue<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key)
             where TValue : new()
         {
             if (dict == null) throw new ArgumentNullException(nameof(dict));
@@ -84,6 +83,20 @@ namespace System.Collections.Generic
             if (!dict.TryGetValue(key, out r))
             {
                 dict.Add(key, r = new TValue());
+            }
+
+            return r;
+        }
+
+        public static TValue GetOrSetValue<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key)
+        {
+            if (dict == null) throw new ArgumentNullException(nameof(dict));
+
+            TValue r;
+
+            if (!dict.TryGetValue(key, out r))
+            {
+                dict.Add(key, r = default(TValue));
             }
 
             return r;
