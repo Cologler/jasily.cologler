@@ -194,6 +194,66 @@ namespace System.Linq
             this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, Comparison<TKey> comparison)
             => source.OrderByDescending(keySelector, Comparer<TKey>.Create(comparison));
 
-        #endregion 
+        #endregion
+
+        #region random
+
+        public static T RandomTake<T>(this IList<T> t, Random random = null)
+        {
+            if (t.Count == 0) return default(T);
+            if (t.Count == 1) return t[0];
+            random = random ?? RandomExtensions.RandomNumberGenerator;
+            return t[random.Next(t.Count)];
+        }
+
+        public static IEnumerable<T> RandomSort<T>(this IEnumerable<T> source, Random random = null)
+        {
+            return (source as IList<T>)?.RandomSort(random) ??
+                   (source as ICollection<T>)?.RandomSort(random) ??
+                   (source.ToArray()).RandomSort(random);
+        }
+
+        public static IEnumerable<T> RandomSort<T>(this ICollection<T> source, Random random = null)
+        {
+            var count = source.Count;
+            if (count == 0) yield break;
+            if (count == 1) yield return source.First();
+            var array = Enumerable.Range(0, count).ToArray();
+            var cache = new List<T>(count);
+            random = random ?? RandomExtensions.RandomNumberGenerator;
+            using (var itor = source.GetEnumerator())
+            {
+                while (count > 0)
+                {
+                    var index = random.Next(count);
+                    while (index >= cache.Count)
+                    {
+                        if (!itor.MoveNext()) throw new InvalidOperationException("collection was changed");
+                        cache.Add(itor.Current);
+                    }
+                    yield return cache[array[index]];
+                    array[index] = array[count - 1];
+                    count--;
+                }
+            }
+        }
+
+        public static IEnumerable<T> RandomSort<T>(this IList<T> source, Random random = null)
+        {
+            var count = source.Count;
+            if (count == 0) yield break;
+            if (count == 1) yield return source[0];
+            var array = Enumerable.Range(0, count).ToArray();
+            random = random ?? RandomExtensions.RandomNumberGenerator;
+            while (count > 0)
+            {
+                var index = random.Next(count);
+                yield return source[array[index]];
+                array[index] = array[count - 1];
+                count--;
+            }
+        }
+
+        #endregion
     }
 }
