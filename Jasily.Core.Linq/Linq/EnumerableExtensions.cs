@@ -98,7 +98,8 @@ namespace System.Linq
             if (source == null) throw new ArgumentNullException(nameof(source));
             if (trueToLeft == null) throw new ArgumentNullException(nameof(trueToLeft));
 
-            return Tuple.Create(source.Where(trueToLeft), source.Where(z => !trueToLeft(z)));
+            var array = source as T[] ?? source.ToArray();
+            return Tuple.Create(array.Where(trueToLeft), array.Where(z => !trueToLeft(z)));
         }
 
         #endregion
@@ -255,5 +256,78 @@ namespace System.Linq
         }
 
         #endregion
+
+        #region join
+
+        public static IEnumerable<T> JoinWith<T>(this IEnumerable<T> source, T spliter)
+        {
+            using (var itor = source.GetEnumerator())
+            {
+                if (!itor.MoveNext()) yield break;
+                while (true)
+                {
+                    yield return itor.Current;
+                    if (!itor.MoveNext()) yield break;
+                    yield return spliter;
+                }
+            }
+        }
+
+        public static IEnumerable<T> JoinWith<T>(this IEnumerable<T> source, Func<T> spliterFunc)
+        {
+            using (var itor = source.GetEnumerator())
+            {
+                if (!itor.MoveNext()) yield break;
+                while (true)
+                {
+                    yield return itor.Current;
+                    if (!itor.MoveNext()) yield break;
+                    yield return spliterFunc();
+                }
+            }
+        }
+
+        public static IEnumerable<T> JoinWith<T>(this IEnumerable<T> source, Action action)
+        {
+            using (var itor = source.GetEnumerator())
+            {
+                if (!itor.MoveNext()) yield break;
+                while (true)
+                {
+                    yield return itor.Current;
+                    if (!itor.MoveNext()) yield break;
+                    action();
+                }
+            }
+        }
+
+        #endregion
+
+        public static IEnumerable<T> Insert<T>(this IEnumerable<T> source, int index, T item)
+        {
+            var i = 0;
+            using (var itor = source.GetEnumerator())
+            {
+                while (i < index && itor.MoveNext())
+                {
+                    yield return itor.Current;
+                    i++;
+                }
+
+                if (i == index)
+                {
+                    yield return item;
+                }
+                else
+                {
+                    throw new IndexOutOfRangeException();
+                }
+
+                while (itor.MoveNext())
+                {
+                    yield return itor.Current;
+                }
+            }
+        }
     }
 }
