@@ -106,13 +106,20 @@ namespace System.Linq
 
         #region giveup
 
+        /// <summary>
+        /// Skip() will skip left of items, but Giveup() will skip right of items.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="giveup"></param>
+        /// <returns></returns>
         public static IEnumerable<T> Giveup<T>(this IEnumerable<T> source, int giveup)
         {
-            var collection = source as ICollection<T>;
-            if (collection != null)
+            var total = (source as ICollection<T>)?.Count ?? (source as ICollection)?.Count ?? -1;
+            if (total != -1)
             {
-                if (collection.Count <= giveup) yield break;
-                foreach (var item in collection.Take(collection.Count - giveup))
+                if (total <= giveup) yield break;
+                foreach (var item in source.Take(total - giveup))
                 {
                     yield return item;
                 }
