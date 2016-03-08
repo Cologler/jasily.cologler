@@ -84,6 +84,8 @@
     <Compile Include="RequestActionEventArgs.cs" />
     <Compile Include="Services\IServiceProvider.cs" />
     <Compile Include="Services\IServiceProviderFactory.cs" />
+    <Compile Include="ITryEnter.cs" />
+    <Compile Include="Threading\ReaderWriterLockSlimExtensions.cs" />
     <Compile Include="TypeExtensions.cs" />
     <Compile Include="UfDateTimeConverter.cs" />
     <Compile Include="EventExtensions.cs" />

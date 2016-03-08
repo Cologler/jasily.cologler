@@ -46,6 +46,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Collections\JasilyIncrementBits.cs" />
+    <Compile Include="Collections\ReaderWriterCollections\ReaderWriterCollection.cs" />
+    <Compile Include="Collections\ReaderWriterCollections\ReaderWriterList.cs" />
+    <Compile Include="Collections\ReaderWriterCollections\ReaderWriterQueue.cs" />
+    <Compile Include="Collections\ReaderWriterCollections\ReaderWriterStack.cs" />
     <Compile Include="ComponentModel\EditableFieldAttribute.cs" />
     <Compile Include="ComponentModel\JasilyEditableViewModel.cs" />
     <Compile Include="ComponentModel\JasilyViewModel.cs" />
@@ -64,6 +68,7 @@
     <Compile Include="Diagnostics\JasilyLoggerMode.cs" />
     <Compile Include="Diagnostics\AttributeTest\SizeRangeAttribute.cs" />
     <Compile Include="Diagnostics\AttributeTest\TestAttribute.cs" />
+    <Compile Include="Empty.cs" />
     <Compile Include="IO\MemoryTributary.cs" />
     <Compile Include="Net\HttpUriBuilder.cs" />
     <Compile Include="Net\Http\RangeHeader.cs" />

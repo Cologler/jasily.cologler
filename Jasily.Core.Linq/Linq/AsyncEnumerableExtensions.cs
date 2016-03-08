@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
@@ -38,26 +39,26 @@ namespace System.Linq
 
         #region combine
 
-        public static async Task<T[]> CombineToArrayAsync<T>(this IEnumerable<Task<T>> source)
+        public static async Task<T[]> CombineToArrayAsync<T>([NotNull] this IEnumerable<Task<T>> source)
         {
             if (source == null) throw new ArgumentNullException(nameof(source));
 
             return await Task.WhenAll(source);
         }
-        public static async Task<T[]> CombineToArrayAsync<T>(this IEnumerable<Task<T>> source, CancellationToken token)
+        public static async Task<T[]> CombineToArrayAsync<T>([NotNull] this IEnumerable<Task<T>> source, CancellationToken token)
         {
             if (source == null) throw new ArgumentNullException(nameof(source));
 
             return (await source.CombineToListAsync(token)).ToArray();
         }
 
-        public static async Task<List<T>> CombineToListAsync<T>(this IEnumerable<Task<T>> source)
+        public static async Task<List<T>> CombineToListAsync<T>([NotNull] this IEnumerable<Task<T>> source)
         {
             if (source == null) throw new ArgumentNullException(nameof(source));
 
             return (await source.CombineToArrayAsync()).ToList();
         }
-        public static async Task<List<T>> CombineToListAsync<T>(this IEnumerable<Task<T>> source, CancellationToken token)
+        public static async Task<List<T>> CombineToListAsync<T>([NotNull] this IEnumerable<Task<T>> source, CancellationToken token)
         {
             if (source == null) throw new ArgumentNullException(nameof(source));
 
