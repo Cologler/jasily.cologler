@@ -6,7 +6,8 @@ using System.Threading;
 namespace Jasily.Collections.LockFreeCollections
 {
     /// <summary>
-    /// thread-safe with lock-free queue
+    /// thread-safe with lock-free stack
+    /// it was slow then ConcurrentStack on performance
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public sealed class LockFreeStack<T> : BaseLockFreeCollection<T>

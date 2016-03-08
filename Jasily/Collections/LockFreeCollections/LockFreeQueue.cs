@@ -7,7 +7,8 @@ using System.Threading;
 namespace Jasily.Collections.LockFreeCollections
 {
     /// <summary>
-    /// thread-safe with lock-free queue
+    /// thread-safe with lock-free queue.
+    /// it was slow then ConcurrentQueue on performance
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public sealed class LockFreeQueue<T> : BaseLockFreeCollection<T>
