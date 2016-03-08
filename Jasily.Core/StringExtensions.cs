@@ -7,15 +7,7 @@ namespace System
 {
     public static class StringExtensions
     {
-        private static Encoding defaultEncoding = Encoding.UTF8;
-
         #region encoding & decoding
-
-        public static Encoding DefaultEncoding
-        {
-            get { return defaultEncoding ?? Encoding.UTF8; }
-            set { defaultEncoding = value; }
-        }
 
         /// <summary>
         /// get bytes using special encoding
@@ -24,7 +16,7 @@ namespace System
         /// <param name="encoding"></param>
         /// <returns></returns>
         public static byte[] GetBytes(this string text, Encoding encoding = null)
-            => (encoding ?? DefaultEncoding).GetBytes(text);
+            => (encoding ?? Encoding.UTF8).GetBytes(text);
 
         public static string UrlEncode(this string str) => Net.WebUtility.UrlEncode(str);
 
@@ -39,14 +31,14 @@ namespace System
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
-        public static bool IsNullOrEmpty(this string text) => String.IsNullOrEmpty(text);
+        public static bool IsNullOrEmpty(this string text) => string.IsNullOrEmpty(text);
 
         /// <summary>
         /// return String.IsNullOrWhiteSpace(text)
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
-        public static bool IsNullOrWhiteSpace(this string text) => String.IsNullOrWhiteSpace(text);
+        public static bool IsNullOrWhiteSpace(this string text) => string.IsNullOrWhiteSpace(text);
 
         #endregion
 
@@ -179,7 +171,6 @@ namespace System
         /// use Environment.NewLine to join texts.
         /// </summary>
         /// <param name="texts"></param>
-        /// <param name="spliter"></param>
         /// <returns></returns>
         public static string AsLines(this IEnumerable<string> texts)
             => string.Join(Environment.NewLine, texts);
