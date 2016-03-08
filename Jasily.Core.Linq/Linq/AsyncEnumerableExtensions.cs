@@ -1,6 +1,6 @@
 using JetBrains.Annotations;
-using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -56,14 +56,16 @@ namespace System.Linq
         {
             if (source == null) throw new ArgumentNullException(nameof(source));
 
-            return (await source.CombineToArrayAsync()).ToList();
+            return (await Task.WhenAll(source)).ToList();
         }
+
+        [SuppressMessage("ReSharper", "PossibleMultipleEnumeration")]
         public static async Task<List<T>> CombineToListAsync<T>([NotNull] this IEnumerable<Task<T>> source, CancellationToken token)
         {
             if (source == null) throw new ArgumentNullException(nameof(source));
 
-            var collection = source as ICollection;
-            var result = collection == null ? new List<T>() : new List<T>(collection.Count);
+            var count = source.TryGetCount();
+            var result = count < 0 ? new List<T>() : new List<T>(count);
             foreach (var item in source)
             {
                 token.ThrowIfCancellationRequested();

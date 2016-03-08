@@ -40,6 +40,7 @@
     <Compile Include="Collections\Generic\TryGetVauleDelegate.cs" />
     <Compile Include="Collections\Interval.cs" />
     <Compile Include="Diagnostics\IJasilyPrinter.cs" />
+    <Compile Include="Empty.cs" />
     <Compile Include="Enums\SupportedFlagsAttribute.cs" />
     <Compile Include="EventArgses\ChangingEventArgs.cs" />
     <Compile Include="Collections\Generic\ITryGetValueExtensions.cs" />
@@ -85,6 +86,7 @@
     <Compile Include="Services\IServiceProvider.cs" />
     <Compile Include="Services\IServiceProviderFactory.cs" />
     <Compile Include="ITryEnter.cs" />
+    <Compile Include="Singleton.cs" />
     <Compile Include="Threading\ReaderWriterLockSlimExtensions.cs" />
     <Compile Include="TypeExtensions.cs" />
     <Compile Include="UfDateTimeConverter.cs" />

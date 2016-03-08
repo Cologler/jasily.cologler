@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
-namespace Jasily
+namespace System
 {
     public static class Empty<T>
     {

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 
 namespace System.Linq
@@ -113,9 +114,10 @@ namespace System.Linq
         /// <param name="source"></param>
         /// <param name="giveup"></param>
         /// <returns></returns>
+        [SuppressMessage("ReSharper", "PossibleMultipleEnumeration")]
         public static IEnumerable<T> Giveup<T>(this IEnumerable<T> source, int giveup)
         {
-            var total = (source as ICollection<T>)?.Count ?? (source as ICollection)?.Count ?? -1;
+            var total = source.TryGetCount();
             if (total != -1)
             {
                 if (total <= giveup) yield break;
@@ -208,10 +210,40 @@ namespace System.Linq
 
         public static T RandomTake<T>(this IList<T> t, Random random = null)
         {
-            if (t.Count == 0) return default(T);
-            if (t.Count == 1) return t[0];
-            random = random ?? RandomExtensions.RandomNumberGenerator;
-            return t[random.Next(t.Count)];
+            switch (t.Count)
+            {
+                case 0:
+                    return default(T);
+                case 1:
+                    return t[0];
+            }
+
+            random = random ?? Singleton.ThreadStaticInstance<Random>();
+            var n = random.Next(t.Count);
+            return t[n];
+        }
+
+        [SuppressMessage("ReSharper", "PossibleMultipleEnumeration")]
+        public static T RandomTake<T>(this IEnumerable<T> t, Random random = null)
+        {
+            var list = t as IList<T>;
+            if (list != null) return list.RandomTake(random);
+
+            var c = t.TryGetCount();
+            if (c < 0)
+            {
+                return t.ToArray().RandomTake(random);
+            }
+
+            switch (c)
+            {
+                case 0:
+                    return default(T);
+                case 1:
+                    return t.First();
+                default:
+                    return t.Skip((random ?? Singleton.ThreadStaticInstance<Random>()).Next(c)).First();
+            }
         }
 
         public static IEnumerable<T> RandomSort<T>(this IEnumerable<T> source, Random random = null)
@@ -228,7 +260,7 @@ namespace System.Linq
             if (count == 1) yield return source.First();
             var array = Enumerable.Range(0, count).ToArray();
             var cache = new List<T>(count);
-            random = random ?? RandomExtensions.RandomNumberGenerator;
+            random = random ?? Singleton.ThreadStaticInstance<Random>();
             using (var itor = source.GetEnumerator())
             {
                 while (count > 0)
@@ -252,7 +284,7 @@ namespace System.Linq
             if (count == 0) yield break;
             if (count == 1) yield return source[0];
             var array = Enumerable.Range(0, count).ToArray();
-            random = random ?? RandomExtensions.RandomNumberGenerator;
+            random = random ?? Singleton.ThreadStaticInstance<Random>();
             while (count > 0)
             {
                 var index = random.Next(count);
@@ -336,5 +368,11 @@ namespace System.Linq
                 }
             }
         }
+
+        public static int TryGetCount<T>(this IEnumerable<T> source)
+            => (source as ICollection<T>)?.Count ?? (source as ICollection)?.Count ?? -1;
+
+        public static int TryGetCount(this IEnumerable source)
+            => (source as ICollection)?.Count ?? -1;
     }
 }

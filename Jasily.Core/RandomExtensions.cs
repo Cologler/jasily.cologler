@@ -2,10 +2,7 @@
 {
     public static class RandomExtensions
     {
-        private static Random randomNumberGenerator;
-
-        public static Random RandomNumberGenerator
-            => randomNumberGenerator ?? (randomNumberGenerator = new Random());
+        public static bool NextBoolean(this Random random) => random.Next(2) == 0;
 
         public static byte[] NextBytes(this Random random, int byteCount)
         {

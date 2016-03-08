@@ -68,7 +68,6 @@
     <Compile Include="Diagnostics\JasilyLoggerMode.cs" />
     <Compile Include="Diagnostics\AttributeTest\SizeRangeAttribute.cs" />
     <Compile Include="Diagnostics\AttributeTest\TestAttribute.cs" />
-    <Compile Include="Empty.cs" />
     <Compile Include="IO\MemoryTributary.cs" />
     <Compile Include="Net\HttpUriBuilder.cs" />
     <Compile Include="Net\Http\RangeHeader.cs" />
