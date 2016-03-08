@@ -1,5 +1,7 @@
 using Jasily.Threading;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 
@@ -11,7 +13,7 @@ namespace Jasily.Collections.LockFreeCollections
     /// thread-safe with lock-free queue
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class LockFreeQueue<T> : IDisposable
+    public class LockFreeQueue<T> : IEnumerable<T>, IDisposable
     {
         private volatile QueueData header;
         private volatile int prevAdd;
@@ -167,6 +169,43 @@ namespace Jasily.Collections.LockFreeCollections
         public void Dispose()
         {
             this.isDisposed = 0;
+        }
+
+        public IEnumerator<T> GetEnumerator() => new Enumerator(this);
+
+        IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
+
+        private class Enumerator : IEnumerator<T>
+        {
+            private readonly LockFreeQueue<T> queue;
+            private T value;
+
+            public Enumerator(LockFreeQueue<T> queue)
+            {
+                this.queue = queue;
+            }
+
+            public bool MoveNext()
+            {
+                while (this.queue.MayHasNext)
+                {
+                    if (this.queue.TryDequeue(out this.value)) return true;
+                }
+
+                return false;
+            }
+
+            public void Reset()
+            {
+            }
+
+            public T Current => this.value;
+
+            object IEnumerator.Current => this.Current;
+
+            public void Dispose()
+            {
+            }
         }
     }
 }
