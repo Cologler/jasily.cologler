@@ -1,12 +1,13 @@
 ﻿using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization;
 
 namespace System.Attributes
 {
     /// <summary>
-    /// 设置指定的属性或字段需要被浅表克隆
+    /// 设置指定的属性或字段需要被克隆
     /// </summary>
-    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class)]
     public class CloneableAttribute : Attribute
     {
         /// <summary>
@@ -14,35 +15,63 @@ namespace System.Attributes
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="source"></param>
-        /// <param name="dest"></param>
         /// <returns></returns>
-        public static T Clone<T>(T source, T dest)
+        public static T Clone<T>(T source)
         {
-            var type = typeof (T);
+            return (T)ObjectClone(source);
+        }
 
-            var fields = type.GetRuntimeFields();
-            foreach (var fieldInfo in 
-                from fieldInfo in fields.Where(z => !z.IsStatic && !z.IsInitOnly && !z.IsLiteral)
-                where fieldInfo.GetCustomAttribute<CloneableAttribute>() != null
-                select fieldInfo)
+        private static object ObjectClone(object source)
+        {
+            if (source == null) return null;
+
+            var type = source.GetType();
+
+            if (type.IsPrimitive ||
+                type == typeof(string) ||
+                type == typeof(decimal)) return source;
+
+            if (type.GetCustomAttribute<CloneableAttribute>() != null)
             {
-                var value = fieldInfo.GetValue(source);
-                var clone = value as ICloneable;
-                fieldInfo.SetValue(dest, clone != null ? clone.Clone() : value);
+                var dest = FormatterServices.GetUninitializedObject(type);
+
+                foreach (var field in
+                    from fieldInfo in type.GetRuntimeFields()
+                    where fieldInfo.GetCustomAttribute<CloneableAttribute>() != null
+                    select fieldInfo)
+                {
+                    if (field.IsStatic || field.IsInitOnly || field.IsLiteral)
+                    {
+                        throw new InvalidOperationException();
+                    }
+
+                    var value = field.GetValue(source);
+                    field.SetValue(dest, ObjectClone(value));
+                }
+
+                foreach (var property in
+                    from propertyInfo in type.GetRuntimeProperties()
+                    where propertyInfo.GetCustomAttribute<CloneableAttribute>() != null
+                    select propertyInfo)
+                {
+                    if (property.CanRead && property.CanWrite)
+                    {
+                        var value = property.GetValue(source);
+                        property.SetValue(dest, ObjectClone(value));
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException();
+                    }
+                }
+
+                return dest;
             }
 
-            var properties = type.GetRuntimeProperties();
-            foreach (var propertyInfo in
-                from propertyInfo in properties.Where(z => z.CanRead && z.CanWrite)
-                where propertyInfo.GetCustomAttribute<CloneableAttribute>() != null
-                select propertyInfo)
-            {
-                var value = propertyInfo.GetValue(source);
-                var clone = value as ICloneable;
-                propertyInfo.SetValue(dest, clone != null ? clone.Clone() : value);
-            }
+            var clone = source as ICloneable;
+            if (clone != null) return clone.Clone();
 
-            return dest;
+            return source;
         }
     }
 }

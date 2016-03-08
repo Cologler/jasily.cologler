@@ -1,6 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Attributes;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace UnitTest.Desktop.Attributes
 {
@@ -11,8 +10,7 @@ namespace UnitTest.Desktop.Attributes
         public void TestMethod1()
         {
             var accept = new AcceptClass("1", "2", "3", "4", "5", "6", "7", "8", "9");
-            var acceptC = CloneableAttribute.Clone(accept,
-                new AcceptClass("", "", "", "", "", "", "", "", ""));
+            var acceptC = CloneableAttribute.Clone(accept);
 
             Assert.AreEqual(accept.GetPublicProperty(), acceptC.GetPublicProperty());
             Assert.AreEqual(accept.GetProtectedProperty(), acceptC.GetProtectedProperty());
@@ -56,17 +54,23 @@ namespace UnitTest.Desktop.Attributes
         [Cloneable]
         private string PrivateProperty { get; set; }
 
-        [Cloneable] public string PublicField;
+        [Cloneable]
+        public string PublicField;
 
-        [Cloneable] protected string ProtectedField;
+        [Cloneable]
+        protected string ProtectedField;
 
-        [Cloneable] private string PrivateFirld;
+        [Cloneable]
+        private string PrivateFirld;
 
-        [Cloneable] public readonly string PublicReadonlyField;
+        [Cloneable]
+        public readonly string PublicReadonlyField;
 
-        [Cloneable] protected readonly string ProtectedReadonlyField;
+        [Cloneable]
+        protected readonly string ProtectedReadonlyField;
 
-        [Cloneable] private readonly string PrivateReadonlyFirld;
+        [Cloneable]
+        private readonly string PrivateReadonlyFirld;
 
         public string GetPublicProperty()
         {

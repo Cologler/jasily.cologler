@@ -1,6 +1,6 @@
 ﻿namespace System
 {
-#if !DESKTOP
+#if !DESKTOP && !COMMON
     public interface ICloneable
     {
         object Clone();
