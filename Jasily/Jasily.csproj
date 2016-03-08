@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Collections\JasilyIncrementBits.cs" />
+    <Compile Include="Collections\LockFreeCollections\LockFreeQueue.cs" />
     <Compile Include="Collections\ReaderWriterCollections\ReaderWriterCollection.cs" />
     <Compile Include="Collections\ReaderWriterCollections\ReaderWriterList.cs" />
     <Compile Include="Collections\ReaderWriterCollections\ReaderWriterQueue.cs" />

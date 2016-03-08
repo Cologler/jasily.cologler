@@ -13,36 +13,36 @@ namespace System.IO
         [DllImport("user32.dll")]
         public static extern bool RemoveClipboardFormatListener(IntPtr hwnd);
 
-        WindowInteropHelper WindowHelper;
-        HwndSource HwndSource;
-        Window HandleSource;
+        WindowInteropHelper windowHelper;
+        HwndSource hwndSource;
+        Window handleSource;
 
         public ClipboardMonitor(Window window)
         {
-            this.HandleSource = window;
+            this.handleSource = window;
         }
 
         public void Begin()
         {
-            this.WindowHelper = new WindowInteropHelper(this.HandleSource);
-            AddClipboardFormatListener(this.WindowHelper.Handle);
+            this.windowHelper = new WindowInteropHelper(this.handleSource);
+            AddClipboardFormatListener(this.windowHelper.Handle);
 
-            this.HwndSource = HwndSource.FromHwnd(this.WindowHelper.Handle);
-            this.HwndSource.AddHook(this.WndProc);
+            this.hwndSource = HwndSource.FromHwnd(this.windowHelper.Handle);
+            this.hwndSource.AddHook(this.WndProc);
         }
 
         public void Stop()
         {
-            this.HwndSource.RemoveHook(this.WndProc);
+            this.hwndSource.RemoveHook(this.WndProc);
 
-            RemoveClipboardFormatListener(this.WindowHelper.Handle);
+            RemoveClipboardFormatListener(this.windowHelper.Handle);
         }
 
         private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
             if (msg == WM_CLIPBOARDUPDATE)
             {
-                this.ClipboardUpdated.Fire(this);
+                this.ClipboardUpdated?.Invoke(this);
             }
 
             return IntPtr.Zero;
