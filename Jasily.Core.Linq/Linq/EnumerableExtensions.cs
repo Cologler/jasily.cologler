@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using JetBrains.Annotations;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
@@ -70,6 +71,22 @@ namespace System.Linq
                 result.Add(item);
             }
             return result;
+        }
+
+        public static int CopyToArray<T>(this IEnumerable<T> source, [NotNull] T[] array, int arrayIndex, int count)
+        {
+            if (array == null) throw new ArgumentNullException(nameof(array));
+            if (arrayIndex < 0) throw new ArgumentOutOfRangeException(nameof(arrayIndex));
+            if (count < 0) throw new ArgumentOutOfRangeException(nameof(count));
+            if (arrayIndex > array.Length || count > array.Length - arrayIndex) throw new ArgumentException();
+
+            var i = arrayIndex;
+            foreach (var item in source.Take(count))
+            {
+                array[i] = item;
+                i++;
+            }
+            return i - arrayIndex;
         }
 
         #endregion
