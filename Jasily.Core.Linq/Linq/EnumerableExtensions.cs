@@ -167,12 +167,19 @@ namespace System.Linq
 
         #region Foreach
 
-        public static IEnumerable<T> ForEach<T>(this IEnumerable<T> source, Action<T> action)
+        public static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
         {
             if (action == null) throw new ArgumentNullException(nameof(action));
 
             foreach (var item in source) action(item);
-            return source;
+        }
+
+        public static void ForEach<T>(this IEnumerable<T> source, Action<int, T> action)
+        {
+            if (action == null) throw new ArgumentNullException(nameof(action));
+
+            var index = 0;
+            foreach (var item in source) action(index++, item);
         }
 
         #endregion
@@ -386,10 +393,14 @@ namespace System.Linq
             }
         }
 
+        #region count
+
         public static int TryGetCount<T>(this IEnumerable<T> source)
             => (source as ICollection<T>)?.Count ?? (source as ICollection)?.Count ?? -1;
 
         public static int TryGetCount(this IEnumerable source)
             => (source as ICollection)?.Count ?? -1;
+
+        #endregion
     }
 }
