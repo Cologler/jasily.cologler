@@ -59,6 +59,7 @@
     <Compile Include="ComponentModel\NotifyPropertyChangedAttribute.cs" />
     <Compile Include="ComponentModel\NotifyPropertyChangedObject.cs" />
     <Compile Include="ComponentModel\PropertySelector.cs" />
+    <Compile Include="Container.cs" />
     <Compile Include="Diagnostics\AttributeTest\AttributeTestor.cs" />
     <Compile Include="Diagnostics\AttributeTest\CanBeNullAttribute.cs" />
     <Compile Include="Diagnostics\AttributeTest\DateTimeKindAttribute.cs" />
@@ -88,7 +89,6 @@
     <Compile Include="Reflection\WriteableMemberAttribute.cs" />
     <Compile Include="Text\TextReplacer.cs" />
     <Compile Include="Threading\JasilyTimeout.cs" />
-    <Compile Include="Threading\Tasks\JasilySingleTaskManager.cs" />
     <Compile Include="Windows\JasilyClipboard.cs" />
   </ItemGroup>
   <ItemGroup>
