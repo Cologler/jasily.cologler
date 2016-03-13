@@ -45,7 +45,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Collections\Generic\NullableHashSet.cs" />
     <Compile Include="Collections\JasilyIncrementBits.cs" />
     <Compile Include="Collections\LockFreeCollections\LockFreeQueue.cs" />
     <Compile Include="Collections\ReaderWriterCollections\ReaderWriterCollection.cs" />
@@ -88,7 +87,6 @@
     <Compile Include="Reflection\WriteableMemberAttribute.cs" />
     <Compile Include="Text\TextReplacer.cs" />
     <Compile Include="Threading\JasilyTimeout.cs" />
-    <Compile Include="Threading\Tasks\JasilySingleTaskManager.cs" />
     <Compile Include="Windows\JasilyClipboard.cs" />
   </ItemGroup>
   <ItemGroup>

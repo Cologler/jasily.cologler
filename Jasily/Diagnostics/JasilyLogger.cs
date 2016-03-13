@@ -13,7 +13,7 @@ namespace Jasily.Diagnostics
     public class JasilyLogger : IJasilyLoggerObject<JasilyLogger>
     {
 #if !DEBUG
-        object syncRoot;
+        object SyncRoot;
         private List<JasilyLoggerData> logs;
 #endif
         private static int loggerCount;
