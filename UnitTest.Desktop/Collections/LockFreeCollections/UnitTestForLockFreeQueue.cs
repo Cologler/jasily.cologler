@@ -1,8 +1,11 @@
 ﻿using Jasily.Collections.LockFreeCollections;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Performance;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -128,6 +131,163 @@ namespace UnitTest.Desktop.Collections.LockFreeCollections
             Debug.WriteLine((DateTime.UtcNow - now).TotalMilliseconds);
             Assert.AreEqual(true, queue.TryDequeue(out value, 4000));
             Debug.WriteLine((DateTime.UtcNow - now).TotalMilliseconds);
+        }
+
+        [TestMethod]
+        public void Performance()
+        {
+            // OMG, it was too many slow !!!
+
+            var count = 100000;
+
+            using (var timer = new CodeTimer())
+            {
+                timer.Initialize();
+                Debug.WriteLine("single thread:");
+                Debug.WriteLine("LockFreeQueue: " + timer.Time(100, () =>
+                {
+                    var queue = new LockFreeQueue<int>();
+                    foreach (var v in Enumerable.Range(0, count))
+                    {
+                        queue.Enqueue(v);
+                    }
+                }).ToString());
+                Debug.WriteLine("Queue: " + timer.Time(100, () =>
+                {
+                    var queue = new Queue<int>();
+                    foreach (var v in Enumerable.Range(0, count))
+                    {
+                        queue.Enqueue(v);
+                    }
+                }).ToString());
+                Debug.WriteLine("ConcurrentQueue: " + timer.Time(100, () =>
+                {
+                    var queue = new ConcurrentQueue<int>();
+                    foreach (var v in Enumerable.Range(0, count))
+                    {
+                        queue.Enqueue(v);
+                    }
+                }).ToString());
+
+                Debug.WriteLine("");
+                Debug.WriteLine("mulit thread:");
+                Debug.WriteLine("LockFreeQueue: " + timer.Time(100, () =>
+                {
+                    var queue = new LockFreeQueue<int>();
+                    var setter = new Action(() =>
+                    {
+                        foreach (var v in Enumerable.Range(0, count))
+                        {
+                            queue.Enqueue(v);
+                        }
+                    });
+                    Task.WaitAll(Task.Run(setter), Task.Run(setter), Task.Run(setter), Task.Run(setter));
+                }).ToString());
+                Debug.WriteLine("ConcurrentQueue: " + timer.Time(100, () =>
+                {
+                    var queue = new ConcurrentQueue<int>();
+                    var setter = new Action(() =>
+                    {
+                        foreach (var v in Enumerable.Range(0, count))
+                        {
+                            queue.Enqueue(v);
+                        }
+                    });
+                    Task.WaitAll(Task.Run(setter), Task.Run(setter), Task.Run(setter), Task.Run(setter));
+                }).ToString());
+
+                Debug.WriteLine("");
+                Debug.WriteLine("mulit thread read | write:");
+                Debug.WriteLine("LockFreeQueue: " + timer.Time(100, () =>
+                {
+                    var queue = new LockFreeQueue<int>();
+                    var setter = new Action(() =>
+                    {
+                        foreach (var v in Enumerable.Range(0, count))
+                        {
+                            queue.Enqueue(v);
+                        }
+                    });
+                    var getter = new Action(() =>
+                    {
+                        foreach (var item in queue)
+                        {
+
+                        }
+                    });
+                    Task.WhenAll(Task.Run(setter), Task.Run(setter), Task.Run(setter), Task.Run(setter))
+                        .ContinueWith(z => queue.Dispose())
+                        .Wait();
+                    Task.WaitAll(Task.Run(getter), Task.Run(getter), Task.Run(getter), Task.Run(getter));
+                }).ToString());
+                Debug.WriteLine("ConcurrentQueue: " + timer.Time(100, () =>
+                {
+                    var queue = new ConcurrentQueue<int>();
+                    var setter = new Action(() =>
+                    {
+                        foreach (var v in Enumerable.Range(0, count))
+                        {
+                            queue.Enqueue(v);
+                        }
+                    });
+                    var getter = new Action(() =>
+                    {
+                        foreach (var item in queue)
+                        {
+
+                        }
+                    });
+                    Task.WaitAll(Task.Run(setter), Task.Run(setter), Task.Run(setter), Task.Run(setter));
+                    Task.WaitAll(Task.Run(getter), Task.Run(getter), Task.Run(getter), Task.Run(getter));
+                }).ToString());
+
+                Debug.WriteLine("");
+                Debug.WriteLine("mulit thread read & write:");
+                Debug.WriteLine("LockFreeQueue: " + timer.Time(100, () =>
+                {
+                    var queue = new LockFreeQueue<int>();
+                    var setter = new Action(() =>
+                    {
+                        foreach (var v in Enumerable.Range(0, count))
+                        {
+                            queue.Enqueue(v);
+                        }
+                    });
+                    var getter = new Action(() =>
+                    {
+                        foreach (var item in queue)
+                        {
+
+                        }
+                    });
+                    Task.WaitAll(Task.WhenAll(Task.Run(setter), Task.Run(setter), Task.Run(setter), Task.Run(setter))
+                        .ContinueWith(z => queue.Dispose()),
+                        Task.WhenAll(Task.Run(getter), Task.Run(getter), Task.Run(getter), Task.Run(getter))
+                    );
+                }).ToString());
+                Debug.WriteLine("ConcurrentQueue: " + timer.Time(100, () =>
+                {
+                    var queue = new ConcurrentQueue<int>();
+                    var setter = new Action(() =>
+                    {
+                        foreach (var v in Enumerable.Range(0, count))
+                        {
+                            queue.Enqueue(v);
+                        }
+                    });
+                    var getter = new Action(() =>
+                    {
+                        foreach (var item in queue)
+                        {
+
+                        }
+                    });
+                    Task.WaitAll(
+                        Task.WhenAll(Task.Run(setter), Task.Run(setter), Task.Run(setter), Task.Run(setter)),
+                        Task.WhenAll(Task.Run(getter), Task.Run(getter), Task.Run(getter), Task.Run(getter))
+                    );
+                }).ToString());
+            }
         }
     }
 }
