@@ -1,25 +1,18 @@
 ﻿
+using System.Runtime.CompilerServices;
+
 namespace System
 {
     public static class JasilyThrow
     {
-        /// <summary>
-        /// throw if current object is null.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="obj"></param>
-        /// <param name="paramName"></param>
-        /// <param name="message"></param>
-        /// <exception cref="System.ArgumentNullException">throw if current object is null.</exception>
-        /// <returns></returns>
-        public static T ThrowIfNull<T>(this T obj, string paramName, string message = null)
+        public static T ThrowIfNull<T>(this T obj,
+            [CallerFilePath] string file = "",
+            [CallerLineNumber] int line = 0)
         {
             if (obj == null)
             {
-                if (message == null)
-                    throw new ArgumentNullException(paramName);
-                else
-                    throw new ArgumentNullException(paramName, message);
+                var message = $"null reference on file [{file}] at line [{line}]";
+                throw new NullReferenceException(message);
             }
 
             return obj;

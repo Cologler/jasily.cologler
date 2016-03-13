@@ -56,20 +56,21 @@ namespace System.Shell
 
         public MicrosoftSingleInstanceProvider(TApplication app)
         {
-            this.App = app.ThrowIfNull("app");
+            if (app == null) throw new ArgumentNullException(nameof(app));
+            this.App = app;
         }
 
         public bool InitializeAsFirstInstance()
         {
-            var type = typeof (TApplication);
+            var type = typeof(TApplication);
             return base.InitializeAsFirstInstance(type.GUID.ToString());
         }
 
         public override void Callback(string[] args)
         {
- 	         base.Callback(args);
+            base.Callback(args);
 
-             this.App.SignalExternalCommandLineArgs(args);
+            this.App.SignalExternalCommandLineArgs(args);
         }
     }
 

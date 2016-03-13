@@ -2,7 +2,6 @@
 using JetBrains.Annotations;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using static System.Diagnostics.Debug;
 
 namespace System
 {
@@ -192,12 +191,7 @@ namespace System
         /// <param name="obj"></param>
         /// <param name="selector"></param>
         /// <returns></returns>
-        public static TOut CastWith<TIn, TOut>(this TIn obj, Func<TIn, TOut> selector)
-        {
-            Assert(selector != null);
-
-            return selector(obj);
-        }
+        public static TOut CastWith<TIn, TOut>(this TIn obj, Func<TIn, TOut> selector) => selector(obj);
 
         /// <summary>
         /// return a single item array : new[] { obj }.
