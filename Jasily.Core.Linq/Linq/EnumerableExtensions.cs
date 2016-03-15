@@ -60,17 +60,28 @@ namespace System.Linq
             return result;
         }
 
-        public static List<T> ToList<T>(this IEnumerable<T> source, CancellationToken token)
+        public static List<T> ToList<T>([NotNull] this IEnumerable<T> source, CancellationToken token)
         {
-            var collection = source as ICollection;
-
-            var result = collection == null ? new List<T>() : new List<T>(collection.Count);
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            // ReSharper disable once PossibleMultipleEnumeration
+            var count = source.TryGetCount();
+            var result = count >= 0 ? new List<T>(count) : new List<T>();
+            // ReSharper disable once PossibleMultipleEnumeration
             foreach (var item in source)
             {
                 token.ThrowIfCancellationRequested();
                 result.Add(item);
             }
             return result;
+        }
+
+        public static List<T> ToList<T>([NotNull] this IEnumerable<T> source, int capacity)
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+
+            var list = new List<T>(capacity);
+            list.AddRange(source);
+            return list;
         }
 
         public static int CopyToArray<T>(this IEnumerable<T> source, [NotNull] T[] array, int arrayIndex, int count)
