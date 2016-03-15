@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using System;
 
 namespace Jasily.Diagnostics.AttributeTest
 {
@@ -6,6 +7,8 @@ namespace Jasily.Diagnostics.AttributeTest
     {
         public bool CanNull { get; set; }
 
-        public abstract bool Test(object obj);
+        public bool Test(object obj) => obj == null ? this.CanNull : this.TestCore(obj);
+
+        protected abstract bool TestCore([NotNull] object obj);
     }
 }

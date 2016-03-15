@@ -61,8 +61,8 @@
     <Compile Include="ComponentModel\PropertySelector.cs" />
     <Compile Include="Container.cs" />
     <Compile Include="Diagnostics\AttributeTest\AttributeTestor.cs" />
-    <Compile Include="Diagnostics\AttributeTest\CanBeNullAttribute.cs" />
     <Compile Include="Diagnostics\AttributeTest\DateTimeKindAttribute.cs" />
+    <Compile Include="Diagnostics\AttributeTest\FloatRangeAttribute.cs" />
     <Compile Include="Diagnostics\IJasilyLoggerExtensions.cs" />
     <Compile Include="Diagnostics\IJasilyLoggerObject.cs" />
     <Compile Include="Diagnostics\IJasilyTestable.cs" />
@@ -70,7 +70,7 @@
     <Compile Include="Diagnostics\JasilyLogger.cs" />
     <Compile Include="Diagnostics\JasilyLoggerData.cs" />
     <Compile Include="Diagnostics\JasilyLoggerMode.cs" />
-    <Compile Include="Diagnostics\AttributeTest\SizeRangeAttribute.cs" />
+    <Compile Include="Diagnostics\AttributeTest\IntRangeAttribute.cs" />
     <Compile Include="Diagnostics\AttributeTest\TestAttribute.cs" />
     <Compile Include="IO\MemoryTributary.cs" />
     <Compile Include="Net\HttpUriBuilder.cs" />

@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.Contracts;
-using System.IO;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading;
-using static System.String;
 
 namespace Jasily.Diagnostics
 {
@@ -41,7 +36,7 @@ namespace Jasily.Diagnostics
 
         private static bool HasFlag(JasilyLoggerMode value, JasilyLoggerMode flag)
         {
-            return ((byte) value & (byte) flag) == (byte) flag;
+            return ((byte)value & (byte)flag) == (byte)flag;
         }
 
         public void WriteInfo<T>(JasilyLoggerMode mode, string message,
