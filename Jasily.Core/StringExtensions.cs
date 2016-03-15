@@ -148,6 +148,9 @@ namespace System
 
         #endregion
 
+        public static bool Contains(this string str, string value, StringComparison comparisonType)
+            => str.IndexOf(value, comparisonType) > -1;
+
         #region split & join
 
         public static string[] Split(this string text, string separator, StringSplitOptions options = StringSplitOptions.None)
