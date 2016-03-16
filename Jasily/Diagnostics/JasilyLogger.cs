@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -88,7 +89,7 @@ namespace Jasily.Diagnostics
 #if DEBUG
             Debug.WriteLine(msg);
 #else
-            Debug.WriteLine(Concat(data.DateTime.ToString("HH:mm:ss"), " ", msg));
+            Debug.WriteLine(string.Concat(data.DateTime.ToString("HH:mm:ss"), " ", msg));
 #endif
 
             if (HasFlag(mode, JasilyLoggerMode.RealTimeTrack))
