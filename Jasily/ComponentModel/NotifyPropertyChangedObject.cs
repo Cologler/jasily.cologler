@@ -129,7 +129,7 @@ namespace Jasily.ComponentModel
                 from property in type.GetRuntimeProperties()
                 let attr = property.GetCustomAttribute<NotifyPropertyChangedAttribute>()
                 where attr != null
-                orderby attr.Order
+                orderby attr.AsOrderable().GetOrderCode()
                 select property.Name
             ).ToArray();
         }

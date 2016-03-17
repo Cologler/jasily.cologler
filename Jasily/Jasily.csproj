@@ -72,6 +72,7 @@
     <Compile Include="Diagnostics\JasilyLoggerMode.cs" />
     <Compile Include="Diagnostics\AttributeTest\IntRangeAttribute.cs" />
     <Compile Include="Diagnostics\AttributeTest\TestAttribute.cs" />
+    <Compile Include="IOrderable.cs" />
     <Compile Include="IO\MemoryTributary.cs" />
     <Compile Include="Net\HttpUriBuilder.cs" />
     <Compile Include="Net\Http\RangeHeader.cs" />
@@ -79,6 +80,7 @@
     <Compile Include="Net\WebResult.cs" />
     <Compile Include="Net\WebResultExtensions.cs" />
     <Compile Include="Net\WebResultType.cs" />
+    <Compile Include="Orderable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reflection\JasilyMemberReader.cs" />
     <Compile Include="Reflection\JasilyMemberWriter.cs" />
