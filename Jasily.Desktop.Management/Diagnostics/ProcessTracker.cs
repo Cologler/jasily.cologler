@@ -50,7 +50,7 @@ namespace Jasily.Desktop.Management.Diagnostics
         {
             Task.Run(async () =>
             {
-                var ids = new int[0];
+                var ids = Process.GetProcesses().Select(z => z.Id).ToArray();
                 while (!this.isDisposed)
                 {
                     await Task.Delay(delay);
