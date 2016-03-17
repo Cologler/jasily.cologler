@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using JetBrains.Annotations;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -274,24 +275,25 @@ namespace System
 
         #endregion
 
-        #region after first and last
+        #region after/before first and last
 
-        public static string AfterFirst(this string str, string spliter)
+        public static string AfterFirst([NotNull] this string str, [NotNull] string spliter,
+            StringComparison comparisonType = StringComparison.Ordinal)
         {
             if (str == null) throw new ArgumentNullException(nameof(str));
-            if (string.IsNullOrEmpty(spliter)) throw new ArgumentNullException(nameof(spliter));
+            if (string.IsNullOrEmpty(spliter)) throw new ArgumentException(nameof(spliter));
 
-            var index = str.IndexOf(spliter, StringComparison.Ordinal);
+            var index = str.IndexOf(spliter, comparisonType);
             return index < 1 ? str : str.Substring(index + 1);
         }
-        public static string AfterFirst(this string str, char spliter)
+        public static string AfterFirst([NotNull] this string str, char spliter)
         {
             if (str == null) throw new ArgumentNullException(nameof(str));
 
             var index = str.IndexOf(spliter);
             return index < 1 ? str : str.Substring(index + 1);
         }
-        public static string AfterFirst(this string str, params char[] spliter)
+        public static string AfterFirst([NotNull] this string str, params char[] spliter)
         {
             if (str == null) throw new ArgumentNullException(nameof(str));
 
@@ -299,27 +301,51 @@ namespace System
             return index < 1 ? str : str.Substring(index + 1);
         }
 
-        public static string AfterLast(this string str, string spliter)
+        public static string AfterLast([NotNull] this string str, [NotNull] string spliter,
+            StringComparison comparisonType = StringComparison.Ordinal)
         {
             if (str == null) throw new ArgumentNullException(nameof(str));
-            if (string.IsNullOrEmpty(spliter)) throw new ArgumentNullException(nameof(spliter));
+            if (string.IsNullOrEmpty(spliter)) throw new ArgumentException(nameof(spliter));
 
-            var index = str.LastIndexOf(spliter, StringComparison.Ordinal);
+            var index = str.LastIndexOf(spliter, comparisonType);
             return index < 1 ? str : str.Substring(index + 1);
         }
-        public static string AfterLast(this string str, char spliter)
+        public static string AfterLast([NotNull] this string str, char spliter)
         {
             if (str == null) throw new ArgumentNullException(nameof(str));
 
             var index = str.LastIndexOf(spliter);
             return index < 1 ? str : str.Substring(index + 1);
         }
-        public static string AfterLast(this string str, params char[] spliter)
+        public static string AfterLast([NotNull] this string str, params char[] spliter)
         {
             if (str == null) throw new ArgumentNullException(nameof(str));
 
             var index = str.LastIndexOfAny(spliter);
             return index < 1 ? str : str.Substring(index + 1);
+        }
+
+        public static string BeforeFirst([NotNull] this string str, [NotNull] string spliter,
+            StringComparison comparisonType = StringComparison.Ordinal)
+        {
+            if (str == null) throw new ArgumentNullException(nameof(str));
+            if (string.IsNullOrEmpty(spliter)) throw new ArgumentException(nameof(spliter));
+
+            var index = str.IndexOf(spliter, comparisonType);
+            if (index < 0) return str;
+            return index == 0 ? string.Empty : str.Substring(0, index);
+        }
+        public static string BeforeFirst([NotNull] this string str, [NotNull] string[] spliters,
+            StringComparison comparisonType = StringComparison.Ordinal)
+        {
+            if (str == null) throw new ArgumentNullException(nameof(str));
+            if (spliters == null) throw new ArgumentNullException(nameof(spliters));
+            if (spliters.Length == 0 || spliters.Any(string.IsNullOrEmpty)) throw new ArgumentException(nameof(spliters));
+
+            var indexs = spliters.Select(z => str.IndexOf(z, comparisonType)).Where(z => z >= 0).ToArray();
+            if (indexs.Length == 0) return str;
+            var index = indexs.Min();
+            return index == 0 ? string.Empty : str.Substring(0, index);
         }
 
         #endregion
