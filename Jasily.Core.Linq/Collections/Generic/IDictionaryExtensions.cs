@@ -1,4 +1,6 @@
 ﻿
+using JetBrains.Annotations;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace System.Collections.Generic
@@ -135,7 +137,14 @@ namespace System.Collections.Generic
 
         #endregion
 
-        public static int RemoveKeyRange<TKey, TValue>(this IDictionary<TKey, TValue> obj, IEnumerable<TKey> keys)
-            => keys.Count(obj.Remove);
+        public static int RemoveKeyRange<TKey, TValue>([NotNull] this IDictionary<TKey, TValue> obj,
+            [NotNull] IEnumerable<TKey> keys) => keys.Count(obj.Remove);
+
+        public static IReadOnlyDictionary<TKey, TValue> AsReadOnly<TKey, TValue>(
+            [NotNull] this IDictionary<TKey, TValue> source)
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            return new ReadOnlyDictionary<TKey, TValue>(source);
+        }
     }
 }
