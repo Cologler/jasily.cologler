@@ -60,19 +60,40 @@ namespace System.Linq
             return result;
         }
 
-        public static List<T> ToList<T>([NotNull] this IEnumerable<T> source, CancellationToken token)
+        public static List<T> ToList<T>([NotNull] this IEnumerable<T> source, CancellationToken token, int detect = 30)
         {
             if (source == null) throw new ArgumentNullException(nameof(source));
+            if (detect <= 0) throw new ArgumentOutOfRangeException(nameof(detect));
+
             // ReSharper disable once PossibleMultipleEnumeration
             var count = source.TryGetCount();
             var result = count >= 0 ? new List<T>(count) : new List<T>();
-            // ReSharper disable once PossibleMultipleEnumeration
-            foreach (var item in source)
+            if (detect == 1)
             {
-                token.ThrowIfCancellationRequested();
-                result.Add(item);
+                // ReSharper disable once PossibleMultipleEnumeration
+                foreach (var item in source)
+                {
+                    token.ThrowIfCancellationRequested();
+                    result.Add(item);
+                }
+                return result;
             }
-            return result;
+            else
+            {
+                // ReSharper disable once PossibleMultipleEnumeration
+                using (var itor = source.GetEnumerator())
+                {
+                    while (true)
+                    {
+                        token.ThrowIfCancellationRequested();
+                        for (var i = 0; i < detect; i++)
+                        {
+                            if (!itor.MoveNext()) return result;
+                            result.Add(itor.Current);
+                        }
+                    }
+                }
+            }
         }
 
         public static List<T> ToList<T>([NotNull] this IEnumerable<T> source, int capacity)
