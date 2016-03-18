@@ -30,6 +30,8 @@ namespace Jasily.ComponentModel
             return new PropertySelector<T>(null).Select(selectExpression);
         }
 
+        public static PropertySelector<T> Start() => Start(z => z);
+
         public PropertySelector<TProperty> Select<TProperty>([NotNull] Expression<Func<T, TProperty>> selectExpression)
         {
             if (selectExpression == null) throw new ArgumentNullException(nameof(selectExpression));
