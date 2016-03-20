@@ -216,7 +216,7 @@ namespace System
 
         #endregion
 
-        public static NameValuePair<string, T> WithName<T>(this T obj, string name) => new NameValuePair<string, T>(name, obj);
+        public static NameValuePair<T> WithName<T>(this T obj, string name) => new NameValuePair<T>(name, obj);
 
         #region try
 

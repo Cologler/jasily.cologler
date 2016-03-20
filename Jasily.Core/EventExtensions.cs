@@ -8,17 +8,11 @@ namespace System
         public static void Invoke(this EventHandler e, object sender) => e.Invoke(sender, EventArgs.Empty);
         public static void Invoke(this EventHandler e, object sender, params EventArgs[] args)
         {
-            foreach (var arg in args)
-            {
-                e.Invoke(sender, arg);
-            }
+            foreach (var arg in args) e.Invoke(sender, arg);
         }
         public static void Invoke(this EventHandler e, object sender, IEnumerable<EventArgs> args)
         {
-            foreach (var arg in args)
-            {
-                e.Invoke(sender, arg);
-            }
+            foreach (var arg in args) e.Invoke(sender, arg);
         }
         public static void Invoke<T>(this EventHandler<T> e, object sender) => e.Invoke(sender, default(T));
         public static void Invoke<T>(this EventHandler<T> e, object sender, params T[] args)
@@ -182,7 +176,7 @@ namespace System
 
         #endregion
 
-        #region keep for old api
+        #region fire
 
         public static void Fire(this EventHandler e, object sender) => e?.Invoke(sender);
         public static void Fire(this EventHandler e, object sender, EventArgs arg) => e?.Invoke(sender, arg);
