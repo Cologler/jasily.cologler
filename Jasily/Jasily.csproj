@@ -89,6 +89,7 @@
     <Compile Include="Reflection\JasilyMemberType.cs" />
     <Compile Include="Reflection\ReadableMemberAttribute.cs" />
     <Compile Include="Reflection\WriteableMemberAttribute.cs" />
+    <Compile Include="Text\PinYinManager.cs" />
     <Compile Include="Text\TextReplacer.cs" />
     <Compile Include="Threading\JasilyTimeout.cs" />
     <Compile Include="Windows\JasilyClipboard.cs" />

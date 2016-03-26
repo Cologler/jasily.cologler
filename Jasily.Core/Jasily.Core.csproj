@@ -101,7 +101,6 @@
     <Compile Include="UsingAnything.cs" />
     <Compile Include="Net\HttpWebRequestResourceString.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Text\PinYinManager.cs" />
     <Compile Include="Text\RegularExpressions\RegexResourceStrings.cs" />
     <Compile Include="Threading\Tasks\TaskExtensions.cs" />
     <Compile Include="Xml\Serialization\JasilyXmlSerializer.cs" />
