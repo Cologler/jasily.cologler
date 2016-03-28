@@ -41,6 +41,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collections\Generic\ArrayExtensions.cs" />
     <Compile Include="Collections\Generic\ICollectionExtensions.cs" />
     <Compile Include="Collections\Generic\IDictionaryExtensions.cs" />
     <Compile Include="Collections\Generic\IListExtensions.cs" />
