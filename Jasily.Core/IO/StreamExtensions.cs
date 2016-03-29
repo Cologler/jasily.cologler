@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -22,6 +23,8 @@ namespace System.IO
             }
         }
 
+        #region read & write
+
         /// <summary>
         /// write whole buffer into stream
         /// </summary>
@@ -43,13 +46,31 @@ namespace System.IO
             await stream.WriteAsync(buffer, 0, buffer.Length);
         }
 
-        #region read & write
-
         public static async Task<int> ReadAsync(this Stream stream, JasilyBuffer buffer)
             => await stream.ReadAsync(buffer.Buffer, buffer.Offset, buffer.Count);
 
         public static async Task WriteAsync(this Stream stream, JasilyBuffer buffer)
             => await stream.WriteAsync(buffer.Buffer, buffer.Offset, buffer.Count);
+
+        public static IEnumerable<byte[]> ReadAsEnumerable(this Stream stream, int maxCount, bool reuseBuffer = false)
+        {
+            var buffer = new byte[maxCount];
+            int readed;
+            if (reuseBuffer)
+            {
+                while ((readed = stream.Read(buffer, 0, maxCount)) != 0)
+                {
+                    yield return readed != maxCount ? buffer.Take(readed).ToArray() : buffer;
+                }
+            }
+            else
+            {
+                while ((readed = stream.Read(buffer, 0, maxCount)) != 0)
+                {
+                    yield return readed != maxCount ? buffer.Take(readed).ToArray() : buffer.ToArray();
+                }
+            }
+        }
 
         #endregion
 
