@@ -168,8 +168,8 @@ namespace System
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
-        public static IEnumerable<string> AsLines(this string text)
-            => text?.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
+        public static IEnumerable<string> AsLines(this string text, StringSplitOptions options = StringSplitOptions.None)
+            => text?.Split(new[] { "\r\n", "\n" }, options);
 
         /// <summary>
         /// use Environment.NewLine to join texts.
