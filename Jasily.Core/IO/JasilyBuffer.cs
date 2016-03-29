@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace System.IO
+﻿namespace System.IO
 {
     public struct JasilyBuffer
     {
@@ -21,13 +15,13 @@ namespace System.IO
 
         public int Count { get; }
 
-        public JasilyBuffer GetInvalidBuffer()
+        public JasilyBuffer GetValidBuffer()
         {
             if (this.Offset == 0 && this.Count == this.Buffer.Length)
                 return this.Clone();
 
             var buffer = new byte[this.Count];
-            Array.ConstrainedCopy(this.Buffer, this.Offset, buffer, 0, this.Count);
+            Array.Copy(this.Buffer, this.Offset, buffer, 0, this.Count);
             return new JasilyBuffer(buffer, 0, this.Count);
         }
 

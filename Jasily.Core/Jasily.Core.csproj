@@ -53,14 +53,9 @@
     <Compile Include="Data\IJasilyEntitySetProvider.cs" />
     <Compile Include="Data\IJasilyEntitySetReader.cs" />
     <Compile Include="Data\IJasilyEntitySetWriter.cs" />
-    <Compile Include="Enums\ByteSize.cs" />
-    <Compile Include="Enums\ByteSizeTypeExtensions.cs" />
     <Compile Include="Enums\CollectionChangedAction.cs" />
     <Compile Include="Enums\ObjectChangedAction.cs" />
-    <Compile Include="Enums\PropertyChangedAction.cs" />
     <Compile Include="Enums\ResourceChangedAction.cs" />
-    <Compile Include="Enums\BinarySizeType.cs" />
-    <Compile Include="Enums\TimeSpace.cs" />
     <Compile Include="EventArgs.cs" />
     <Compile Include="EventArgses\JasilyProgressChangedEventArgs.cs" />
     <Compile Include="IBuilder.cs" />
