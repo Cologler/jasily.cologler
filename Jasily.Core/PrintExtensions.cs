@@ -192,6 +192,15 @@ namespace System
                         return;
                     }
 
+                    var type = obj.GetType();
+                    if (type.GetTypeInfo().IsEnum)
+                    {
+                        this.Builder.Append(type.Name);
+                        this.Builder.Append('.');
+                        this.Builder.Append(obj);
+                        return;
+                    }
+
                     this.Builder.Append(obj);
                 }
 
