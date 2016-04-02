@@ -8,6 +8,8 @@ namespace System.IO
 {
     public static class StreamExtensions
     {
+        #region to array
+
         /// <summary>
         /// 将流内容写入字节数组。
         /// </summary>
@@ -22,6 +24,18 @@ namespace System.IO
                 return ms.ToArray();
             }
         }
+
+        public static byte[] ToArray(this Stream stream, CancellationToken cancellationToken)
+        {
+            using (var ms = stream.CanSeek ? new MemoryStream(Convert.ToInt32(stream.Length)) : new MemoryStream())
+            {
+                if (stream.CanSeek && stream.Position != 0) stream.Position = 0;
+                stream.CopyTo(ms, cancellationToken);
+                return ms.ToArray();
+            }
+        }
+
+        #endregion
 
         #region read & write
 
@@ -80,6 +94,21 @@ namespace System.IO
         /// see http://referencesource.microsoft.com/#mscorlib/system/io/stream.cs,2a0f078c2e0c0aa8
         /// </summary>
         private const int DefaultCopyBufferSize = 81920;
+
+        public static void CopyTo(this Stream stream, Stream destination, CancellationToken cancellationToken,
+            int bufferSize = DefaultCopyBufferSize)
+        {
+            var buffer = new byte[bufferSize];
+            int read;
+            cancellationToken.ThrowIfCancellationRequested();
+            while ((read = stream.Read(buffer, 0, buffer.Length)) != 0)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                destination.Write(buffer, 0, read);
+                cancellationToken.ThrowIfCancellationRequested();
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+        }
 
         public static void CopyTo(this Stream stream, Stream destination, IObserver<long> progressChangedWatcher)
             => CopyTo(stream, destination, DefaultCopyBufferSize, progressChangedWatcher);
