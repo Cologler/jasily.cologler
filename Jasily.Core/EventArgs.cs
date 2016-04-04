@@ -8,6 +8,8 @@
         }
 
         public T Value { get; }
+
+        public static implicit operator EventArgs<T>(T value) => new EventArgs<T>(value);
     }
 
     public class EventArgs<T1, T2> : EventArgs
