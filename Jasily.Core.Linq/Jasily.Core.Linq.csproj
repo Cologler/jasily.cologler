@@ -43,7 +43,7 @@
   <ItemGroup>
     <Compile Include="Collections\Generic\ArrayExtensions.cs" />
     <Compile Include="Collections\Generic\ICollectionExtensions.cs" />
-    <Compile Include="Collections\Generic\IDictionaryExtensions.cs" />
+    <Compile Include="Collections\Generic\DictionaryExtensions.cs" />
     <Compile Include="Collections\Generic\IListExtensions.cs" />
     <Compile Include="Collections\Generic\ItemExtensions.cs" />
     <Compile Include="Linq\AsyncEnumerableExtensions.cs" />
