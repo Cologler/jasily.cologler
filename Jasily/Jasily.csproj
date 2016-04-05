@@ -77,6 +77,7 @@
     <Compile Include="IO\ByteSize.cs" />
     <Compile Include="IO\ByteSizeTypeExtensions.cs" />
     <Compile Include="IO\MemoryTributary.cs" />
+    <Compile Include="JasilyNullable.cs" />
     <Compile Include="Net\HttpUriBuilder.cs" />
     <Compile Include="Net\Http\RangeHeader.cs" />
     <Compile Include="Net\Sockets\Port.cs" />
