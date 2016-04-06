@@ -1,4 +1,6 @@
-﻿namespace System
+﻿// ReSharper disable MemberCanBeProtected.Global
+// ReSharper disable MemberCanBePrivate.Global
+namespace System
 {
     public class EventArgs<T> : EventArgs
     {

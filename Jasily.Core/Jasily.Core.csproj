@@ -42,7 +42,6 @@
     <Compile Include="Collections\Interval.cs" />
     <Compile Include="Diagnostics\IJasilyPrinter.cs" />
     <Compile Include="Empty.cs" />
-    <Compile Include="Enums\SupportedFlagsAttribute.cs" />
     <Compile Include="EventArgses\ChangingEventArgs.cs" />
     <Compile Include="Collections\Generic\ITryGetValueExtensions.cs" />
     <Compile Include="Collections\Generic\ITryGetValue.cs" />
@@ -52,7 +51,6 @@
     <Compile Include="ComponentModel\INotifyPropertyChangedExtensions.cs" />
     <Compile Include="Enums\CollectionChangedAction.cs" />
     <Compile Include="Enums\ObjectChangedAction.cs" />
-    <Compile Include="Enums\ResourceChangedAction.cs" />
     <Compile Include="EventArgs.cs" />
     <Compile Include="EventArgses\JasilyProgressChangedEventArgs.cs" />
     <Compile Include="IBuilder.cs" />
@@ -65,7 +63,7 @@
     <Compile Include="IO\TextReaderExtensions.cs" />
     <Compile Include="IPrint.cs" />
     <Compile Include="ByteArrayExtensions.cs" />
-    <Compile Include="JasilyDateTime.cs" />
+    <Compile Include="DateTimeExtensions.cs" />
     <Compile Include="JasilyEnum.cs" />
     <Compile Include="Net\HttpWebRequestExtensions.cs" />
     <Compile Include="NumberExtensions.cs" />
