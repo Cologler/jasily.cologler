@@ -10,10 +10,8 @@ namespace System.Linq
     {
         #region to
 
-        public static TSource[] ToArray<TSource>(this IEnumerable<TSource> source, CancellationToken token)
-        {
-            return source.ToList(token).ToArray();
-        }
+        public static TSource[] ToArray<TSource>([NotNull] this IEnumerable<TSource> source, CancellationToken token)
+            => source.ToList(token).ToArray();
 
         public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this IEnumerable<TSource> source,
             Func<TSource, TKey> keySelector, CancellationToken token)
@@ -105,8 +103,9 @@ namespace System.Linq
             return list;
         }
 
-        public static int CopyToArray<T>(this IEnumerable<T> source, [NotNull] T[] array, int arrayIndex, int count)
+        public static int CopyToArray<T>([NotNull] this IEnumerable<T> source, [NotNull] T[] array, int arrayIndex, int count)
         {
+            if (source == null) throw new ArgumentNullException(nameof(source));
             if (array == null) throw new ArgumentNullException(nameof(array));
             if (arrayIndex < 0) throw new ArgumentOutOfRangeException(nameof(arrayIndex));
             if (count < 0) throw new ArgumentOutOfRangeException(nameof(count));
@@ -125,25 +124,26 @@ namespace System.Linq
 
         #region split
 
-        public static IEnumerable<IEnumerable<TSource>> Split<TSource>(this IEnumerable<TSource> source, int chunkSize)
+        public static IEnumerable<IEnumerable<TSource>> Split<TSource>([NotNull] this IEnumerable<TSource> source, int chunkSize)
         {
             if (source == null) throw new ArgumentNullException(nameof(source));
             if (chunkSize < 1) throw new ArgumentOutOfRangeException(nameof(chunkSize), chunkSize, "must > 0.");
 
-            var list = new List<TSource>(chunkSize);
-            foreach (var item in source)
+            if (chunkSize == 1)
             {
-                list.Add(item);
-                if (list.Count == chunkSize)
+                foreach (var item in source) yield return item.IntoArray();
+            }
+            else // chunkSize > 1
+            {
+                var count = chunkSize - 1; // > 0
+                using (var itor = source.GetEnumerator())
                 {
-                    yield return list;
-                    list = new List<TSource>(chunkSize);
+                    if (itor.MoveNext()) yield return itor.Current.IntoArray().Concat(itor.Take(count));
                 }
             }
-            if (list.Count != 0) yield return list;
         }
 
-        public static Tuple<IEnumerable<T>, IEnumerable<T>> Split<T>(this IEnumerable<T> source, Func<T, bool> trueToLeft)
+        public static Tuple<IEnumerable<T>, IEnumerable<T>> Split<T>([NotNull] this IEnumerable<T> source, Func<T, bool> trueToLeft)
         {
             if (source == null) throw new ArgumentNullException(nameof(source));
             if (trueToLeft == null) throw new ArgumentNullException(nameof(trueToLeft));
