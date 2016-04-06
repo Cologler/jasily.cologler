@@ -1,12 +1,26 @@
-﻿using System.Collections.Generic;
+﻿using JetBrains.Annotations;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace System.IO
 {
     public static class TextReaderExtensions
     {
-        public static IEnumerable<string> EnumerateLines(this TextReader reader)
+        /// <summary>
+        /// read next char if not end.
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <returns></returns>
+        public static char? ReadChar([NotNull] this TextReader reader)
         {
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            var n = reader.Read();
+            return n == -1 ? (char?)null : (char)n;
+        }
+
+        public static IEnumerable<string> EnumerateLines([NotNull] this TextReader reader)
+        {
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
             while (true)
             {
                 var line = reader.ReadLine();
@@ -15,8 +29,9 @@ namespace System.IO
             }
         }
 
-        public static IEnumerable<char> EnumerateChars(this TextReader reader)
+        public static IEnumerable<char> EnumerateChars([NotNull] this TextReader reader)
         {
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
             while (true)
             {
                 var ch = reader.Read();
@@ -25,8 +40,9 @@ namespace System.IO
             }
         }
 
-        public static IEnumerable<char[]> EnumerateBlocks(this TextReader reader, int maxBlockSize)
+        public static IEnumerable<char[]> EnumerateBlocks([NotNull] this TextReader reader, int maxBlockSize)
         {
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
             while (true)
             {
                 var block = new char[maxBlockSize];

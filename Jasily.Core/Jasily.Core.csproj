@@ -65,7 +65,6 @@
     <Compile Include="IO\JasilyBuffer.cs" />
     <Compile Include="IO\JasilyStreamCopyObserver.cs" />
     <Compile Include="IO\StreamExtensions.cs" />
-    <Compile Include="IO\JasilyStringReader.cs" />
     <Compile Include="IO\MergeReadonlyStream.cs" />
     <Compile Include="IO\TextReaderExtensions.cs" />
     <Compile Include="IPrint.cs" />
