@@ -42,9 +42,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Collections\Generic\ArrayExtensions.cs" />
-    <Compile Include="Collections\Generic\ICollectionExtensions.cs" />
+    <Compile Include="Collections\Generic\CollectionExtensions.cs" />
     <Compile Include="Collections\Generic\DictionaryExtensions.cs" />
-    <Compile Include="Collections\Generic\IListExtensions.cs" />
+    <Compile Include="Collections\Generic\ListExtensions.cs" />
     <Compile Include="Collections\Generic\ItemExtensions.cs" />
     <Compile Include="Linq\AsyncEnumerableExtensions.cs" />
     <Compile Include="Linq\EnumerableExtensions.cs" />

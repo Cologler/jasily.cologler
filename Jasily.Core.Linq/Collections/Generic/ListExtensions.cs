@@ -3,8 +3,10 @@ using System.Collections.ObjectModel;
 
 namespace System.Collections.Generic
 {
-    public static class IListExtensions
+    public static class ListExtensions
     {
+        #region IList
+
         public static IReadOnlyList<T> AsReadOnly<T>([NotNull] this IList<T> source)
         {
             if (source == null) throw new ArgumentNullException(nameof(source));
@@ -16,5 +18,7 @@ namespace System.Collections.Generic
             if (source == null) throw new ArgumentNullException(nameof(source));
             for (var i = count; i < source.Count; i++) yield return source[i];
         }
+
+        #endregion
     }
 }
