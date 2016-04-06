@@ -50,10 +50,6 @@
     <Compile Include="Collections\ObjectModel\CollectionChangedEventArgs.cs" />
     <Compile Include="Collections\ObjectModel\ObservableCollectionGroup.cs" />
     <Compile Include="ComponentModel\INotifyPropertyChangedExtensions.cs" />
-    <Compile Include="Data\IJasilyEntity.cs" />
-    <Compile Include="Data\IJasilyEntitySetProvider.cs" />
-    <Compile Include="Data\IJasilyEntitySetReader.cs" />
-    <Compile Include="Data\IJasilyEntitySetWriter.cs" />
     <Compile Include="Enums\CollectionChangedAction.cs" />
     <Compile Include="Enums\ObjectChangedAction.cs" />
     <Compile Include="Enums\ResourceChangedAction.cs" />
@@ -78,8 +74,6 @@
     <Compile Include="Reflection\JasilyCustomAttributeExtensions.cs" />
     <Compile Include="Reflection\JasilyReflectionExtensions.cs" />
     <Compile Include="RequestActionEventArgs.cs" />
-    <Compile Include="Services\IServiceProvider.cs" />
-    <Compile Include="Services\IServiceProviderFactory.cs" />
     <Compile Include="ITryEnter.cs" />
     <Compile Include="Singleton.cs" />
     <Compile Include="Text\StringBuilderExtensions.cs" />

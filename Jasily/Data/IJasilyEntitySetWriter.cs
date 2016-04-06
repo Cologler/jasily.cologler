@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace System.Data
+namespace Jasily.Data
 {
-    public interface IJasilyEntitySetWriter<TEntity, TKey>
+    public interface IJasilyEntitySetWriter<in TEntity, in TKey>
         where TEntity : class, IJasilyEntity<TKey>
     {
         /// <summary>

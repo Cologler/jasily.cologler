@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace System.Data
+namespace Jasily.Data
 {
     public interface IJasilyEntitySetReader<TEntity, TKey>
         where TEntity : class, IJasilyEntity<TKey>
@@ -16,7 +17,7 @@ namespace System.Data
         /// <summary>
         /// return a entities dictionary where match id.
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="ids"></param>
         /// <returns></returns>
         Task<IDictionary<TKey, TEntity>> FindAsync(IEnumerable<TKey> ids);
 
