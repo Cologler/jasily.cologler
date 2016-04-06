@@ -1,143 +1,132 @@
-﻿using System;
+﻿using Jasily.Collections.Generic;
+using JetBrains.Annotations;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading;
 
 namespace Jasily.Text
 {
     public sealed class TextReplacer
     {
-        private Comparer<KeyValueFinder> comparer;
-
-        public TextReplacer(string originText)
+        public static string Replace([NotNull] string text, [NotNull] IReadOnlyDictionary<string, string> replacements,
+            StringComparison comparison = StringComparison.Ordinal)
         {
-            if (originText == null) throw new ArgumentNullException(nameof(originText));
+            if (text == null) throw new ArgumentNullException(nameof(text));
+            if (replacements == null) throw new ArgumentNullException(nameof(replacements));
 
-            this.OriginText = originText;
+            if (text.Length == 0 || replacements.Count == 0) return text;
+
+            var comparer = new JasilyEqualityComparer<string>(JasilyComparer.GetStringComparer(comparison));
+            var hashSet = new HashSet<string>(comparer);
+            var replacer = new TextReplacer(text, comparison);
+            var finders = new List<KeyValueFinder>(replacements.Count);
+            foreach (var pair in replacements)
+            {
+                if (string.IsNullOrEmpty(pair.Key))
+                    throw new ArgumentException("replacement source can not be empty", nameof(replacements));
+                if (pair.Value == null)
+                    throw new ArgumentNullException(nameof(replacements), "replacement dest can not be empty");
+                if (!hashSet.Add(pair.Key))
+                    throw new ArgumentException($"replacement source [{comparer.LastCompareItem1}] was conflict with [{comparer.LastCompareItem2}]",
+                        nameof(replacements));
+
+                finders.Add(new KeyValueFinder(replacer, pair.Key, pair.Value));
+            }
+            return replacer.Replace(finders);
         }
 
-        public string OriginText { get; }
-
-        private int StartPointer;
-
-        public string Replace(IReadOnlyDictionary<string, string> replacement)
+        private TextReplacer([NotNull] string originText, StringComparison comparison)
         {
-            if (replacement == null) throw new ArgumentNullException(nameof(replacement));
-            
-            if (this.OriginText.Length == 0) return string.Empty;
+            this.originText = originText;
+            this.comparison = comparison;
+        }
 
-            Interlocked.CompareExchange(ref this.comparer,
-                Comparer<KeyValueFinder>.Create(KeyValueFinder.Compare),
-                null);
+        [NotNull]
+        private readonly string originText;
 
-            var rl = replacement
-                    .Select(z => new KeyValueFinder(this, z.Key, z.Value))
-                    .Where(z => z.Current > -1)
-                    .ToList();
-            if (rl.Count == 0) return this.OriginText;
-            rl.Sort(this.comparer);
+        private readonly StringComparison comparison;
+
+        private int startIndex;
+
+        private string Replace(List<KeyValueFinder> finders)
+        {
+            foreach (var finder in finders)
+            {
+                finder.Reset();
+                finder.MoveNext();
+            }
+            finders.RemoveAll(z => z.Current < 0);
+            if (finders.Count == 0) return this.originText;
+            finders.Sort(KeyValueFinder.Comparer);
 
             var sb = new StringBuilder();
-            lock (this.comparer)
+            while (true)
             {
-                this.StartPointer = 0;
+                if (finders.Count == 0) break;
 
-                while (true)
+                var first = finders[0];
+
+                // add replacement
+                if (first.Current > this.startIndex) sb.Append(this.originText, this.startIndex, first.Current - this.startIndex);
+                sb.Append(first.To);
+                this.startIndex = first.Current + first.From.Length;
+
+                // resort
+                foreach (var finder in finders.ToArray())
                 {
-                    if (rl.Count == 0) break;
-                    var first = rl[0];
-
-                    if (rl.Count > 1 && first.Current == rl[1].Current)
-                        throw new ArgumentException($"key '{first.Key}' was conflict with key '{rl[1].Key}'");
-
-                    if (first.Current > this.StartPointer)
-                        sb.Append(this.OriginText, this.StartPointer, first.Current - this.StartPointer);
-                    sb.Append(first.Value);
-                    this.StartPointer = first.Current + first.Key.Length;
-
-                    // resort
-                    rl.Remove(first);
-                    if (first.MoveNext())
-                        rl.Insert(~rl.BinarySearch(first, this.comparer), first);
+                    if (finder.Current < this.startIndex)
+                    {
+                        finders.Remove(finder);
+                        if (finder.MoveNext()) finders.Insert(~finders.BinarySearch(finder, KeyValueFinder.Comparer), finder);
+                    }
                 }
-
-                if (this.StartPointer < this.OriginText.Length - 1) sb.Append(this.OriginText, this.StartPointer, this.OriginText.Length - this.StartPointer);
             }
-            return sb.ToString();
+            return sb.Append(this.originText, this.startIndex).ToString();
         }
 
         private class KeyValueFinder : IEnumerator<int>
         {
-            public readonly string Key;
-            public readonly string Value;
+            [NotNull]
+            public readonly string From;
+            [NotNull]
+            public readonly string To;
+            [NotNull]
             private readonly TextReplacer parent;
 
-            public KeyValueFinder(TextReplacer parent, string key, string value)
+            public KeyValueFinder([NotNull] TextReplacer parent, [NotNull] string from, [NotNull] string to)
             {
-                if (key.IsNullOrEmpty()) throw new ArgumentException("key can not be empty or null.");
-                if (value == null) throw new ArgumentNullException(nameof(value));
-
-                this.Key = key;
-                this.Value = value;
+                this.From = from;
+                this.To = to;
                 this.parent = parent;
-                this.Current = -1;
 
                 this.Reset();
                 this.MoveNext();
             }
 
-            /// <summary>
-            /// 将枚举数推进到集合的下一个元素。
-            /// </summary>
-            /// <returns>
-            /// 如果枚举数成功地推进到下一个元素，则为 true；如果枚举数越过集合的结尾，则为 false。
-            /// </returns>
-            /// <exception cref="T:System.InvalidOperationException">在创建了枚举数后集合被修改了。</exception>
             public bool MoveNext()
             {
-                if (this.parent.StartPointer < this.Current) return true;
-                var start = this.Current == -1 ? 0 : this.Current + this.Key.Length;
-                if (start >= this.parent.OriginText.Length) return false;
-                this.Current = this.parent.OriginText.IndexOf(this.Key, start, StringComparison.Ordinal);
-                return this.Current != -1;
+                if (this.parent.originText.Length - this.parent.startIndex < this.From.Length) return false;
+                if (this.parent.startIndex <= this.Current) return true; // last time
+                var start = this.Current < 0 ? 0 : this.Current + this.From.Length;
+                if (start >= this.parent.originText.Length) return false;
+                this.Current = this.parent.originText.IndexOf(this.From, start, this.parent.comparison);
+                return this.Current >= 0;
             }
 
-            /// <summary>
-            /// 将枚举数设置为其初始位置，该位置位于集合中第一个元素之前。
-            /// </summary>
-            /// <exception cref="T:System.InvalidOperationException">在创建了枚举数后集合被修改了。</exception>
             public void Reset() => this.Current = -1;
 
-            /// <summary>
-            /// 获取集合中位于枚举数当前位置的元素。
-            /// </summary>
-            /// <returns>
-            /// 集合中位于枚举数当前位置的元素。
-            /// </returns>
             public int Current { get; private set; }
 
-            /// <summary>
-            /// 获取集合中的当前元素。
-            /// </summary>
-            /// <returns>
-            /// 集合中的当前元素。
-            /// </returns>
             object IEnumerator.Current => this.Current;
 
-            /// <summary>
-            /// 执行与释放或重置非托管资源相关的应用程序定义的任务。
-            /// </summary>
-            public void Dispose()
-            {
-                
-            }
+            public void Dispose() => this.Current = -1;
 
-            public static int Compare(KeyValueFinder x, KeyValueFinder y)
-            {
-                return x.Current.CompareTo(y.Current);
-            }
+            private static int Compare(KeyValueFinder x, KeyValueFinder y) => x.Current == y.Current
+                ? y.From.Length.CompareTo(x.From.Length)
+                : x.Current.CompareTo(y.Current);
+
+            public static readonly Comparer<KeyValueFinder> Comparer = Comparer<KeyValueFinder>.Create(Compare);
         }
     }
 }

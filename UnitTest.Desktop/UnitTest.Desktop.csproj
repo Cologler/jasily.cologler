@@ -59,6 +59,7 @@
     <Compile Include="Linq\UnitTestForJasilyExpression.cs" />
     <Compile Include="Performance\UnitTestForCodeTimer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Text\UnitTestForTextReplacer.cs" />
     <Compile Include="UnitTestForNumber.cs" />
     <Compile Include="UnitTestForObject.cs" />
     <Compile Include="UnitTestForPrint.cs" />

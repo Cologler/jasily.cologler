@@ -45,6 +45,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collections\Generic\HashSetExtensions.cs" />
+    <Compile Include="Collections\Generic\JasilyEqualityComparer.cs" />
     <Compile Include="Collections\JasilyIncrementBits.cs" />
     <Compile Include="Collections\LockFreeCollections\BaseLockFreeCollection.cs" />
     <Compile Include="Collections\LockFreeCollections\LockFreeQueue.cs" />
@@ -78,6 +80,7 @@
     <Compile Include="IO\ByteSizeTypeExtensions.cs" />
     <Compile Include="IO\MemoryTributary.cs" />
     <Compile Include="JasilyNullable.cs" />
+    <Compile Include="JasilyComparer.cs" />
     <Compile Include="Net\HttpUriBuilder.cs" />
     <Compile Include="Net\Http\RangeHeader.cs" />
     <Compile Include="Net\Sockets\Port.cs" />

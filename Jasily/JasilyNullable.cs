@@ -1,6 +1,6 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using System;
 using System.Collections.Generic;
-using JetBrains.Annotations;
 
 namespace Jasily
 {
@@ -41,7 +41,7 @@ namespace Jasily
 
             if (n1.HasValue)
             {
-                return n2.HasValue ? Comparer<T>.Create(comparison).Compare(n1.Value, n2.Value) : 1;
+                return n2.HasValue ? comparison(n1.Value, n2.Value) : 1;
             }
             if (n2.HasValue) return -1;
             return 0;
