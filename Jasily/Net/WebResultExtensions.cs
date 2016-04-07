@@ -110,14 +110,30 @@ namespace Jasily.Net
         public static async Task<WebResult<byte[]>> GetResultAsBytesAsync([NotNull] this HttpWebRequest request)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
-            return await request.GetResultAsync(AsBytes);
+            try
+            {
+                return await request.GetResultAsync(AsBytes);
+            }
+            catch (IOException e)
+            {
+                if (Debugger.IsAttached) Debugger.Break();
+                throw;
+            }
         }
 
         public static async Task<WebResult<byte[]>> GetResultAsBytesAsync([NotNull] this HttpWebRequest request,
             CancellationToken cancellationToken)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
-            return await request.GetResultAsync(AsBytes, cancellationToken);
+            try
+            {
+                return await request.GetResultAsync(AsBytes, cancellationToken);
+            }
+            catch (IOException e)
+            {
+                if (Debugger.IsAttached) Debugger.Break();
+                throw;
+            }
         }
 
         #endregion
@@ -201,7 +217,15 @@ namespace Jasily.Net
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
             if (input == null) throw new ArgumentNullException(nameof(input));
-            return await request.SendAndGetResultAsync(input, AsBytes);
+            try
+            {
+                return await request.SendAndGetResultAsync(input, AsBytes);
+            }
+            catch (IOException e)
+            {
+                if (Debugger.IsAttached) Debugger.Break();
+                throw;
+            }
         }
 
         public static async Task<WebResult<byte[]>> SendAndGetResultAsBytesAsync([NotNull] this HttpWebRequest request,
@@ -209,7 +233,15 @@ namespace Jasily.Net
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
             if (input == null) throw new ArgumentNullException(nameof(input));
-            return await request.SendAndGetResultAsync(input, AsBytes, cancellationToken);
+            try
+            {
+                return await request.SendAndGetResultAsync(input, AsBytes, cancellationToken);
+            }
+            catch (IOException e)
+            {
+                if (Debugger.IsAttached) Debugger.Break();
+                throw;
+            }
         }
 
         #endregion
