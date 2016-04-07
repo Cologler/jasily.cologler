@@ -18,6 +18,8 @@ namespace System.IO
             return n == -1 ? (char?)null : (char)n;
         }
 
+        [NotNull]
+        [ItemNotNull]
         public static IEnumerable<string> EnumerateLines([NotNull] this TextReader reader)
         {
             if (reader == null) throw new ArgumentNullException(nameof(reader));
@@ -29,6 +31,8 @@ namespace System.IO
             }
         }
 
+        [NotNull]
+        [ItemNotNull]
         public static IEnumerable<char> EnumerateChars([NotNull] this TextReader reader)
         {
             if (reader == null) throw new ArgumentNullException(nameof(reader));
@@ -40,6 +44,8 @@ namespace System.IO
             }
         }
 
+        [NotNull]
+        [ItemNotNull]
         public static IEnumerable<char[]> EnumerateBlocks([NotNull] this TextReader reader, int maxBlockSize)
         {
             if (reader == null) throw new ArgumentNullException(nameof(reader));
