@@ -348,6 +348,16 @@ namespace System
             return index == 0 ? string.Empty : str.Substring(0, index);
         }
 
+        public static string BeforeLast([NotNull] this string str, [NotNull] string spliter,
+            StringComparison comparisonType = StringComparison.Ordinal)
+        {
+            if (str == null) throw new ArgumentNullException(nameof(str));
+            if (spliter == null) throw new ArgumentNullException(nameof(spliter));
+
+            var index = str.LastIndexOf(spliter, comparisonType);
+            return index <= 0 ? string.Empty : str.Substring(0, index);
+        }
+
         #endregion
 
         public static string Childs(this string str, int? firstIndex = null, int? lastIndex = null)
