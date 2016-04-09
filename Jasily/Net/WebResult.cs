@@ -6,6 +6,8 @@ namespace Jasily.Net
 {
     public class WebResult : IDisposable
     {
+        private bool isDisposed;
+
         /// <summary>
         /// maybe null if not contain response.
         /// </summary>
@@ -22,6 +24,11 @@ namespace Jasily.Net
 
             this.Type = WebResultType.Succeed;
             this.Response = response;
+        }
+
+        ~WebResult()
+        {
+            if (!this.isDisposed) this.Dispose();
         }
 
         /// <summary>
@@ -49,6 +56,7 @@ namespace Jasily.Net
 
         public void Dispose()
         {
+            this.isDisposed = true;
             this.Response?.Dispose();
         }
     }
