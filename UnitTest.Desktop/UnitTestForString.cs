@@ -46,9 +46,9 @@ namespace UnitTest.Desktop
         }
 
         [TestMethod]
-        public void CommonStart()
+        public void TestForCommonStart()
         {
-            var test1 = new string[] {};
+            var test1 = new string[] { };
             Assert.AreEqual("", test1.CommonStart());
 
             var test2 = new[] { "12" };
@@ -65,7 +65,7 @@ namespace UnitTest.Desktop
         }
 
         [TestMethod]
-        public void CommonEnd()
+        public void TestForCommonEnd()
         {
             var test1 = new string[] { };
             Assert.AreEqual("", test1.CommonEnd());
@@ -84,6 +84,30 @@ namespace UnitTest.Desktop
 
             var test6 = new[] { "012", "012", "312" };
             Assert.AreEqual("12", test6.CommonEnd());
+        }
+
+        [TestMethod]
+        public void TestForStartsWith()
+        {
+            Assert.AreEqual(true, "".StartsWith(0, "", StringComparison.OrdinalIgnoreCase));
+            Assert.AreEqual(true, "123".StartsWith(0, "12", StringComparison.OrdinalIgnoreCase));
+            Assert.AreEqual(true, "A123".StartsWith(0, "a", StringComparison.OrdinalIgnoreCase));
+        }
+
+        [TestMethod]
+        public void TestForEndsWith()
+        {
+            Assert.AreEqual(true, "123".EndsWith(2, "2", StringComparison.OrdinalIgnoreCase));
+            Assert.AreEqual(true, "123".EndsWith(2, "12", StringComparison.OrdinalIgnoreCase));
+            Assert.AreEqual(false, "123".EndsWith(2, "22", StringComparison.OrdinalIgnoreCase));
+        }
+
+        [TestMethod]
+        public void TestForReplace()
+        {
+            Assert.AreEqual("1234-c-C6789_1234-c-C6789", "1234abcABC6789_1234abcABC6789".Replace("ab", "-", StringComparison.OrdinalIgnoreCase));
+            Assert.AreEqual("__123abcABC", "abcABC123abcABC".ReplaceStart("abc", "_", StringComparison.OrdinalIgnoreCase));
+            Assert.AreEqual("abcABC123__", "abcABC123abcABC".ReplaceEnd("abc", "_", StringComparison.OrdinalIgnoreCase));
         }
     }
 }

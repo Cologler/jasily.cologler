@@ -398,8 +398,9 @@ namespace System.Linq
 
         #endregion
 
-        public static IEnumerable<T> Insert<T>(this IEnumerable<T> source, int index, T item)
+        public static IEnumerable<T> Insert<T>([NotNull] this IEnumerable<T> source, int index, T item)
         {
+            if (source == null) throw new ArgumentNullException(nameof(source));
             var i = 0;
             using (var itor = source.GetEnumerator())
             {
@@ -423,6 +424,20 @@ namespace System.Linq
                     yield return itor.Current;
                 }
             }
+        }
+
+        public static IEnumerable<T> AppendToEnd<T>([NotNull] IEnumerable<T> source, T next)
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            foreach (var item in source) yield return item;
+            yield return next;
+        }
+
+        public static IEnumerable<T> AppendToStart<T>([NotNull] IEnumerable<T> source, T next)
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            yield return next;
+            foreach (var item in source) yield return item;
         }
 
         #region count

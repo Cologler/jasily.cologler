@@ -1,5 +1,6 @@
 ﻿using JetBrains.Annotations;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -149,6 +150,128 @@ namespace System
 
         #endregion
 
+        public static string Take([NotNull] this string str, int count)
+        {
+            if (str == null) throw new ArgumentNullException(nameof(str));
+            if (count < 0) throw new ArgumentOutOfRangeException();
+            if (count > str.Length) return str;
+            return str.Substring(0, count);
+        }
+
+        #region replace
+
+        private static IEnumerable<string> AppendStart(IEnumerable<string> source, string next)
+        {
+            Debug.Assert(source != null);
+            yield return next;
+            foreach (var item in source) yield return item;
+        }
+
+        private static IEnumerable<string> AppendEnd(IEnumerable<string> source, string next)
+        {
+            Debug.Assert(source != null);
+            foreach (var item in source) yield return item;
+            yield return next;
+        }
+
+        public static string Replace([NotNull] this string str, [NotNull] string oldValue,
+            [NotNull] string newValue, StringComparison comparisonType)
+        {
+            if (str == null) throw new ArgumentNullException(nameof(str));
+            if (oldValue == null) throw new ArgumentNullException(nameof(oldValue));
+            if (newValue.Length == 0) throw new ArgumentException("Argument is empty", nameof(oldValue));
+            if (newValue == null) throw new ArgumentNullException(nameof(newValue));
+            if (str.Length < oldValue.Length) return str;
+
+            if (comparisonType == StringComparison.Ordinal) return str.Replace(oldValue, newValue);
+
+            var sb = new StringBuilder(str.Length);
+            var ptr = 0;
+            while (true)
+            {
+                var index = str.IndexOf(oldValue, ptr, comparisonType);
+                if (index < 0) return sb.Append(str, ptr).ToString();
+                sb.Append(str, ptr, index - ptr);
+                sb.Append(newValue);
+                ptr = index + oldValue.Length;
+            }
+        }
+
+        public static string ReplaceStart([NotNull] this string str, [NotNull] string oldValue,
+            [NotNull] string newValue, StringComparison comparisonType = StringComparison.Ordinal)
+        {
+            if (str == null) throw new ArgumentNullException(nameof(str));
+            if (oldValue == null) throw new ArgumentNullException(nameof(oldValue));
+            if (newValue.Length == 0) throw new ArgumentException("Argument is empty", nameof(oldValue));
+            if (newValue == null) throw new ArgumentNullException(nameof(newValue));
+            if (str.Length < oldValue.Length) return str;
+
+            var ptr = 0;
+            var count = 0;
+            while (str.StartsWith(ptr, oldValue, comparisonType))
+            {
+                ptr += oldValue.Length;
+                count++;
+            }
+
+            if (count == 0) return str;
+            return string.Concat(AppendEnd(Enumerable.Repeat(newValue, count), str.Substring(ptr)));
+        }
+
+        public static string ReplaceEnd([NotNull] this string str, [NotNull] string oldValue,
+            [NotNull] string newValue, StringComparison comparisonType = StringComparison.Ordinal)
+        {
+            if (str == null) throw new ArgumentNullException(nameof(str));
+            if (oldValue == null) throw new ArgumentNullException(nameof(oldValue));
+            if (newValue.Length == 0) throw new ArgumentException("Argument is empty", nameof(oldValue));
+            if (newValue == null) throw new ArgumentNullException(nameof(newValue));
+            if (str.Length < oldValue.Length) return str;
+
+            var ptr = 0;
+            var count = 0;
+            while (str.EndsWith(str.Length - ptr, oldValue, comparisonType))
+            {
+                ptr += oldValue.Length;
+                count++;
+            }
+
+            if (count == 0) return str;
+            return string.Concat(AppendStart(Enumerable.Repeat(newValue, count), str.Take(str.Length - ptr)));
+        }
+
+        #endregion
+
+        #region start or end
+
+        public static bool StartsWith([NotNull] this string str, int startIndex, [NotNull] string value,
+            StringComparison comparisonType = StringComparison.Ordinal)
+        {
+            if (str == null) throw new ArgumentNullException(nameof(str));
+            if (value == null) throw new ArgumentNullException(nameof(value));
+            if (value.Length == 0) return true;
+
+            if (startIndex == 0) return str.StartsWith(value, comparisonType);
+
+            return string.Compare(str, startIndex, value, 0, value.Length, comparisonType) == 0;
+        }
+
+        public static bool EndsWith([NotNull] this string str, int count, [NotNull] string value,
+            StringComparison comparisonType = StringComparison.Ordinal)
+        {
+            if (str == null) throw new ArgumentNullException(nameof(str));
+            if (value == null) throw new ArgumentNullException(nameof(value));
+            if (count < 0 || count > str.Length) throw new ArgumentOutOfRangeException(nameof(count));
+            if (value.Length == 0) return true;
+
+            if (count == str.Length) return str.EndsWith(value, comparisonType);
+
+            var startIndex = count - value.Length;
+            if (startIndex < 0) return false;
+            return string.Compare(str, startIndex, value, 0, value.Length, comparisonType) == 0;
+        }
+
+        #endregion
+
         public static bool Contains(this string str, string value, StringComparison comparisonType)
             => str.IndexOf(value, comparisonType) > -1;
 
@@ -197,7 +320,7 @@ namespace System
 
         #endregion
 
-        #region
+        #region trim
 
         public static string TrimStart(this string str, params string[] trimStrings)
         {
