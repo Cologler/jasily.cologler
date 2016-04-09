@@ -135,7 +135,7 @@ namespace System
         /// <param name="count"></param>
         /// <exception cref="System.ArgumentOutOfRangeException">count &lt; 0</exception>
         /// <returns></returns>
-        public static string Repeat(this char ch, int count) => new string(ch, count);
+        public static string Repeat(this char ch, int count) => count == 0 ? string.Empty : new string(ch, count);
 
         /// <summary>
         /// repeat this string. 
@@ -146,7 +146,7 @@ namespace System
         /// <exception cref="System.ArgumentOutOfRangeException">count &lt; 0</exception>
         /// <returns></returns>
         public static string Repeat(this string str, int count)
-            => str == null ? null : string.Concat(Enumerable.Repeat(str, count));
+            => str == null ? null : (count == 0 ? string.Empty : string.Concat(Enumerable.Repeat(str, count)));
 
         #endregion
 
@@ -202,7 +202,7 @@ namespace System
         {
             if (str == null) throw new ArgumentNullException(nameof(str));
             if (oldValue == null) throw new ArgumentNullException(nameof(oldValue));
-            if (newValue.Length == 0) throw new ArgumentException("Argument is empty", nameof(oldValue));
+            if (oldValue.Length == 0) throw new ArgumentException("Argument is empty", nameof(oldValue));
             if (newValue == null) throw new ArgumentNullException(nameof(newValue));
             if (str.Length < oldValue.Length) return str;
 
