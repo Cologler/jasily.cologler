@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using JetBrains.Annotations;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -15,8 +16,9 @@ namespace System.IO
         /// </summary>
         /// <param name="stream"></param>
         /// <returns>新字节数组。</returns>
-        public static byte[] ToArray(this Stream stream)
+        public static byte[] ToArray([NotNull] this Stream stream)
         {
+            if (stream == null) throw new ArgumentNullException(nameof(stream));
             using (var ms = stream.CanSeek ? new MemoryStream(Convert.ToInt32(stream.Length)) : new MemoryStream())
             {
                 if (stream.CanSeek && stream.Position != 0) stream.Position = 0;
