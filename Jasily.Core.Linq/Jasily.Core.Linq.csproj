@@ -44,6 +44,7 @@
     <Compile Include="Collections\Generic\ArrayExtensions.cs" />
     <Compile Include="Collections\Generic\CollectionExtensions.cs" />
     <Compile Include="Collections\Generic\DictionaryExtensions.cs" />
+    <Compile Include="Collections\Generic\IGetKey.cs" />
     <Compile Include="Collections\Generic\ListExtensions.cs" />
     <Compile Include="Collections\Generic\ItemExtensions.cs" />
     <Compile Include="Linq\AsyncEnumerableExtensions.cs" />

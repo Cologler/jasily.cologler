@@ -184,6 +184,45 @@ namespace System.Collections.Generic
             }
         }
 
+        #region IGetKey
+
+        public static void Add<TKey, TValue>([NotNull] this IDictionary<TKey, TValue> dict, [NotNull] TValue item)
+            where TValue : IGetKey<TKey>
+        {
+            if (dict == null) throw new ArgumentNullException(nameof(dict));
+            if (item == null) throw new ArgumentNullException(nameof(item));
+            var key = item.GetKey();
+            if (key == null) throw new ArgumentNullException(nameof(key));
+
+            dict.Add(key, item);
+        }
+
+        public static void AddRange<TKey, TValue>([NotNull] this IDictionary<TKey, TValue> dict,
+            [NotNull] IEnumerable<TValue> items)
+            where TValue : IGetKey<TKey>
+        {
+            if (dict == null) throw new ArgumentNullException(nameof(dict));
+            if (items == null) throw new ArgumentNullException(nameof(items));
+
+            var itemArray = items.ToArray();
+            var keyArray = itemArray.Select(z => z.GetKey()).ToArray();
+            if (keyArray.Any(z => z == null)) throw new ArgumentException("GetKey() can not return null.");
+            for (var i = 0; i < itemArray.Length; i++) dict.Add(keyArray[i], itemArray[i]);
+        }
+
+        public static void Set<TKey, TValue>([NotNull] this IDictionary<TKey, TValue> dict, [NotNull] TValue item)
+            where TValue : IGetKey<TKey>
+        {
+            if (dict == null) throw new ArgumentNullException(nameof(dict));
+            if (item == null) throw new ArgumentNullException(nameof(item));
+            var key = item.GetKey();
+            if (key == null) throw new ArgumentNullException(nameof(key));
+
+            dict[key] = item;
+        }
+
+        #endregion
+
         #endregion
     }
 }
