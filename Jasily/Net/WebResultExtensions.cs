@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Runtime.Serialization.Json;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
@@ -17,7 +18,14 @@ namespace Jasily.Net
         public static WebResult<string> AsText([NotNull] this WebResult<byte[]> webResult)
         {
             if (webResult == null) throw new ArgumentNullException(nameof(webResult));
-            return webResult.Cast(ByteArrayExtensions.GetString);
+            Encoding encoding = null;
+            if (webResult.Response != null)
+            {
+                var ct = webResult.Response.ContentType.Replace(" ", "");
+                if (ct.Contains("charset=gbk")) encoding = Encoding.GetEncoding("gbk");
+            }
+            if (encoding == null) encoding = Encoding.UTF8;
+            return webResult.Cast(z => z.GetString(encoding));
         }
 
         public static WebResult<T> AsXml<T>([NotNull] this WebResult<byte[]> webResult)
@@ -43,25 +51,25 @@ namespace Jasily.Net
         public static async Task<WebResult<string>> AsText([NotNull] this Task<WebResult<byte[]>> webResult)
         {
             if (webResult == null) throw new ArgumentNullException(nameof(webResult));
-            return (await webResult).Cast(ByteArrayExtensions.GetString);
+            return (await webResult).AsText();
         }
 
         public static async Task<WebResult<T>> AsXml<T>([NotNull] this Task<WebResult<byte[]>> webResult)
         {
             if (webResult == null) throw new ArgumentNullException(nameof(webResult));
-            return (await webResult).Cast(XmlSerializerExtensions.XmlToObject<T>);
+            return (await webResult).AsXml<T>();
         }
 
         public static async Task<WebResult<T>> AsJson<T>([NotNull] this Task<WebResult<byte[]>> webResult)
         {
             if (webResult == null) throw new ArgumentNullException(nameof(webResult));
-            return (await webResult).Cast(DataContractJsonSerializerExtensions.JsonToObject<T>);
+            return (await webResult).AsJson<T>();
         }
 
         public static async Task<WebResult<T>> TryAsJson<T>([NotNull] this Task<WebResult<byte[]>> webResult) where T : class
         {
             if (webResult == null) throw new ArgumentNullException(nameof(webResult));
-            return (await webResult).Cast(DataContractJsonSerializerExtensions.TryJsonToObject<T>);
+            return (await webResult).TryAsJson<T>();
         }
 
         #endregion
