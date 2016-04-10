@@ -22,7 +22,7 @@ namespace Jasily.Net
             if (webResult.Response != null)
             {
                 var ct = webResult.Response.ContentType.Replace(" ", "");
-                if (ct.Contains("charset=gbk")) encoding = Encoding.GetEncoding("gbk");
+                if (ct.Contains("charset=gbk")) encoding = JasilyEncoding.GetEncoding("gbk");
             }
             if (encoding == null) encoding = Encoding.UTF8;
             return webResult.Cast(z => z.GetString(encoding));

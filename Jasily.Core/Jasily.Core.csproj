@@ -74,6 +74,7 @@
     <Compile Include="RequestActionEventArgs.cs" />
     <Compile Include="ITryEnter.cs" />
     <Compile Include="Singleton.cs" />
+    <Compile Include="Text\JasilyEncoding.cs" />
     <Compile Include="Text\StringBuilderExtensions.cs" />
     <Compile Include="Threading\ReaderWriterLockSlimExtensions.cs" />
     <Compile Include="TypeExtensions.cs" />

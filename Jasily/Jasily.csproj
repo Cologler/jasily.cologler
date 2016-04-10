@@ -106,6 +106,7 @@
     <Compile Include="Services\IServiceProviderFactory.cs" />
     <Compile Include="Text\TextReplacer.cs" />
     <Compile Include="Threading\JasilyTimeout.cs" />
+    <Compile Include="Threading\Tasks\JasilyTask.cs" />
     <Compile Include="Windows\JasilyClipboard.cs" />
   </ItemGroup>
   <ItemGroup>
