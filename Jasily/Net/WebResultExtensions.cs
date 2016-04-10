@@ -2,6 +2,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Runtime.Serialization.Json;
 using System.Text;
@@ -18,14 +19,49 @@ namespace Jasily.Net
         public static WebResult<string> AsText([NotNull] this WebResult<byte[]> webResult)
         {
             if (webResult == null) throw new ArgumentNullException(nameof(webResult));
-            Encoding encoding = null;
-            if (webResult.Response != null)
-            {
-                var ct = webResult.Response.ContentType.Replace(" ", "");
-                if (ct.Contains("charset=gbk")) encoding = JasilyEncoding.GetEncoding("gbk");
-            }
-            if (encoding == null) encoding = Encoding.UTF8;
+            return webResult.Cast(ByteArrayExtensions.GetString);
+        }
+
+        public static WebResult<string> AsText([NotNull] this WebResult<byte[]> webResult,
+            [NotNull] Encoding encoding)
+        {
+            if (webResult == null) throw new ArgumentNullException(nameof(webResult));
+            if (encoding == null) throw new ArgumentNullException(nameof(encoding));
             return webResult.Cast(z => z.GetString(encoding));
+        }
+
+        /// <summary>
+        /// auto parse encoding, but take more time
+        /// </summary>
+        /// <param name="webResult"></param>
+        /// <returns></returns>
+        public static WebResult<string> AsPowerText([NotNull] this WebResult<byte[]> webResult)
+        {
+            if (webResult == null) throw new ArgumentNullException(nameof(webResult));
+            return webResult.Cast(z =>
+            {
+                if (webResult.Response != null)
+                {
+                    var encoding = GetEncodingFromText(webResult.Response.ContentType);
+                    if (encoding != null) return z.GetString(encoding);
+                }
+                var doc = z.GetString(Encoding.UTF8);
+                var docArray = doc.AsLines();
+                var metas = docArray.Where(x => x.StartsWith("<meta http-equiv=\"Content-Type\"")).ToArray();
+                if (metas.Length > 0)
+                {
+                    var encoding = metas.Select(GetEncodingFromText).FirstOrDefault(x => x != null);
+                    if (encoding != null) return z.GetString(encoding);
+                }
+                return doc;
+            });
+        }
+
+        private static Encoding GetEncodingFromText(string text)
+        {
+            if (text.Contains("charset=gbk") || text.Contains("charset=gb2312"))
+                return JasilyEncoding.GetEncoding("gbk");
+            return null;
         }
 
         public static WebResult<T> AsXml<T>([NotNull] this WebResult<byte[]> webResult)
@@ -52,6 +88,19 @@ namespace Jasily.Net
         {
             if (webResult == null) throw new ArgumentNullException(nameof(webResult));
             return (await webResult).AsText();
+        }
+
+        public static async Task<WebResult<string>> AsText([NotNull] this Task<WebResult<byte[]>> webResult,
+            [NotNull] Encoding encoding)
+        {
+            if (webResult == null) throw new ArgumentNullException(nameof(webResult));
+            return (await webResult).AsText(encoding);
+        }
+
+        public static async Task<WebResult<string>> AsPowerText([NotNull] this Task<WebResult<byte[]>> webResult)
+        {
+            if (webResult == null) throw new ArgumentNullException(nameof(webResult));
+            return (await webResult).AsPowerText();
         }
 
         public static async Task<WebResult<T>> AsXml<T>([NotNull] this Task<WebResult<byte[]>> webResult)

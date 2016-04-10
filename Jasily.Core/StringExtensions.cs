@@ -290,8 +290,9 @@ namespace System
         /// use '\r\n' or '\n' to split text.
         /// </summary>
         /// <param name="text"></param>
+        /// <param name="options"></param>
         /// <returns></returns>
-        public static IEnumerable<string> AsLines(this string text, StringSplitOptions options = StringSplitOptions.None)
+        public static string[] AsLines(this string text, StringSplitOptions options = StringSplitOptions.None)
             => text?.Split(new[] { "\r\n", "\n" }, options);
 
         /// <summary>
