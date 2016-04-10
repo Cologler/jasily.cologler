@@ -449,5 +449,14 @@ namespace System.Linq
             => (source as ICollection)?.Count ?? -1;
 
         #endregion
+
+        public static T? FirstOrNull<T>([NotNull] this IEnumerable<T> source, [NotNull] Func<T, bool> predicate)
+            where T : struct
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            if (predicate == null) throw new ArgumentNullException(nameof(predicate));
+            foreach (var item in source.Where(predicate)) return item;
+            return null;
+        }
     }
 }

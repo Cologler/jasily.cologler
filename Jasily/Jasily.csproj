@@ -88,6 +88,7 @@
     <Compile Include="JasilyComparer.cs" />
     <Compile Include="Net\HttpUriBuilder.cs" />
     <Compile Include="Net\Http\RangeHeader.cs" />
+    <Compile Include="Net\JasilyUri.cs" />
     <Compile Include="Net\Sockets\Port.cs" />
     <Compile Include="Net\WebResult.cs" />
     <Compile Include="Net\WebResultExtensions.cs" />
