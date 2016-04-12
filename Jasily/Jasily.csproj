@@ -66,6 +66,8 @@
     <Compile Include="Data\IJasilyEntitySetProvider.cs" />
     <Compile Include="Data\IJasilyEntitySetReader.cs" />
     <Compile Include="Data\IJasilyEntitySetWriter.cs" />
+    <Compile Include="JasilyDayOfWeek.cs" />
+    <Compile Include="JasilyDayOfWeekExtensions.cs" />
     <Compile Include="Diagnostics\AttributeTest\AttributeTestor.cs" />
     <Compile Include="Diagnostics\AttributeTest\DateTimeKindAttribute.cs" />
     <Compile Include="Diagnostics\AttributeTest\FloatRangeAttribute.cs" />
