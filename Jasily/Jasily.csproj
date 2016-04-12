@@ -45,6 +45,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AsyncLazy.cs" />
     <Compile Include="Collections\Generic\HashSetExtensions.cs" />
     <Compile Include="Collections\Generic\JasilyEqualityComparer.cs" />
     <Compile Include="Collections\JasilyIncrementBits.cs" />
