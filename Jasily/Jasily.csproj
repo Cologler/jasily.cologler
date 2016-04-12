@@ -112,6 +112,7 @@
     <Compile Include="Threading\JasilyEnvironment.cs" />
     <Compile Include="Threading\JasilyTimeout.cs" />
     <Compile Include="Threading\Tasks\JasilyTask.cs" />
+    <Compile Include="Threading\Tasks\UniqueTask.cs" />
     <Compile Include="Windows\JasilyClipboard.cs" />
   </ItemGroup>
   <ItemGroup>

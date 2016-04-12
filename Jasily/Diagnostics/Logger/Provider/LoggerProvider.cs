@@ -75,35 +75,35 @@ namespace Jasily.Diagnostics.Logger.Provider
 
         public abstract void Write(string message);
 
+        public void ThreadSafeWrite(string message)
+        {
+            lock (this.SyncRoot)
+            {
+                this.Write(message);
+            }
+        }
+
         public virtual Task WriteAsync(string message)
             => Task.Run(() => this.Write(message));
 
-        public virtual Task ThreadSafeWriteAsync(string message)
-        {
-            return Task.Run(() =>
-            {
-                lock (this.SyncRoot)
-                {
-                    this.Write(message);
-                }
-            });
-        }
+        public Task ThreadSafeWriteAsync(string message)
+            => Task.Run(() => this.ThreadSafeWrite(message));
 
         public abstract void WriteLine(string message);
+
+        public void ThreadSafeWriteLine(string message)
+        {
+            lock (this.SyncRoot)
+            {
+                this.WriteLine(message);
+            }
+        }
 
         public virtual Task WriteLineAsync(string message)
             => Task.Run(() => this.WriteLine(message));
 
         public virtual Task ThreadSafeWriteLineAsync(string message)
-        {
-            return Task.Run(() =>
-            {
-                lock (this.SyncRoot)
-                {
-                    this.WriteLine(message);
-                }
-            });
-        }
+            => Task.Run(() => this.ThreadSafeWriteLine(message));
 
         public abstract string Id { get; }
 
