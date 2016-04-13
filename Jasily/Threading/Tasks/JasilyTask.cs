@@ -1,6 +1,5 @@
 ﻿using JetBrains.Annotations;
 using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -20,20 +19,7 @@ namespace Jasily.Threading.Tasks
             return t;
         }
 
-        private static async Task RunTaskFactory([NotNull] Func<Task> taskFactory)
-        {
-            Debug.WriteLine("JasilyTask: run at" + DateTime.Now);
-            Debug.Assert(taskFactory != null);
-
-            await Run(taskFactory);
-        }
-
-        public static async void Begin([NotNull] Func<Task> taskFactory)
-        {
-            if (taskFactory == null) throw new ArgumentNullException(nameof(taskFactory));
-
-            await RunTaskFactory(taskFactory);
-        }
+        public static async void Begin([NotNull] Func<Task> taskFactory) => await Run(taskFactory);
 
         /// <summary>
         /// exec task same time
@@ -56,7 +42,7 @@ namespace Jasily.Threading.Tasks
             if (taskFactorys == null || taskFactorys.Any(z => z == null))
                 throw new ArgumentNullException(nameof(taskFactorys));
 
-            foreach (var t in taskFactorys) await RunTaskFactory(t);
+            foreach (var t in taskFactorys) await Run(t);
         }
 
         /// <summary>
@@ -69,10 +55,10 @@ namespace Jasily.Threading.Tasks
             if (taskFactorys == null || taskFactorys.Any(z => z == null))
                 throw new ArgumentNullException(nameof(taskFactorys));
 
-            foreach (var t in taskFactorys) await RunTaskFactory(t);
+            foreach (var t in taskFactorys) await Run(t);
         }
 
-        #region <T>
+        #region generic
 
         public static Task<T> Run<T>([NotNull] Func<Task<T>> taskFactory)
         {

@@ -13,7 +13,7 @@ namespace Jasily.Diagnostics.Logger.Provider
         private static LoggerProvider @default;
         private static Dictionary<string, LoggerProvider> loggers;
 
-        protected readonly object SyncRoot = new object();
+        public object SyncRoot { get; } = new object();
 
         public void Register()
         {

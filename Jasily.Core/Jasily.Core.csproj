@@ -77,6 +77,7 @@
     <Compile Include="Text\JasilyEncoding.cs" />
     <Compile Include="Text\StringBuilderExtensions.cs" />
     <Compile Include="Threading\ReaderWriterLockSlimExtensions.cs" />
+    <Compile Include="Threading\SemaphoreSlimExtensions.cs" />
     <Compile Include="TypeExtensions.cs" />
     <Compile Include="UfDateTimeConverter.cs" />
     <Compile Include="EventExtensions.cs" />
