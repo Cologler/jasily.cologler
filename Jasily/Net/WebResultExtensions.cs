@@ -180,6 +180,11 @@ namespace Jasily.Net
             {
                 return new WebResult<T>(e);
             }
+            catch (IOException e) when (e.InnerException?.ToString() == "System.Net.Sockets.SocketException")
+            {
+                if (Debugger.IsAttached) Debugger.Break();
+                return new WebResult<T>(new WebException(e.InnerException.Message, e));
+            }
         }
 
         public static async Task<WebResult<T>> GetResultAsync<T>([NotNull] this HttpWebRequest request,
@@ -201,6 +206,11 @@ namespace Jasily.Net
             {
                 return new WebResult<T>(e);
             }
+            catch (IOException e) when (e.InnerException?.ToString() == "System.Net.Sockets.SocketException")
+            {
+                if (Debugger.IsAttached) Debugger.Break();
+                return new WebResult<T>(new WebException(e.InnerException.Message, e));
+            }
         }
 
         #endregion
@@ -210,30 +220,14 @@ namespace Jasily.Net
         public static async Task<WebResult<byte[]>> GetResultAsBytesAsync([NotNull] this HttpWebRequest request)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
-            try
-            {
-                return await request.GetResultAsync(AsBytes);
-            }
-            catch (IOException e)
-            {
-                if (Debugger.IsAttached) Debugger.Break();
-                throw;
-            }
+            return await request.GetResultAsync(AsBytes);
         }
 
         public static async Task<WebResult<byte[]>> GetResultAsBytesAsync([NotNull] this HttpWebRequest request,
             CancellationToken cancellationToken)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
-            try
-            {
-                return await request.GetResultAsync(AsBytes, cancellationToken);
-            }
-            catch (IOException e)
-            {
-                if (Debugger.IsAttached) Debugger.Break();
-                throw;
-            }
+            return await request.GetResultAsync(AsBytes, cancellationToken);
         }
 
         #endregion
@@ -271,7 +265,7 @@ namespace Jasily.Net
                 return new WebResult(e);
             }
 
-            return await request.GetResultAsync();
+            return await request.GetResultAsync(cancellationToken);
         }
 
         public static async Task<WebResult<T>> SendAndGetResultAsync<T>([NotNull] this HttpWebRequest request,
@@ -283,12 +277,13 @@ namespace Jasily.Net
             try
             {
                 await request.SendAsync(input);
-                return await request.GetResultAsync<T>(selector);
             }
             catch (WebException e)
             {
                 return new WebResult<T>(e);
             }
+
+            return await request.GetResultAsync<T>(selector);
         }
 
         public static async Task<WebResult<T>> SendAndGetResultAsync<T>([NotNull] this HttpWebRequest request,
@@ -300,12 +295,12 @@ namespace Jasily.Net
             try
             {
                 await request.SendAsync(input, cancellationToken);
-                return await request.GetResultAsync<T>(selector);
             }
             catch (WebException e)
             {
                 return new WebResult<T>(e);
             }
+            return await request.GetResultAsync<T>(selector);
         }
 
         #endregion
@@ -317,15 +312,7 @@ namespace Jasily.Net
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
             if (input == null) throw new ArgumentNullException(nameof(input));
-            try
-            {
-                return await request.SendAndGetResultAsync(input, AsBytes);
-            }
-            catch (IOException e)
-            {
-                if (Debugger.IsAttached) Debugger.Break();
-                throw;
-            }
+            return await request.SendAndGetResultAsync(input, AsBytes);
         }
 
         public static async Task<WebResult<byte[]>> SendAndGetResultAsBytesAsync([NotNull] this HttpWebRequest request,
@@ -333,15 +320,7 @@ namespace Jasily.Net
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
             if (input == null) throw new ArgumentNullException(nameof(input));
-            try
-            {
-                return await request.SendAndGetResultAsync(input, AsBytes, cancellationToken);
-            }
-            catch (IOException e)
-            {
-                if (Debugger.IsAttached) Debugger.Break();
-                throw;
-            }
+            return await request.SendAndGetResultAsync(input, AsBytes, cancellationToken);
         }
 
         #endregion
