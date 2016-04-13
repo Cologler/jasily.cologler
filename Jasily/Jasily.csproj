@@ -109,6 +109,7 @@
     <Compile Include="Reflection\WriteableMemberAttribute.cs" />
     <Compile Include="Services\IServiceProvider.cs" />
     <Compile Include="Services\IServiceProviderFactory.cs" />
+    <Compile Include="StringConverter.cs" />
     <Compile Include="Text\TextReplacer.cs" />
     <Compile Include="Threading\JasilyEnvironment.cs" />
     <Compile Include="Threading\JasilyTimeout.cs" />
