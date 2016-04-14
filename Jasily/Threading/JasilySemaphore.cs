@@ -36,11 +36,19 @@ namespace Jasily.Threading
             internal Lock(JasilySemaphore semaphore)
             {
                 this.semaphore = semaphore;
+                this.isDisposed = false;
             }
 
             public bool IsEntered => this.semaphore != null;
 
-            public void Dispose() => this.semaphore?.OnPut();
+            private bool isDisposed;
+
+            public void Dispose()
+            {
+                if (this.isDisposed) throw new ObjectDisposedException(nameof(Lock));
+                this.isDisposed = true;
+                this.semaphore?.OnPut();
+            }
         }
 
         /// <summary>

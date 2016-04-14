@@ -46,11 +46,22 @@ namespace System.Threading
         {
             private readonly SemaphoreSlim semaphore;
 
-            internal Releaser(SemaphoreSlim semaphore) { this.semaphore = semaphore; }
+            internal Releaser(SemaphoreSlim semaphore)
+            {
+                this.semaphore = semaphore;
+                this.isDisposed = false;
+            }
 
             public bool IsEntered => this.semaphore != null;
 
-            public void Dispose() => this.semaphore?.Release();
+            private bool isDisposed;
+
+            public void Dispose()
+            {
+                if (this.isDisposed) throw new ObjectDisposedException(nameof(Releaser));
+                this.isDisposed = true;
+                this.semaphore?.Release();
+            }
         }
     }
 }
