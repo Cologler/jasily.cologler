@@ -1,55 +1,46 @@
 using System;
+using System.Diagnostics;
 using System.Threading;
 
 namespace Jasily.Threading
 {
     /// <summary>
-    /// this is not thread safe
+    /// this is unwaitable semaphore
     /// </summary>
-    public abstract class JasilyEnvironment
+    public abstract class JasilySemaphore
     {
         public int Count { get; }
 
         public abstract int Current { get; }
 
-        protected JasilyEnvironment(int count)
+        protected JasilySemaphore(int count)
         {
             if (count <= 0) throw new ArgumentOutOfRangeException(nameof(count));
 
             this.Count = count;
         }
 
-        public Result Enter()
+        public Lock TryGetLock()
         {
-            if (this.OnGet())
-            {
-                var r = new Result(true);
-                r.Exited += this.R_Exited;
-                return r;
-            }
-            return new Result(false);
+            return this.OnGet() ? new Lock(this) : new Lock();
         }
-
-        private void R_Exited(object sender, EventArgs e) => this.OnPut();
 
         protected abstract bool OnGet();
 
         protected abstract void OnPut();
 
-        public struct Result : IDisposable
+        public struct Lock : IDisposable
         {
-            public event EventHandler Exited;
+            private readonly JasilySemaphore semaphore;
 
-            public Result(bool get)
+            internal Lock(JasilySemaphore semaphore)
             {
-                // ReSharper disable once ArrangeThisQualifier
-                Exited = null;
-                this.IsGet = get;
+                this.semaphore = semaphore;
             }
 
-            public bool IsGet { get; }
+            public bool IsEntered => this.semaphore != null;
 
-            public void Dispose() => this.Exited?.Invoke(this);
+            public void Dispose() => this.semaphore?.OnPut();
         }
 
         /// <summary>
@@ -57,13 +48,13 @@ namespace Jasily.Threading
         /// </summary>
         /// <param name="count"></param>
         /// <returns></returns>
-        public static JasilyEnvironment CreateThreadNotSafe(int count = 1)
+        public static JasilySemaphore CreateThreadNotSafe(int count = 1)
             => new ThreadNotSafeEnvironment(count);
 
-        public static JasilyEnvironment CreateThreadSafe(int count = 1)
+        public static JasilySemaphore CreateThreadSafe(int count = 1)
             => new ThreadSafeEnvironment(count);
 
-        private class ThreadNotSafeEnvironment : JasilyEnvironment
+        private class ThreadNotSafeEnvironment : JasilySemaphore
         {
             private int current;
 
@@ -81,10 +72,14 @@ namespace Jasily.Threading
                 return true;
             }
 
-            protected override void OnPut() => this.current--;
+            protected override void OnPut()
+            {
+                this.current--;
+                Debug.Assert(this.current >= 0, "you need use ThreadSafe version");
+            }
         }
 
-        private class ThreadSafeEnvironment : JasilyEnvironment
+        private class ThreadSafeEnvironment : JasilySemaphore
         {
             private int current;
 
@@ -106,7 +101,11 @@ namespace Jasily.Threading
                 return true;
             }
 
-            protected override void OnPut() => Interlocked.Decrement(ref this.current);
+            protected override void OnPut()
+            {
+                Interlocked.Decrement(ref this.current);
+                Debug.Assert(this.current >= 0);
+            }
         }
     }
 }
