@@ -46,8 +46,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AsyncLazy.cs" />
+    <Compile Include="Collections\Generic\CriticalValue.cs" />
     <Compile Include="Collections\Generic\HashSetExtensions.cs" />
     <Compile Include="Collections\Generic\JasilyEqualityComparer.cs" />
+    <Compile Include="Collections\Generic\Range.cs" />
+    <Compile Include="Collections\Generic\RangeDictionary.cs" />
+    <Compile Include="Collections\Generic\RangeMode.cs" />
     <Compile Include="Collections\JasilyIncrementBits.cs" />
     <Compile Include="Collections\LockFreeCollections\BaseLockFreeCollection.cs" />
     <Compile Include="Collections\LockFreeCollections\LockFreeQueue.cs" />

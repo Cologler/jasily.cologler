@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using JetBrains.Annotations;
+using System.Collections.Generic;
 using System.Linq;
-using JetBrains.Annotations;
 
 namespace Jasily.Collections.Generic
 {

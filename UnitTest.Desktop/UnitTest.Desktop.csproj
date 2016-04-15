@@ -51,6 +51,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Attributes\UnitTestForCloneableAttribute.cs" />
+    <Compile Include="Collections\Generic\UnitTestForRangeDictionary.cs" />
     <Compile Include="Collections\LockFreeCollections\UnitTestForLockFreeQueue.cs" />
     <Compile Include="Collections\LockFreeCollections\UnitTestForLockFreeStack.cs" />
     <Compile Include="ComponentModel\UnitTestForNotifyPropertyChangedObject.cs" />

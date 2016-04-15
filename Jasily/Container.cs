@@ -14,8 +14,18 @@ namespace Jasily
 
         public void SetValue(T value)
         {
-            //this.value = value;
-            //this.HasValue = true;
+            this.value = value;
+            this.HasValue = true;
+        }
+
+        public Container()
+        {
+
+        }
+
+        public Container(T value)
+        {
+            this.SetValue(value);
         }
 
         public bool HasValue { get; private set; }
