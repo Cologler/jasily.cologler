@@ -15,4 +15,13 @@ namespace System
             Debug.Assert(Enumerable != null);
         }
     }
+
+    public static class Empty
+    {
+        public static T[] EmptyIfNull<T>(this T[] array) => array ?? Empty<T>.Array;
+
+        public static IEnumerable<T> EmptyIfNull<T>(this IEnumerable<T> enumerable) => enumerable ?? Empty<T>.Enumerable;
+
+        public static string EmptyIfNull<T>(this string str) => str ?? string.Empty;
+    }
 }
