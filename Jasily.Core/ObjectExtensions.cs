@@ -258,17 +258,31 @@ namespace System
                 this.source = source;
             }
 
-            public TDest To<TDest>() => CastToCache<T, TDest>.Caster(this.source);
+            public TDest To<TDest>() => ConvertChecked<T, TDest>.Caster(this.source);
+
+            public TDest UncheckedTo<TDest>() => ConvertUnchecked<T, TDest>.Caster(this.source);
         }
 
-        private static class CastToCache<TSource, TDest>
+        private static class ConvertChecked<TSource, TDest>
         {
             internal static readonly Func<TSource, TDest> Caster;
 
-            static CastToCache()
+            static ConvertChecked()
             {
                 var p = Expression.Parameter(typeof(TSource));
                 var c = Expression.ConvertChecked(p, typeof(TDest));
+                Caster = Expression.Lambda<Func<TSource, TDest>>(c, p).Compile();
+            }
+        }
+
+        private static class ConvertUnchecked<TSource, TDest>
+        {
+            internal static readonly Func<TSource, TDest> Caster;
+
+            static ConvertUnchecked()
+            {
+                var p = Expression.Parameter(typeof(TSource));
+                var c = Expression.Convert(p, typeof(TDest));
                 Caster = Expression.Lambda<Func<TSource, TDest>>(c, p).Compile();
             }
         }
