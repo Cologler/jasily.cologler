@@ -1,5 +1,5 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 
@@ -235,6 +235,42 @@ namespace System
                 maxTryCount--;
             } while (maxTryCount > 0);
             return r;
+        }
+
+        #endregion
+
+        #region cast
+
+        /// <summary>
+        /// cast without boxing.
+        /// alse see: https://stackoverflow.com/questions/1189144/c-sharp-non-boxing-conversion-of-generic-enum-to-int
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static Cast<T> Casting<T>(this T source) => new Cast<T>(source);
+
+        public struct Cast<T>
+        {
+            private readonly T source;
+
+            public Cast(T source)
+            {
+                this.source = source;
+            }
+
+            public TDest To<TDest>() => CastToCache<T, TDest>.Caster(this.source);
+        }
+
+        private static class CastToCache<TSource, TDest>
+        {
+            internal static readonly Func<TSource, TDest> Caster;
+
+            static CastToCache()
+            {
+                var p = Expression.Parameter(typeof(TSource));
+                var c = Expression.ConvertChecked(p, typeof(TDest));
+                Caster = Expression.Lambda<Func<TSource, TDest>>(c, p).Compile();
+            }
         }
 
         #endregion
