@@ -13,5 +13,8 @@ namespace Jasily
         Thursday = 16,
         Friday = 32,
         Saturday = 64,
+
+        Weekend = Sunday | Saturday,
+        Weekdays = Monday | Tuesday | Wednesday | Thursday | Friday
     }
 }
