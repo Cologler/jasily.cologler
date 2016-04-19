@@ -1,28 +1,13 @@
 ﻿
-using JetBrains.Annotations;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 
 namespace System
 {
     public static class ObjectExtensions
     {
-        /// <summary>
-        /// if both are not null, using Equals() to check if they equals.
-        /// <para/>
-        /// both are null, return true.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="obj"></param>
-        /// <param name="other"></param>
-        /// <returns></returns>
-        public static bool NormalEquals<T>(this T obj, T other)
-        {
-            if (ReferenceEquals(obj, other)) return true;
-            if (ReferenceEquals(obj, null) || ReferenceEquals(other, null)) return false;
-
-            return (obj as IEquatable<T>)?.Equals(other) ?? obj.Equals(other);
-        }
+        public static bool NormalEquals<T>(this T obj, T other) => EqualityComparer<T>.Default.Equals(obj, other);
 
         /// <summary>
         /// if obj is special type, action
