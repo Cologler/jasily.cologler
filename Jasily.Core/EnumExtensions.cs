@@ -27,5 +27,18 @@ namespace System
             var asEnumType = first as TEnum?;
             return asEnumType.HasValue && EqualityComparer<TEnum>.Default.Equals(asEnumType.Value, second);
         }
+
+        /// <summary>
+        /// for enum (with boxing).
+        /// </summary>
+        /// <typeparam name="TEnum"></typeparam>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <returns></returns>
+        public static bool HasFlag2<TEnum>(this TEnum first, TEnum second) where TEnum : struct
+        {
+            var o = second.Casting().UncheckedTo<ulong>();
+            return (first.Casting().UncheckedTo<ulong>() & o) == o;
+        }
     }
 }

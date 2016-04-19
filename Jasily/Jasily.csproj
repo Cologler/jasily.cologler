@@ -72,6 +72,7 @@
     <Compile Include="Data\IJasilyEntitySetReader.cs" />
     <Compile Include="Data\IJasilyEntitySetWriter.cs" />
     <Compile Include="Diagnostics\Logger\Provider\StreamWriterLoggerProvider.cs" />
+    <Compile Include="EnumCache.cs" />
     <Compile Include="JasilyDayOfWeek.cs" />
     <Compile Include="JasilyDayOfWeekExtensions.cs" />
     <Compile Include="Diagnostics\AttributeTest\AttributeTestor.cs" />
