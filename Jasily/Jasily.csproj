@@ -94,6 +94,7 @@
     <Compile Include="IO\ByteSizeTypeExtensions.cs" />
     <Compile Include="IO\JasilyStringReader.cs" />
     <Compile Include="IO\MemoryTributary.cs" />
+    <Compile Include="JasilyEnum.cs" />
     <Compile Include="JasilyNullable.cs" />
     <Compile Include="JasilyComparer.cs" />
     <Compile Include="Net\HttpUriBuilder.cs" />

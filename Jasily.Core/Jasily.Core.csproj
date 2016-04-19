@@ -64,7 +64,7 @@
     <Compile Include="IPrint.cs" />
     <Compile Include="ByteArrayExtensions.cs" />
     <Compile Include="DateTimeExtensions.cs" />
-    <Compile Include="JasilyEnum.cs" />
+    <Compile Include="EnumExtensions.cs" />
     <Compile Include="Net\HttpWebRequestExtensions.cs" />
     <Compile Include="NumberExtensions.cs" />
     <Compile Include="PrintExtensions.cs" />

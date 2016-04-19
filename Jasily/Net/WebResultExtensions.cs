@@ -185,6 +185,11 @@ namespace Jasily.Net
                 if (Debugger.IsAttached) Debugger.Break();
                 return new WebResult<T>(new WebException(e.InnerException.Message, e));
             }
+            catch (Exception e)
+            {
+                if (Debugger.IsAttached) Debugger.Break();
+                throw;
+            }
         }
 
         public static async Task<WebResult<T>> GetResultAsync<T>([NotNull] this HttpWebRequest request,
