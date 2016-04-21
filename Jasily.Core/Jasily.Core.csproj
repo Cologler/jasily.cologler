@@ -69,8 +69,17 @@
     <Compile Include="NumberExtensions.cs" />
     <Compile Include="PrintExtensions.cs" />
     <Compile Include="RandomExtensions.cs" />
+    <Compile Include="Reflection\FieldExtensions.cs" />
+    <Compile Include="Reflection\Getter.cs" />
+    <Compile Include="Reflection\IAccessor.cs" />
+    <Compile Include="Reflection\IGetter.cs" />
+    <Compile Include="Reflection\ISetter.cs" />
     <Compile Include="Reflection\JasilyCustomAttributeExtensions.cs" />
     <Compile Include="Reflection\JasilyReflectionExtensions.cs" />
+    <Compile Include="Reflection\MemberExtensions.cs" />
+    <Compile Include="Reflection\PropertyExtensions.cs" />
+    <Compile Include="Reflection\Setter.cs" />
+    <Compile Include="Reflection\TypeExtensions.cs" />
     <Compile Include="RequestActionEventArgs.cs" />
     <Compile Include="ITryEnter.cs" />
     <Compile Include="Singleton.cs" />
