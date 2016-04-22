@@ -30,18 +30,22 @@ namespace Jasily.ComponentModel.Editable
 
             public Setter<object, object> ObjectSetter { get; set; }
 
-            [Conditional("DEBUG")]
             public void Verify()
             {
                 Debug.Assert(this.ViewModelGetter != null);
                 Debug.Assert(this.ViewModelSetter != null);
                 Debug.Assert(this.ObjectGetter != null);
                 Debug.Assert(this.ObjectSetter != null);
+
                 if (this.Attribute.Converter != null)
                 {
-                    Debug.Assert(typeof(IConverter).GetTypeInfo().IsAssignableFrom(this.Attribute.Converter.GetTypeInfo()));
-                    Debug.Assert(this.Attribute.Converter.GetTypeInfo().DeclaredConstructors
-                        .FirstOrDefault(z => z.GetParameters().Length == 0) != null);
+                    if (!typeof(IConverter).GetTypeInfo().IsAssignableFrom(this.Attribute.Converter.GetTypeInfo()))
+                        throw new InvalidCastException($"can not cast {this.Attribute.Converter} to {typeof(IConverter)}");
+
+                    if (this.Attribute.Converter.GetTypeInfo()
+                        .DeclaredConstructors
+                        .FirstOrDefault(z => z.GetParameters().Length == 0) == null)
+                        throw new InvalidOperationException($"{this.Attribute.Converter} has no none args constructor.");
                 }
             }
 
@@ -52,7 +56,7 @@ namespace Jasily.ComponentModel.Editable
                 {
                     var converter = Activator.CreateInstance(this.Attribute.Converter) as IConverter;
                     Debug.Assert(converter != null);
-                    Debug.Assert(converter.CanConvertBack(value));
+                    if (!converter.CanConvertBack(value)) return;
                     value = converter.ConvertBack(value);
                 }
                 this.ObjectSetter.Set(obj, value);
@@ -65,7 +69,7 @@ namespace Jasily.ComponentModel.Editable
                 {
                     var converter = Activator.CreateInstance(this.Attribute.Converter) as IConverter;
                     Debug.Assert(converter != null);
-                    Debug.Assert(converter.CanConvert(value));
+                    if (!converter.CanConvert(value)) return;
                     value = converter.Convert(value);
                 }
                 this.ViewModelSetter.Set(vm, value);
@@ -138,10 +142,7 @@ namespace Jasily.ComponentModel.Editable
                         }
                     }
 
-#if DEBUG
                     mapped.Values.ForEach(z => z.Verify());
-#endif
-
                     this.writers = mapped;
                 }
             }
