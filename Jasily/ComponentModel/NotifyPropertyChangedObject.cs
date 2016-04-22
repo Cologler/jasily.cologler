@@ -1,18 +1,18 @@
-﻿using JetBrains.Annotations;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using JetBrains.Annotations;
 
 namespace Jasily.ComponentModel
 {
     public class NotifyPropertyChangedObject : INotifyPropertyChanged
     {
-        readonly object syncRootForEndRefresh = new object();
-        readonly List<string> registeredPropertyForEndRefresh = new List<string>();
+        private readonly object syncRootForEndRefresh = new object();
+        private readonly List<string> registeredPropertyForEndRefresh = new List<string>();
 
         /// <summary>
         /// please always call on background thread.
@@ -44,6 +44,7 @@ namespace Jasily.ComponentModel
             }
         }
 
+        [NotifyPropertyChangedInvocator]
         protected bool SetPropertyRef<T>(ref T property, T newValue, [CallerMemberName] string propertyName = null)
         {
             if (property.NormalEquals(newValue))
@@ -57,6 +58,7 @@ namespace Jasily.ComponentModel
                 return true;
             }
         }
+        [NotifyPropertyChangedInvocator]
         protected bool SetPropertyRef<T>(ref T property, T newValue, params string[] propertyNames)
         {
             if (property.NormalEquals(newValue))
@@ -86,13 +88,17 @@ namespace Jasily.ComponentModel
 
         public RefreshPropertiesMapper PropertiesMapper { get; set; }
 
+        [NotifyPropertyChangedInvocator]
         protected void NotifyPropertyChanged<T>(Expression<Func<T, object>> propertySelector)
         {
             var propertyName = PropertySelector<T>.Start(propertySelector);
             this.PropertyChanged.Fire(this, propertyName);
         }
+        [NotifyPropertyChangedInvocator]
         protected void NotifyPropertyChanged(string propertyName) => this.PropertyChanged.Fire(this, propertyName);
+        [NotifyPropertyChangedInvocator]
         protected void NotifyPropertyChanged(params string[] propertyNames) => this.PropertyChanged.Fire(this, propertyNames);
+        [NotifyPropertyChangedInvocator]
         protected void NotifyPropertyChanged(IEnumerable<string> propertyNames) => this.PropertyChanged.Fire(this, propertyNames);
 
         public event PropertyChangedEventHandler PropertyChanged;

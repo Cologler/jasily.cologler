@@ -64,9 +64,11 @@
     <Compile Include="ComponentModel\Editable\Converters\ToStringConverter.cs" />
     <Compile Include="ComponentModel\Editable\EditableFieldAttribute.cs" />
     <Compile Include="ComponentModel\Editable\JasilyEditableViewModel.cs" />
+    <Compile Include="ComponentModel\IPropertyContainer.cs" />
     <Compile Include="ComponentModel\JasilyViewModel.cs" />
     <Compile Include="ComponentModel\NotifyPropertyChangedAttribute.cs" />
     <Compile Include="ComponentModel\NotifyPropertyChangedObject.cs" />
+    <Compile Include="ComponentModel\Property.cs" />
     <Compile Include="ComponentModel\PropertySelector.cs" />
     <Compile Include="Container.cs" />
     <Compile Include="Converter.cs" />
