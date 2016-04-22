@@ -1,7 +1,7 @@
-using JetBrains.Annotations;
 using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 
 namespace Jasily.Collections.Generic
 {
@@ -42,7 +42,7 @@ namespace Jasily.Collections.Generic
 
         public CriticalValue<T> Max { get; }
 
-        private void CheckInitialized()
+        internal void CheckInitialized()
         {
             var r = this.Min.CompareTo(this.Max);
             if (r < 0) return;

@@ -7,18 +7,17 @@ namespace Jasily.Collections
 {
     public class JasilyIncrementBits : IEnumerable<JasilyIncrementBits.BitValue>
     {
-        private readonly int length;
         private readonly ulong max;
 
-        public int BitLength => this.length;
+        public int BitWidth { get; }
 
-        public JasilyIncrementBits(int bitLength)
+        public JasilyIncrementBits(int bitWidth)
         {
-            if (bitLength < 1) throw new ArgumentException("must > 0", nameof(bitLength));
-            if (bitLength > 64) throw new ArgumentException("PC not support length > 64", nameof(bitLength));
+            if (bitWidth < 1) throw new ArgumentException("must > 0", nameof(bitWidth));
+            if (bitWidth > 64) throw new ArgumentException("PC not support length > 64", nameof(bitWidth));
 
-            this.length = bitLength;
-            this.max = (ulong)Math.Pow(2, this.length);
+            this.BitWidth = bitWidth;
+            this.max = (ulong)Math.Pow(2, this.BitWidth);
         }
 
         public IEnumerator<BitValue> GetEnumerator()

@@ -1,9 +1,9 @@
-using JetBrains.Annotations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using JetBrains.Annotations;
 
 namespace Jasily.Collections.Generic
 {
@@ -28,6 +28,7 @@ namespace Jasily.Collections.Generic
 
         public RangeDictionary(Range<TKey> maxRange)
         {
+            maxRange.CheckInitialized();
             this.maxRange = maxRange;
             this.Comparer = Comparer<TKey>.Default;
         }
@@ -350,8 +351,8 @@ namespace Jasily.Collections.Generic
         public IEnumerator<KeyValuePair<Range<TKey>, TValue>> GetEnumerator()
         {
             Debug.Assert(this.ranges.Count == this.values.Count);
-            return
-                this.ranges.Select((t, i) => new KeyValuePair<Range<TKey>, TValue>(t, this.values[i])).GetEnumerator();
+            return this.ranges.Select((t, i) => new KeyValuePair<Range<TKey>, TValue>(t, this.values[i]))
+                .GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();

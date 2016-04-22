@@ -1,124 +1,175 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 
 namespace Jasily.ComponentModel
 {
-    public abstract class JasilyEditableViewModel<T> : JasilyViewModel<T>
+    internal static class JasilyEditableViewModel
     {
-        private List<Action<object, object>> writeToActions;
-        private List<Action<object, object>> readFromActions;
-        private Dictionary<string, Tuple<Getter<object, object>, Setter<object, object>>> currentTypeMapped;
-        private Dictionary<string, Tuple<Getter<object, object>, Setter<object, object>>> sourceTypeMapped;
-
-        protected Type CurrentType { get; }
-
-        protected Type SourceType { get; }
-
-        public JasilyEditableViewModel(T source)
-            : base(source)
+        public class Cache
         {
-            this.CurrentType = this.GetType();
-            this.SourceType = typeof(T);
-        }
+            private List<Action<object, object>> writeToActions;
+            private List<Action<object, object>> readFromActions;
+            private Dictionary<string, Tuple<Getter<object, object>, Setter<object, object>>> currentTypeMapped;
+            private Dictionary<string, Tuple<Getter<object, object>, Setter<object, object>>> sourceTypeMapped;
 
-        private void MappingType()
-        {
-            if (this.currentTypeMapped == null)
+            protected Type ViewModelType { get; }
+
+            protected Type ObjectType { get; }
+
+            public Cache(Type viewModelType, Type objectType)
             {
-                var mapped = new Dictionary<string, Tuple<Getter<object, object>, Setter<object, object>>>();
-                foreach (var field in this.CurrentType.GetRuntimeFields()
-                    .Where(JasilyCustomAttributeExtensions.HasCustomAttribute<EditableFieldAttribute>))
-                {
-                    mapped.Add(field.Name, Tuple.Create(field.CompileGetter(), field.CompileSetter()));
-                }
-                foreach (var property in this.CurrentType.GetRuntimeProperties()
-                    .Where(JasilyCustomAttributeExtensions.HasCustomAttribute<EditableFieldAttribute>))
-                {
-                    mapped.Add(property.Name, Tuple.Create(property.CompileGetter(), property.CompileSetter()));
-                }
+                this.ViewModelType = viewModelType;
+                this.ObjectType = objectType;
 
-                this.currentTypeMapped = mapped;
+                this.MappingWrite();
+                this.MappingRead();
             }
 
-            if (this.sourceTypeMapped == null)
+            private void MappingType()
             {
-                Tuple<Getter<object, object>, Setter<object, object>> tmp;
-                var mapped = new Dictionary<string, Tuple<Getter<object, object>, Setter<object, object>>>();
-                foreach (var field in this.SourceType.GetRuntimeFields())
+                // mapper type
+                if (this.currentTypeMapped == null)
                 {
-                    if (this.currentTypeMapped.TryGetValue(field.Name, out tmp))
+                    var mapped = new Dictionary<string, Tuple<Getter<object, object>, Setter<object, object>>>();
+                    foreach (var field in this.ViewModelType.GetRuntimeFields()
+                        .Where(JasilyCustomAttributeExtensions.HasCustomAttribute<EditableFieldAttribute>))
                     {
                         mapped.Add(field.Name, Tuple.Create(field.CompileGetter(), field.CompileSetter()));
                     }
-                }
-                foreach (var property in this.SourceType.GetRuntimeProperties())
-                {
-                    if (this.currentTypeMapped.TryGetValue(property.Name, out tmp))
+                    foreach (var property in this.ViewModelType.GetRuntimeProperties()
+                        .Where(JasilyCustomAttributeExtensions.HasCustomAttribute<EditableFieldAttribute>))
                     {
                         mapped.Add(property.Name, Tuple.Create(property.CompileGetter(), property.CompileSetter()));
                     }
+
+                    this.currentTypeMapped = mapped;
                 }
 
-                this.sourceTypeMapped = mapped;
+                if (this.sourceTypeMapped == null)
+                {
+                    Tuple<Getter<object, object>, Setter<object, object>> tmp;
+                    var mapped = new Dictionary<string, Tuple<Getter<object, object>, Setter<object, object>>>();
+                    foreach (var field in this.ObjectType.GetRuntimeFields())
+                    {
+                        if (this.currentTypeMapped.TryGetValue(field.Name, out tmp))
+                        {
+                            mapped.Add(field.Name, Tuple.Create(field.CompileGetter(), field.CompileSetter()));
+                        }
+                    }
+                    foreach (var property in this.ObjectType.GetRuntimeProperties())
+                    {
+                        if (this.currentTypeMapped.TryGetValue(property.Name, out tmp))
+                        {
+                            mapped.Add(property.Name, Tuple.Create(property.CompileGetter(), property.CompileSetter()));
+                        }
+                    }
+
+                    this.sourceTypeMapped = mapped;
+                }
+            }
+
+            private void MappingWrite()
+            {
+                if (this.writeToActions == null)
+                {
+                    this.MappingType();
+                    var mapping = new List<Action<object, object>>();
+                    foreach (var kvp in this.currentTypeMapped)
+                    {
+                        var getter = kvp.Value.Item1;
+                        var setter = this.sourceTypeMapped[kvp.Key].Item2;
+                        mapping.Add((source, dest) => setter.Set(dest, getter.Get(source)));
+                    }
+                    this.writeToActions = mapping;
+                }
+            }
+
+            private void MappingRead()
+            {
+                if (this.readFromActions == null)
+                {
+                    this.MappingType();
+                    var mapping = new List<Action<object, object>>();
+                    foreach (var kvp in this.currentTypeMapped)
+                    {
+                        var getter = this.sourceTypeMapped[kvp.Key].Item1;
+                        var setter = kvp.Value.Item2;
+                        mapping.Add((source, dest) => setter.Set(dest, getter.Get(source)));
+                    }
+                    this.readFromActions = mapping;
+                }
+            }
+
+            public void WriteToObject(object vm, object obj)
+            {
+                Debug.Assert(vm != null);
+                Debug.Assert(obj != null);
+                Debug.Assert(vm.GetType() == this.ViewModelType);
+                Debug.Assert(obj.GetType() == this.ObjectType);
+
+                foreach (var writer in this.writeToActions) writer(vm, obj);
+            }
+
+            public void ReadFromObject(object obj, object vm)
+            {
+                Debug.Assert(vm != null);
+                Debug.Assert(obj != null);
+                Debug.Assert(vm.GetType() == this.ViewModelType);
+                Debug.Assert(obj.GetType() == this.ObjectType);
+
+                foreach (var reader in this.readFromActions) reader(obj, vm);
             }
         }
 
-        private void MappingWrite()
+        public class Cache<T>
         {
-            if (this.writeToActions == null)
+            // ReSharper disable once StaticMemberInGenericType
+            private static readonly Dictionary<Type, Cache> Cached = new Dictionary<Type, Cache>();
+
+            public static Cache GetMapperCache(Type viewModelType)
             {
-                this.MappingType();
-                var mapping = new List<Action<object, object>>();
-                foreach (var kvp in this.currentTypeMapped)
+                lock (Cached)
                 {
-                    var getter = kvp.Value.Item1;
-                    var setter = this.sourceTypeMapped[kvp.Key].Item2;
-                    mapping.Add((source, dest) => setter.Set(dest, getter.Get(source)));
+                    var ret = Cached.GetValueOrDefault(viewModelType);
+                    if (ret != null) return ret;
                 }
-                this.writeToActions = mapping;
+
+                var @new = new Cache(viewModelType, typeof(T));
+
+                lock (Cached)
+                {
+                    return Cached.GetOrSetValue(viewModelType, @new);
+                }
             }
         }
+    }
 
-        private void MappingRead()
+    public abstract class JasilyEditableViewModel<T> : JasilyViewModel<T>
+    {
+        private JasilyEditableViewModel.Cache mapperCached;
+
+        protected JasilyEditableViewModel(T source)
+            : base(source)
         {
-            if (this.readFromActions == null)
-            {
-                this.MappingType();
-                var mapping = new List<Action<object, object>>();
-                foreach (var kvp in this.currentTypeMapped)
-                {
-                    var getter = this.sourceTypeMapped[kvp.Key].Item1;
-                    var setter = kvp.Value.Item2;
-                    mapping.Add((source, dest) => setter.Set(dest, getter.Get(source)));
-                }
-                this.readFromActions = mapping;
-            }
         }
 
         public virtual void WriteToObject(T obj)
         {
             if (ReferenceEquals(obj, null)) return;
-
-            this.MappingWrite();
-
-            foreach (var m in this.writeToActions)
-            {
-                m(this, obj);
-            }
+            if (this.mapperCached == null)
+                this.mapperCached = JasilyEditableViewModel.Cache<T>.GetMapperCache(this.GetType());
+            this.mapperCached.WriteToObject(this, obj);
         }
 
         public virtual void ReadFromObject(T obj)
         {
             if (ReferenceEquals(obj, null)) return;
-
-            this.MappingRead();
-
-            foreach (var m in this.readFromActions)
-            {
-                m(obj, this);
-            }
+            if (this.mapperCached == null)
+                this.mapperCached = JasilyEditableViewModel.Cache<T>.GetMapperCache(this.GetType());
+            this.mapperCached.ReadFromObject(obj, this);
         }
     }
 }
