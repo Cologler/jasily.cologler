@@ -8,12 +8,45 @@ namespace Jasily.ComponentModel
 {
     internal static class JasilyEditableViewModel
     {
+        public class Writer
+        {
+            public Writer(string name, EditableFieldAttribute attribute)
+            {
+                Debug.Assert(name != null);
+                Debug.Assert(attribute != null);
+                this.Name = name;
+                this.Attribute = attribute;
+            }
+
+            public string Name { get; }
+
+            public EditableFieldAttribute Attribute { get; }
+
+            public Getter<object, object> ViewModelGetter { get; set; }
+
+            public Setter<object, object> ViewModelSetter { get; set; }
+
+            public Getter<object, object> ObjectGetter { get; set; }
+
+            public Setter<object, object> ObjectSetter { get; set; }
+
+            [Conditional("DEBUG")]
+            public void Verify()
+            {
+                Debug.Assert(this.ViewModelGetter != null);
+                Debug.Assert(this.ViewModelSetter != null);
+                Debug.Assert(this.ObjectGetter != null);
+                Debug.Assert(this.ObjectSetter != null);
+            }
+
+            public void WriteToObject(object vm, object obj) => this.ObjectSetter.Set(obj, this.ViewModelGetter.Get(vm));
+
+            public void ReadFromObject(object obj, object vm) => this.ViewModelSetter.Set(obj, this.ObjectGetter.Get(vm));
+        }
+
         public class Cache
         {
-            private List<Action<object, object>> writeToActions;
-            private List<Action<object, object>> readFromActions;
-            private Dictionary<string, Tuple<Getter<object, object>, Setter<object, object>>> currentTypeMapped;
-            private Dictionary<string, Tuple<Getter<object, object>, Setter<object, object>>> sourceTypeMapped;
+            private Dictionary<string, Writer> writers = new Dictionary<string, Writer>();
 
             protected Type ViewModelType { get; }
 
@@ -24,82 +57,64 @@ namespace Jasily.ComponentModel
                 this.ViewModelType = viewModelType;
                 this.ObjectType = objectType;
 
-                this.MappingWrite();
-                this.MappingRead();
+                this.MappingType();
             }
 
             private void MappingType()
             {
-                // mapper type
-                if (this.currentTypeMapped == null)
+                if (this.writers == null)
                 {
-                    var mapped = new Dictionary<string, Tuple<Getter<object, object>, Setter<object, object>>>();
-                    foreach (var field in this.ViewModelType.GetRuntimeFields()
-                        .Where(JasilyCustomAttributeExtensions.HasCustomAttribute<EditableFieldAttribute>))
+                    var mapped = new Dictionary<string, Writer>();
+
+                    // view model
+                    foreach (var field in this.ViewModelType.GetRuntimeFields())
                     {
-                        mapped.Add(field.Name, Tuple.Create(field.CompileGetter(), field.CompileSetter()));
+                        var attr = field.GetCustomAttribute<EditableFieldAttribute>();
+                        if (attr != null)
+                        {
+                            var writer = new Writer(field.Name, attr);
+                            writer.ViewModelGetter = field.CompileGetter();
+                            writer.ViewModelSetter = field.CompileSetter();
+                            mapped.Add(field.Name, writer);
+                        }
                     }
-                    foreach (var property in this.ViewModelType.GetRuntimeProperties()
-                        .Where(JasilyCustomAttributeExtensions.HasCustomAttribute<EditableFieldAttribute>))
+                    foreach (var property in this.ViewModelType.GetRuntimeProperties())
                     {
-                        mapped.Add(property.Name, Tuple.Create(property.CompileGetter(), property.CompileSetter()));
+                        var attr = property.GetCustomAttribute<EditableFieldAttribute>();
+                        if (attr != null)
+                        {
+                            var writer = new Writer(property.Name, attr);
+                            writer.ViewModelGetter = property.CompileGetter();
+                            writer.ViewModelSetter = property.CompileSetter();
+                            mapped.Add(property.Name, writer);
+                        }
                     }
 
-                    this.currentTypeMapped = mapped;
-                }
-
-                if (this.sourceTypeMapped == null)
-                {
-                    Tuple<Getter<object, object>, Setter<object, object>> tmp;
-                    var mapped = new Dictionary<string, Tuple<Getter<object, object>, Setter<object, object>>>();
+                    // object
                     foreach (var field in this.ObjectType.GetRuntimeFields())
                     {
-                        if (this.currentTypeMapped.TryGetValue(field.Name, out tmp))
+                        Writer writer;
+                        if (mapped.TryGetValue(field.Name, out writer))
                         {
-                            mapped.Add(field.Name, Tuple.Create(field.CompileGetter(), field.CompileSetter()));
+                            writer.ObjectGetter = field.CompileGetter();
+                            writer.ObjectSetter = field.CompileSetter();
                         }
                     }
                     foreach (var property in this.ObjectType.GetRuntimeProperties())
                     {
-                        if (this.currentTypeMapped.TryGetValue(property.Name, out tmp))
+                        Writer writer;
+                        if (mapped.TryGetValue(property.Name, out writer))
                         {
-                            mapped.Add(property.Name, Tuple.Create(property.CompileGetter(), property.CompileSetter()));
+                            writer.ObjectGetter = property.CompileGetter();
+                            writer.ObjectSetter = property.CompileSetter();
                         }
                     }
 
-                    this.sourceTypeMapped = mapped;
-                }
-            }
+#if DEBUG
+                    mapped.Values.ForEach(z => z.Verify());
+#endif
 
-            private void MappingWrite()
-            {
-                if (this.writeToActions == null)
-                {
-                    this.MappingType();
-                    var mapping = new List<Action<object, object>>();
-                    foreach (var kvp in this.currentTypeMapped)
-                    {
-                        var getter = kvp.Value.Item1;
-                        var setter = this.sourceTypeMapped[kvp.Key].Item2;
-                        mapping.Add((source, dest) => setter.Set(dest, getter.Get(source)));
-                    }
-                    this.writeToActions = mapping;
-                }
-            }
-
-            private void MappingRead()
-            {
-                if (this.readFromActions == null)
-                {
-                    this.MappingType();
-                    var mapping = new List<Action<object, object>>();
-                    foreach (var kvp in this.currentTypeMapped)
-                    {
-                        var getter = this.sourceTypeMapped[kvp.Key].Item1;
-                        var setter = kvp.Value.Item2;
-                        mapping.Add((source, dest) => setter.Set(dest, getter.Get(source)));
-                    }
-                    this.readFromActions = mapping;
+                    this.writers = mapped;
                 }
             }
 
@@ -110,7 +125,10 @@ namespace Jasily.ComponentModel
                 Debug.Assert(vm.GetType() == this.ViewModelType);
                 Debug.Assert(obj.GetType() == this.ObjectType);
 
-                foreach (var writer in this.writeToActions) writer(vm, obj);
+                foreach (var writer in this.writers.Values)
+                {
+                    writer.WriteToObject(vm, obj);
+                }
             }
 
             public void ReadFromObject(object obj, object vm)
@@ -120,7 +138,10 @@ namespace Jasily.ComponentModel
                 Debug.Assert(vm.GetType() == this.ViewModelType);
                 Debug.Assert(obj.GetType() == this.ObjectType);
 
-                foreach (var reader in this.readFromActions) reader(obj, vm);
+                foreach (var writer in this.writers.Values)
+                {
+                    writer.ReadFromObject(vm, obj);
+                }
             }
         }
 
