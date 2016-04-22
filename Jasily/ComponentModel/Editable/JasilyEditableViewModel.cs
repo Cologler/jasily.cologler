@@ -21,7 +21,7 @@ namespace Jasily.ComponentModel.Editable
             {
                 Debug.Assert(name != null);
                 Debug.Assert(attribute != null);
-                this.Name = name;
+                this.Name = string.IsNullOrWhiteSpace(attribute.Name) ? name : attribute.Name;
                 this.Attribute = attribute;
             }
 
@@ -85,9 +85,10 @@ namespace Jasily.ComponentModel.Editable
             public override void Verify()
             {
                 base.Verify();
-                
-                Debug.Assert(this.ObjectGetter != null);
-                Debug.Assert(this.ObjectSetter != null);
+
+                if (this.ObjectGetter == null || this.ObjectSetter == null)
+                    throw new InvalidOperationException($"can not find property or field call [{this.Name}] on object.");
+
                 if (this.IsPropertyContainer)
                     Debug.Assert(this.ViewModelSetter == null);
                 else
@@ -112,7 +113,7 @@ namespace Jasily.ComponentModel.Editable
                 var value = this.ViewModelGetter.Get(vm);
 
                 // unwrap IPropertyContainer
-                if (this.IsPropertyContainer) 
+                if (this.IsPropertyContainer)
                 {
                     value = (value as IPropertyContainer)?.Value;
                 }
@@ -144,7 +145,7 @@ namespace Jasily.ComponentModel.Editable
                     if (!converter.CanConvert(value)) return;
                     value = converter.Convert(value);
                 }
-                
+
                 if (this.IsPropertyContainer)
                 {
                     // wrap IPropertyContainer
@@ -194,7 +195,7 @@ namespace Jasily.ComponentModel.Editable
                                 {
                                     ViewModelGetter = field.CompileGetter()
                                 };
-                                mapped.Add(field.Name, executor);
+                                mapped.Add(executor.Name, executor);
                             }
                             else
                             {
@@ -206,7 +207,7 @@ namespace Jasily.ComponentModel.Editable
                                     .GetTypeInfo()
                                     .IsAssignableFrom(field.FieldType.GetTypeInfo());
                                 if (!executor.IsPropertyContainer) executor.ViewModelSetter = field.CompileSetter();
-                                mapped.Add(field.Name, executor);
+                                mapped.Add(executor.Name, executor);
                             }
                         }
                     }
@@ -223,7 +224,7 @@ namespace Jasily.ComponentModel.Editable
                                 {
                                     ViewModelGetter = property.CompileGetter()
                                 };
-                                mapped.Add(property.Name, executor);
+                                mapped.Add(executor.Name, executor);
                             }
                             else
                             {
@@ -235,7 +236,7 @@ namespace Jasily.ComponentModel.Editable
                                     .GetTypeInfo()
                                     .IsAssignableFrom(property.PropertyType.GetTypeInfo());
                                 if (!executor.IsPropertyContainer) executor.ViewModelSetter = property.CompileSetter();
-                                mapped.Add(property.Name, executor);
+                                mapped.Add(executor.Name, executor);
                             }
                         }
                     }
@@ -351,9 +352,9 @@ namespace Jasily.ComponentModel.Editable
 
         #region Implementation of IEditableViewModel
 
-        void JasilyEditableViewModel.IEditableViewModel.WriteToObject(object obj) => this.WriteToObject((T) obj);
+        void JasilyEditableViewModel.IEditableViewModel.WriteToObject(object obj) => this.WriteToObject((T)obj);
 
-        void JasilyEditableViewModel.IEditableViewModel.ReadFromObject(object obj) => this.ReadFromObject((T) obj);
+        void JasilyEditableViewModel.IEditableViewModel.ReadFromObject(object obj) => this.ReadFromObject((T)obj);
 
         #endregion
     }

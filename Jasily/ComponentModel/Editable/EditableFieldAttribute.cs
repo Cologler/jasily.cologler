@@ -17,5 +17,10 @@ namespace Jasily.ComponentModel.Editable
         /// this will ignore Converter because of XXX -_-.
         /// </summary>
         public bool IsSubEditableViewModel { get; set; }
+
+        /// <summary>
+        /// if keep null or empty, will ignore this property.
+        /// </summary>
+        public string Name { get; set; }
     }
 }
