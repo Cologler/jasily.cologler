@@ -4,11 +4,11 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 
-namespace Jasily.ComponentModel
+namespace Jasily.ComponentModel.Editable
 {
     internal static class JasilyEditableViewModel
     {
-        public class Writer
+        private class Writer
         {
             public Writer(string name, EditableFieldAttribute attribute)
             {
@@ -37,16 +37,44 @@ namespace Jasily.ComponentModel
                 Debug.Assert(this.ViewModelSetter != null);
                 Debug.Assert(this.ObjectGetter != null);
                 Debug.Assert(this.ObjectSetter != null);
+                if (this.Attribute.Converter != null)
+                {
+                    Debug.Assert(typeof(IConverter).GetTypeInfo().IsAssignableFrom(this.Attribute.Converter.GetTypeInfo()));
+                    Debug.Assert(this.Attribute.Converter.GetTypeInfo().DeclaredConstructors
+                        .FirstOrDefault(z => z.GetParameters().Length == 0) != null);
+                }
             }
 
-            public void WriteToObject(object vm, object obj) => this.ObjectSetter.Set(obj, this.ViewModelGetter.Get(vm));
+            public void WriteToObject(object vm, object obj)
+            {
+                var value = this.ViewModelGetter.Get(vm);
+                if (this.Attribute.Converter != null)
+                {
+                    var converter = Activator.CreateInstance(this.Attribute.Converter) as IConverter;
+                    Debug.Assert(converter != null);
+                    Debug.Assert(converter.CanConvertBack(value));
+                    value = converter.ConvertBack(value);
+                }
+                this.ObjectSetter.Set(obj, value);
+            }
 
-            public void ReadFromObject(object obj, object vm) => this.ViewModelSetter.Set(obj, this.ObjectGetter.Get(vm));
+            public void ReadFromObject(object obj, object vm)
+            {
+                var value = this.ObjectGetter.Get(obj);
+                if (this.Attribute.Converter != null)
+                {
+                    var converter = Activator.CreateInstance(this.Attribute.Converter) as IConverter;
+                    Debug.Assert(converter != null);
+                    Debug.Assert(converter.CanConvert(value));
+                    value = converter.Convert(value);
+                }
+                this.ViewModelSetter.Set(vm, value);
+            }
         }
 
         public class Cache
         {
-            private Dictionary<string, Writer> writers = new Dictionary<string, Writer>();
+            private Dictionary<string, Writer> writers;
 
             protected Type ViewModelType { get; }
 
@@ -140,7 +168,7 @@ namespace Jasily.ComponentModel
 
                 foreach (var writer in this.writers.Values)
                 {
-                    writer.ReadFromObject(vm, obj);
+                    writer.ReadFromObject(obj, vm);
                 }
             }
         }
