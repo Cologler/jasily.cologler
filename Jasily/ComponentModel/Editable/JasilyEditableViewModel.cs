@@ -8,9 +8,16 @@ namespace Jasily.ComponentModel.Editable
 {
     internal static class JasilyEditableViewModel
     {
-        private class Writer
+        internal interface IEditableViewModel
         {
-            public Writer(string name, EditableFieldAttribute attribute)
+            void WriteToObject(object obj);
+
+            void ReadFromObject(object obj);
+        }
+
+        private abstract class Executor
+        {
+            protected Executor(string name, EditableFieldAttribute attribute)
             {
                 Debug.Assert(name != null);
                 Debug.Assert(attribute != null);
@@ -24,15 +31,59 @@ namespace Jasily.ComponentModel.Editable
 
             public Getter<object, object> ViewModelGetter { get; set; }
 
+            public virtual void Verify()
+            {
+                Debug.Assert(this.ViewModelGetter != null);
+            }
+
+            public abstract void WriteToObject(object vm, object obj);
+
+            public abstract void ReadFromObject(object obj, object vm);
+        }
+
+        private class SubViewModelCaller : Executor
+        {
+            public override void WriteToObject(object vm, object obj)
+            {
+                Debug.Assert(vm != null && obj != null);
+                var value = this.ViewModelGetter.Get(vm);
+                if (value == null) return;
+                Debug.Assert(value is IEditableViewModel);
+                ((IEditableViewModel)value).WriteToObject(obj);
+            }
+
+            public override void ReadFromObject(object obj, object vm)
+            {
+                Debug.Assert(vm != null && obj != null);
+                var value = this.ViewModelGetter.Get(vm);
+                if (value == null) return;
+                Debug.Assert(value is IEditableViewModel);
+                ((IEditableViewModel)value).ReadFromObject(obj);
+            }
+
+            public SubViewModelCaller(string name, EditableFieldAttribute attribute)
+                : base(name, attribute)
+            {
+            }
+        }
+
+        private class FieldWriter : Executor
+        {
+            public FieldWriter(string name, EditableFieldAttribute attribute)
+                : base(name, attribute)
+            {
+            }
+
             public Setter<object, object> ViewModelSetter { get; set; }
 
             public Getter<object, object> ObjectGetter { get; set; }
 
             public Setter<object, object> ObjectSetter { get; set; }
 
-            public void Verify()
+            public override void Verify()
             {
-                Debug.Assert(this.ViewModelGetter != null);
+                base.Verify();
+
                 Debug.Assert(this.ViewModelSetter != null);
                 Debug.Assert(this.ObjectGetter != null);
                 Debug.Assert(this.ObjectSetter != null);
@@ -49,8 +100,9 @@ namespace Jasily.ComponentModel.Editable
                 }
             }
 
-            public void WriteToObject(object vm, object obj)
+            public override void WriteToObject(object vm, object obj)
             {
+                Debug.Assert(vm != null && obj != null);
                 var value = this.ViewModelGetter.Get(vm);
                 if (this.Attribute.Converter != null)
                 {
@@ -62,8 +114,9 @@ namespace Jasily.ComponentModel.Editable
                 this.ObjectSetter.Set(obj, value);
             }
 
-            public void ReadFromObject(object obj, object vm)
+            public override void ReadFromObject(object obj, object vm)
             {
+                Debug.Assert(vm != null && obj != null);
                 var value = this.ObjectGetter.Get(obj);
                 if (this.Attribute.Converter != null)
                 {
@@ -78,7 +131,7 @@ namespace Jasily.ComponentModel.Editable
 
         public class Cache
         {
-            private Dictionary<string, Writer> writers;
+            private Dictionary<string, Executor> executors;
 
             protected Type ViewModelType { get; }
 
@@ -94,9 +147,9 @@ namespace Jasily.ComponentModel.Editable
 
             private void MappingType()
             {
-                if (this.writers == null)
+                if (this.executors == null)
                 {
-                    var mapped = new Dictionary<string, Writer>();
+                    var mapped = new Dictionary<string, Executor>();
 
                     // view model
                     foreach (var field in this.ViewModelType.GetRuntimeFields())
@@ -104,10 +157,19 @@ namespace Jasily.ComponentModel.Editable
                         var attr = field.GetCustomAttribute<EditableFieldAttribute>();
                         if (attr != null)
                         {
-                            var writer = new Writer(field.Name, attr);
-                            writer.ViewModelGetter = field.CompileGetter();
-                            writer.ViewModelSetter = field.CompileSetter();
-                            mapped.Add(field.Name, writer);
+                            if (attr.IsSubEditableViewModel)
+                            {
+                                var executor = new SubViewModelCaller(field.Name, attr);
+                                executor.ViewModelGetter = field.CompileGetter();
+                                mapped.Add(field.Name, executor);
+                            }
+                            else
+                            {
+                                var executor = new FieldWriter(field.Name, attr);
+                                executor.ViewModelGetter = field.CompileGetter();
+                                executor.ViewModelSetter = field.CompileSetter();
+                                mapped.Add(field.Name, executor);
+                            }
                         }
                     }
                     foreach (var property in this.ViewModelType.GetRuntimeProperties())
@@ -115,35 +177,52 @@ namespace Jasily.ComponentModel.Editable
                         var attr = property.GetCustomAttribute<EditableFieldAttribute>();
                         if (attr != null)
                         {
-                            var writer = new Writer(property.Name, attr);
-                            writer.ViewModelGetter = property.CompileGetter();
-                            writer.ViewModelSetter = property.CompileSetter();
-                            mapped.Add(property.Name, writer);
+                            if (attr.IsSubEditableViewModel)
+                            {
+                                var executor = new SubViewModelCaller(property.Name, attr);
+                                executor.ViewModelGetter = property.CompileGetter();
+                                mapped.Add(property.Name, executor);
+                            }
+                            else
+                            {
+                                var writer = new FieldWriter(property.Name, attr);
+                                writer.ViewModelGetter = property.CompileGetter();
+                                writer.ViewModelSetter = property.CompileSetter();
+                                mapped.Add(property.Name, writer);
+                            }
                         }
                     }
 
                     // object
                     foreach (var field in this.ObjectType.GetRuntimeFields())
                     {
-                        Writer writer;
-                        if (mapped.TryGetValue(field.Name, out writer))
+                        Executor executor;
+                        if (mapped.TryGetValue(field.Name, out executor))
                         {
-                            writer.ObjectGetter = field.CompileGetter();
-                            writer.ObjectSetter = field.CompileSetter();
+                            var writer = executor as FieldWriter;
+                            if (writer != null)
+                            {
+                                writer.ObjectGetter = field.CompileGetter();
+                                writer.ObjectSetter = field.CompileSetter();
+                            }
                         }
                     }
                     foreach (var property in this.ObjectType.GetRuntimeProperties())
                     {
-                        Writer writer;
-                        if (mapped.TryGetValue(property.Name, out writer))
+                        Executor executor;
+                        if (mapped.TryGetValue(property.Name, out executor))
                         {
-                            writer.ObjectGetter = property.CompileGetter();
-                            writer.ObjectSetter = property.CompileSetter();
+                            var writer = executor as FieldWriter;
+                            if (writer != null)
+                            {
+                                writer.ObjectGetter = property.CompileGetter();
+                                writer.ObjectSetter = property.CompileSetter();
+                            }
                         }
                     }
 
                     mapped.Values.ForEach(z => z.Verify());
-                    this.writers = mapped;
+                    this.executors = mapped;
                 }
             }
 
@@ -154,7 +233,7 @@ namespace Jasily.ComponentModel.Editable
                 Debug.Assert(vm.GetType() == this.ViewModelType);
                 Debug.Assert(obj.GetType() == this.ObjectType);
 
-                foreach (var writer in this.writers.Values)
+                foreach (var writer in this.executors.Values)
                 {
                     writer.WriteToObject(vm, obj);
                 }
@@ -167,7 +246,7 @@ namespace Jasily.ComponentModel.Editable
                 Debug.Assert(vm.GetType() == this.ViewModelType);
                 Debug.Assert(obj.GetType() == this.ObjectType);
 
-                foreach (var writer in this.writers.Values)
+                foreach (var writer in this.executors.Values)
                 {
                     writer.ReadFromObject(obj, vm);
                 }
@@ -197,7 +276,8 @@ namespace Jasily.ComponentModel.Editable
         }
     }
 
-    public abstract class JasilyEditableViewModel<T> : JasilyViewModel<T>
+    public abstract class JasilyEditableViewModel<T> : JasilyViewModel<T>,
+        JasilyEditableViewModel.IEditableViewModel
     {
         private JasilyEditableViewModel.Cache mapperCached;
 
@@ -221,5 +301,25 @@ namespace Jasily.ComponentModel.Editable
                 this.mapperCached = JasilyEditableViewModel.Cache<T>.GetMapperCache(this.GetType());
             this.mapperCached.ReadFromObject(obj, this);
         }
+
+        #region Implementation of IEditableViewModel
+
+        void JasilyEditableViewModel.IEditableViewModel.WriteToObject(object obj)
+        {
+            Debug.Assert(obj is T);
+            if (this.mapperCached == null)
+                this.mapperCached = JasilyEditableViewModel.Cache<T>.GetMapperCache(this.GetType());
+            this.mapperCached.WriteToObject(this, obj);
+        }
+
+        void JasilyEditableViewModel.IEditableViewModel.ReadFromObject(object obj)
+        {
+            Debug.Assert(obj is T);
+            if (this.mapperCached == null)
+                this.mapperCached = JasilyEditableViewModel.Cache<T>.GetMapperCache(this.GetType());
+            this.mapperCached.ReadFromObject(obj, this);
+        }
+
+        #endregion
     }
 }

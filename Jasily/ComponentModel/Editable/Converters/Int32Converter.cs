@@ -1,6 +1,6 @@
 ﻿namespace Jasily.ComponentModel.Editable.Converters
 {
-    public class Int32Converter : ToStringConverter<int>
+    public class Int32ToStringConverter : ToStringConverter<int>
     {
         #region Overrides of Converter<int,string>
 

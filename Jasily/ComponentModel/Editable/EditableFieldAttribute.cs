@@ -11,5 +11,7 @@ namespace Jasily.ComponentModel.Editable
         /// ConvertBack() will be call on view model to object.
         /// </summary>
         public Type Converter { get; set; }
+
+        public bool IsSubEditableViewModel { get; set; }
     }
 }
