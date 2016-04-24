@@ -15,7 +15,7 @@ namespace Jasily.ComponentModel.Editable
             void ReadFromObject(object obj);
         }
 
-        private abstract class Executor
+        private abstract class Executor : IGetKey<string>
         {
             protected Executor(string name, EditableFieldAttribute attribute)
             {
@@ -39,6 +39,12 @@ namespace Jasily.ComponentModel.Editable
             public abstract void WriteToObject(object vm, object obj);
 
             public abstract void ReadFromObject(object obj, object vm);
+
+            #region Implementation of IGetKey<out string>
+
+            public string GetKey() => this.Name;
+
+            #endregion
         }
 
         private class SubViewModelCaller : Executor
@@ -195,7 +201,7 @@ namespace Jasily.ComponentModel.Editable
                                 {
                                     ViewModelGetter = field.CompileGetter()
                                 };
-                                mapped.Add(executor.Name, executor);
+                                mapped.Add(executor);
                             }
                             else
                             {
@@ -207,7 +213,7 @@ namespace Jasily.ComponentModel.Editable
                                     .GetTypeInfo()
                                     .IsAssignableFrom(field.FieldType.GetTypeInfo());
                                 if (!executor.IsPropertyContainer) executor.ViewModelSetter = field.CompileSetter();
-                                mapped.Add(executor.Name, executor);
+                                mapped.Add(executor);
                             }
                         }
                     }
@@ -224,7 +230,7 @@ namespace Jasily.ComponentModel.Editable
                                 {
                                     ViewModelGetter = property.CompileGetter()
                                 };
-                                mapped.Add(executor.Name, executor);
+                                mapped.Add(executor);
                             }
                             else
                             {
@@ -236,7 +242,7 @@ namespace Jasily.ComponentModel.Editable
                                     .GetTypeInfo()
                                     .IsAssignableFrom(property.PropertyType.GetTypeInfo());
                                 if (!executor.IsPropertyContainer) executor.ViewModelSetter = property.CompileSetter();
-                                mapped.Add(executor.Name, executor);
+                                mapped.Add(executor);
                             }
                         }
                     }
