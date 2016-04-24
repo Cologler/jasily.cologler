@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using Windows.ApplicationModel;
 using Windows.ApplicationModel.Background;
 using Windows.UI.Xaml.Controls;
 
@@ -7,11 +8,9 @@ namespace Jasily
 {
     public static class DeferralExtensions
     {
-        public static IDisposableDeferral<BackgroundTaskDeferral> AsDisposable(
-            this BackgroundTaskDeferral deferral)
+        public static IDisposableDeferral<BackgroundTaskDeferral> AsDisposable(this BackgroundTaskDeferral deferral)
         {
             if (deferral == null) throw new ArgumentNullException(nameof(deferral));
-
             return new BackgroundTaskDeferralDisposable(deferral);
         }
 
@@ -32,7 +31,6 @@ namespace Jasily
             this ContentDialogButtonClickDeferral deferral)
         {
             if (deferral == null) throw new ArgumentNullException(nameof(deferral));
-
             return new ContentDialogButtonClickDeferralDisposable(deferral);
         }
 
@@ -47,6 +45,25 @@ namespace Jasily
             public void Dispose() => this.Deferral.Complete();
 
             public ContentDialogButtonClickDeferral Deferral { get; }
+        }
+
+        public static IDisposableDeferral<SuspendingDeferral> AsDisposable(this SuspendingDeferral deferral)
+        {
+            if (deferral == null) throw new ArgumentNullException(nameof(deferral));
+            return new SuspendingDeferralDisposable(deferral);
+        }
+
+        private sealed class SuspendingDeferralDisposable : IDisposableDeferral<SuspendingDeferral>
+        {
+            public SuspendingDeferralDisposable(SuspendingDeferral deferral)
+            {
+                Debug.Assert(deferral != null);
+                this.Deferral = deferral;
+            }
+
+            public void Dispose() => this.Deferral.Complete();
+
+            public SuspendingDeferral Deferral { get; }
         }
     }
 }
