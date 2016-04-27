@@ -28,6 +28,8 @@ namespace Jasily
             }
         }
 
+        public ulong ToUlong(T e) => e.Casting().UncheckedTo<ulong>();
+
         public static EnumCache<T> Default { get; } = new EnumCache<T>();
 
         private EnumCache()
@@ -36,14 +38,14 @@ namespace Jasily
             if (!ti.IsEnum) throw new InvalidOperationException();
             this.isFlags = ti.HasCustomAttribute<FlagsAttribute>();
             this.items = JasilyEnum.GetValues<T>()
-                .Select(z => new EnumItem(z.Casting<T>().UncheckedTo<ulong>(), z, z.ToString()))
+                .Select(z => new EnumItem(this.ToUlong(z), z, z.ToString()))
                 .OrderBy(z => z.Value)
                 .ToArray();
         }
 
         private EnumItem TryGetEnumItem(T e)
         {
-            var val = e.Casting().UncheckedTo<ulong>();
+            var val = this.ToUlong(e);
             return this.items.FirstOrDefault(z => z.Value == val);
         }
 
@@ -57,7 +59,7 @@ namespace Jasily
             }
             else // for flag
             {
-                var val = e.Casting().UncheckedTo<ulong>();
+                var val = this.ToUlong(e);
 
                 if (val == 0)
                 {
