@@ -30,7 +30,7 @@ namespace Jasily
                 var typeInfo = type.GetTypeInfo();
 
                 ConstructorInfo entryCtor = null;
-                Tuple<Type, object>[] entryParams = null;
+                object[] entryParams = null;
 
                 var ctors = typeInfo.DeclaredConstructors.ToArray();
                 var entryCtors = ctors.Where(z => z.HasCustomAttribute<EntryAttribute>()).ToArray();
@@ -44,28 +44,25 @@ namespace Jasily
                     var parameters = entryCtor.GetParameters();
                     if (parameters.Length == 0)
                     {
-                        entryParams = Empty<Tuple<Type, object>>.Array;
+                        entryParams = Empty<object>.Array;
                     }
                     else
                     {
-                        var entryParamsList = new List<Tuple<Type, object>>();
+                        var entryParamsList = new List<object>();
                         foreach (var parameter in parameters)
                         {
                             var dv = parameter.GetCustomAttribute<DefaultValueAttribute>();
                             if (dv != null)
                             {
-                                entryParamsList.Add(Tuple.Create(parameter.ParameterType,
-                                    dv.Value));
+                                entryParamsList.Add(dv.Value);
                             }
                             else if (parameter.HasDefaultValue)
                             {
-                                entryParamsList.Add(Tuple.Create(parameter.ParameterType,
-                                    parameter.DefaultValue));
+                                entryParamsList.Add(parameter.DefaultValue);
                             }
                             else
                             {
-                                entryParamsList.Add(Tuple.Create(parameter.ParameterType,
-                                    parameter.ParameterType.GetDefaultValue()));
+                                entryParamsList.Add(parameter.ParameterType.GetDefaultValue());
                             }
                         }
                         entryParams = entryParamsList.ToArray();
@@ -79,7 +76,7 @@ namespace Jasily
                         if (parameters.Length == 0)
                         {
                             entryCtor = ctor;
-                            entryParams = Empty<Tuple<Type, object>>.Array;
+                            entryParams = Empty<object>.Array;
                         }
                         else
                         {
@@ -88,7 +85,7 @@ namespace Jasily
                                 if (entryCtor == null)
                                 {
                                     entryCtor = ctor;
-                                    entryParams = parameters.Select(z => Tuple.Create(z.ParameterType, z.DefaultValue)).ToArray();
+                                    entryParams = parameters.Select(z => z.DefaultValue).ToArray();
                                 }
                             }
                         }
@@ -106,7 +103,7 @@ namespace Jasily
                     }
                     else
                     {
-                        @new = Expression.New(entryCtor, entryParams.Select(z => Expression.Constant(z.Item2)));
+                        @new = Expression.New(entryCtor, entryParams.Select(z => Expression.Constant(z)));
                     }
 
                     ActivatorFunc = Expression.Lambda<Func<object>>(@new).Compile();
