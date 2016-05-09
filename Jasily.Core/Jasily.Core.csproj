@@ -34,7 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ArrayExtensions.cs" />
     <Compile Include="CharExtensions.cs" />
+    <Compile Include="Collections\Generic\IndexValuePair.cs" />
     <Compile Include="DelegateExtensions.cs" />
     <Compile Include="Attributes\PrintAttribute.cs" />
     <Compile Include="Collections\Generic\TryGetValueExtensions.cs" />

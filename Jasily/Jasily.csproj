@@ -124,6 +124,7 @@
     <Compile Include="Services\IServiceProvider.cs" />
     <Compile Include="Services\IServiceProviderFactory.cs" />
     <Compile Include="StringConverter.cs" />
+    <Compile Include="Text\NoneEncoding.cs" />
     <Compile Include="Text\TextReplacer.cs" />
     <Compile Include="Threading\JasilySemaphore.cs" />
     <Compile Include="Threading\JasilyTimeout.cs" />
