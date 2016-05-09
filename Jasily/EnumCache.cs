@@ -49,36 +49,54 @@ namespace Jasily
             return this.items.FirstOrDefault(z => z.Value == val);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="e"></param>
+        /// <param name="completeMatch">if set true, if not complete match, will return null.</param>
+        /// <returns></returns>
+        private IEnumerable<EnumItem> SplitFlagItems(T e, bool completeMatch)
+        {
+            if (!this.isFlags) throw new InvalidOperationException();
+
+            var val = this.ToUlong(e);
+
+            if (val == 0)
+            {
+                if (this.items.Length > 0 && this.items[0].Value == 0)
+                {
+                    return new[] { this.items[0] };
+                }
+                else
+                {
+                    return completeMatch ? null : Empty<EnumItem>.Enumerable;
+                }
+            }
+
+            var matchs = new List<EnumItem>();
+            foreach (var item in this.items.Reverse())
+            {
+                if (item.Value == 0) break;
+
+                if ((item.Value & val) == item.Value)
+                {
+                    val -= item.Value;
+                    matchs.Insert(0, item);
+                }
+            }
+            return val != 0 && completeMatch ? null : matchs;
+        }
+
         public bool IsDefined(T e) => this.TryGetEnumItem(e) != null;
+
+        public IEnumerable<T> SplitFlags(T e, bool completeMatch = true) => this.SplitFlagItems(e, completeMatch)?.Select(z => z.Item);
 
         public string ToString(T e)
         {
-            if (!this.isFlags)
-            {
-                return this.TryGetEnumItem(e)?.Name ?? e.ToString();
-            }
-            else // for flag
-            {
-                var val = this.ToUlong(e);
-
-                if (val == 0)
-                {
-                    return this.items.Length > 0 && this.items[0].Value == 0 ? this.items[0].Name : "0";
-                }
-
-                var matchs = new List<EnumItem>();
-                foreach (var item in this.items.Reverse())
-                {
-                    if (item.Value == 0) break;
-
-                    if ((item.Value & val) == item.Value)
-                    {
-                        val -= item.Value;
-                        matchs.Insert(0, item);
-                    }
-                }
-                return val != 0 ? e.ToString() : matchs.Select(z => z.Name).JoinWith(", ");
-            }
+            var value = this.isFlags
+                ? this.SplitFlagItems(e, true)?.Select(z => z.Name).JoinWith(", ")
+                : this.TryGetEnumItem(e)?.Name;
+            return value ?? e.ToString();
         }
 
         public IEnumerable<T> All() => this.items.Select(z => z.Item);
@@ -87,17 +105,15 @@ namespace Jasily
         {
             if (value == null) throw new ArgumentNullException(nameof(value));
 
-            var matchs = this.items.Where(z => string.Compare(z.Name, value, comparison) == 0).ToArray();
-            if (matchs.Length == 0)
-            {
-                result = default(T);
-                return false;
-            }
-            else
+            var matchs = this.items.Where(z => string.Equals(z.Name, value, comparison)).ToArray();
+            if (matchs.Length != 0)
             {
                 result = matchs[0].Item;
                 return true;
             }
+
+            result = default(T);
+            return false;
         }
     }
 }

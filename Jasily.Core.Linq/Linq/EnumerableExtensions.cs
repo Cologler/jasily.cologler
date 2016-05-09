@@ -1,8 +1,8 @@
-﻿using JetBrains.Annotations;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
+using JetBrains.Annotations;
 
 namespace System.Linq
 {
@@ -443,7 +443,10 @@ namespace System.Linq
         #region count
 
         public static int TryGetCount<T>(this IEnumerable<T> source)
-            => (source as ICollection<T>)?.Count ?? (source as ICollection)?.Count ?? -1;
+            => (source as ICollection<T>)?.Count ??
+               (source as ICollection)?.Count ??
+               (source as IReadOnlyCollection<T>)?.Count ??
+               -1;
 
         public static int TryGetCount(this IEnumerable source)
             => (source as ICollection)?.Count ?? -1;
