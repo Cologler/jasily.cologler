@@ -56,7 +56,10 @@ namespace Jasily.Collections.Generic
             public T Dequeue()
             {
                 Debug.Assert(this.Count > 0);
-                return this.array[this.head++];
+                var ret = this.array[this.head];
+                this.array[this.head] = default(T);
+                this.head++;
+                return ret;
             }
 
             public T Peek()
