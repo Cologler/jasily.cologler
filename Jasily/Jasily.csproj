@@ -99,7 +99,6 @@
     <Compile Include="IOrderable.cs" />
     <Compile Include="IO\BinarySizeType.cs" />
     <Compile Include="IO\ByteSize.cs" />
-    <Compile Include="IO\ByteSizeTypeExtensions.cs" />
     <Compile Include="IO\JasilyStringReader.cs" />
     <Compile Include="IO\MemoryTributary.cs" />
     <Compile Include="JasilyEnum.cs" />

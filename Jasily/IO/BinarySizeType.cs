@@ -12,6 +12,8 @@
 
         TByte = 4,
 
-        PByte = 5
+        PByte = 5,
+
+        EByte = 6,
     }
 }
