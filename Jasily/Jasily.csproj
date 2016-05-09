@@ -126,8 +126,10 @@
     <Compile Include="StringConverter.cs" />
     <Compile Include="Text\NoneEncoding.cs" />
     <Compile Include="Text\TextReplacer.cs" />
-    <Compile Include="Threading\JasilySemaphore.cs" />
+    <Compile Include="Threading\ISemaphore.cs" />
+    <Compile Include="Threading\ThreadUnsafeSemaphore.cs" />
     <Compile Include="Threading\JasilyTimeout.cs" />
+    <Compile Include="Threading\LockFree\LockFreeSemaphore.cs" />
     <Compile Include="Threading\Tasks\JasilyTask.cs" />
     <Compile Include="Threading\Tasks\UniqueTask.cs" />
     <Compile Include="Windows\JasilyClipboard.cs" />
