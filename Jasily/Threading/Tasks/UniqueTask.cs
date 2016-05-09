@@ -8,9 +8,9 @@ namespace Jasily.Threading.Tasks
     {
         private bool isCompleted;
         private T result;
-        private readonly Func<Task<T>> taskFunc;
+        private Func<Task<T>> taskFunc;
         private Task<T> task;
-        private readonly object syncRoot = new object();
+        private object syncRoot = new object();
 
         public UniqueTask([NotNull] Func<Task<T>> taskFunc)
         {
@@ -36,6 +36,12 @@ namespace Jasily.Threading.Tasks
 
             this.result = await this.task;
             this.isCompleted = true;
+
+            // remove
+            this.task = null;
+            this.syncRoot = null;
+            this.taskFunc = null;
+
             return this.result;
         }
     }
@@ -43,9 +49,9 @@ namespace Jasily.Threading.Tasks
     public sealed class UniqueTask
     {
         private bool isCompleted;
-        private readonly Func<Task> taskFunc;
+        private Func<Task> taskFunc;
         private Task task;
-        private readonly object syncRoot = new object();
+        private object syncRoot = new object();
 
         public UniqueTask([NotNull] Func<Task> taskFunc)
         {
@@ -71,6 +77,11 @@ namespace Jasily.Threading.Tasks
 
             await this.task;
             this.isCompleted = true;
+
+            // remove
+            this.task = null;
+            this.syncRoot = null;
+            this.taskFunc = null;
         }
     }
 }
