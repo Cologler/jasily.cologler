@@ -82,6 +82,7 @@
     <Compile Include="Reflection\PropertyExtensions.cs" />
     <Compile Include="Reflection\Setter.cs" />
     <Compile Include="Reflection\TypeExtensions.cs" />
+    <Compile Include="Releaser.cs" />
     <Compile Include="RequestActionEventArgs.cs" />
     <Compile Include="ITryEnter.cs" />
     <Compile Include="Singleton.cs" />
@@ -89,6 +90,7 @@
     <Compile Include="Text\StringBuilderExtensions.cs" />
     <Compile Include="Threading\ReaderWriterLockSlimExtensions.cs" />
     <Compile Include="Threading\SemaphoreSlimExtensions.cs" />
+    <Compile Include="TypedEventHandler.cs" />
     <Compile Include="TypeExtensions.cs" />
     <Compile Include="UfDateTimeConverter.cs" />
     <Compile Include="EventExtensions.cs" />
