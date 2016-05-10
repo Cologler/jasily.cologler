@@ -6,7 +6,7 @@ namespace Jasily.Diagnostics
 {
     public static class JasilyDebug
     {
-        #region assert type
+        #region assert
 
         [Conditional("DEBUG")]
         public static void Assert(Func<bool> condition)
@@ -25,16 +25,19 @@ namespace Jasily.Diagnostics
         }
 
         [Conditional("DEBUG")]
-        public static void AssertType<T>(this object obj)
+        public static void AssertIsType<T>(object obj)
         {
             Debug.Assert(obj != null);
-            AssertType<T>(obj.GetType());
+            AssertIsType<T>(obj.GetType());
         }
         [Conditional("DEBUG")]
-        public static void AssertType<T>(this Type type)
+        public static void AssertIsType<T>(Type type)
         {
             Debug.Assert(type == typeof(T), $"assert type failed. {type.FullName} not {typeof(T).FullName}");
         }
+
+        [Conditional("DEBUG")]
+        public static void AssertNotNull(object obj) => Debug.Assert(obj != null);
 
         #endregion
 
