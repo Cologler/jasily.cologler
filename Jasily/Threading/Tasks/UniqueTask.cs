@@ -1,14 +1,16 @@
-using JetBrains.Annotations;
 using System;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 
 namespace Jasily.Threading.Tasks
 {
     public sealed class UniqueTask<T>
     {
-        private readonly Func<Task<T>> taskFunc;
+        private bool isCompleted;
+        private T result;
+        private Func<Task<T>> taskFunc;
         private Task<T> task;
-        private readonly object syncRoot = new object();
+        private object syncRoot = new object();
 
         public UniqueTask([NotNull] Func<Task<T>> taskFunc)
         {
@@ -19,6 +21,8 @@ namespace Jasily.Threading.Tasks
 
         public async Task<T> Run()
         {
+            if (this.isCompleted) return this.result;
+
             if (this.task == null)
             {
                 lock (this.syncRoot)
@@ -30,15 +34,24 @@ namespace Jasily.Threading.Tasks
                 }
             }
 
-            return await this.task;
+            this.result = await this.task;
+            this.isCompleted = true;
+
+            // remove
+            this.task = null;
+            this.syncRoot = null;
+            this.taskFunc = null;
+
+            return this.result;
         }
     }
 
     public sealed class UniqueTask
     {
-        private readonly Func<Task> taskFunc;
+        private bool isCompleted;
+        private Func<Task> taskFunc;
         private Task task;
-        private readonly object syncRoot = new object();
+        private object syncRoot = new object();
 
         public UniqueTask([NotNull] Func<Task> taskFunc)
         {
@@ -49,6 +62,8 @@ namespace Jasily.Threading.Tasks
 
         public async Task Run()
         {
+            if (this.isCompleted) return;
+
             if (this.task == null)
             {
                 lock (this.syncRoot)
@@ -61,6 +76,12 @@ namespace Jasily.Threading.Tasks
             }
 
             await this.task;
+            this.isCompleted = true;
+
+            // remove
+            this.task = null;
+            this.syncRoot = null;
+            this.taskFunc = null;
         }
     }
 }

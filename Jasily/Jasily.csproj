@@ -48,7 +48,9 @@
     <Compile Include="AsyncLazy.cs" />
     <Compile Include="Collections\Generic\CriticalValue.cs" />
     <Compile Include="Collections\Generic\HashSetExtensions.cs" />
+    <Compile Include="Collections\Generic\IQueue.cs" />
     <Compile Include="Collections\Generic\JasilyEqualityComparer.cs" />
+    <Compile Include="Collections\Generic\Queue.cs" />
     <Compile Include="Collections\Generic\Range.cs" />
     <Compile Include="Collections\Generic\RangeDictionary.cs" />
     <Compile Include="Collections\Generic\RangeMode.cs" />
@@ -79,6 +81,7 @@
     <Compile Include="Diagnostics\Logger\Provider\StreamWriterLoggerProvider.cs" />
     <Compile Include="EnumCache.cs" />
     <Compile Include="IConverter.cs" />
+    <Compile Include="JasilyActivator.cs" />
     <Compile Include="JasilyDayOfWeek.cs" />
     <Compile Include="JasilyDayOfWeekExtensions.cs" />
     <Compile Include="Diagnostics\AttributeTest\AttributeTestor.cs" />
@@ -98,7 +101,6 @@
     <Compile Include="IOrderable.cs" />
     <Compile Include="IO\BinarySizeType.cs" />
     <Compile Include="IO\ByteSize.cs" />
-    <Compile Include="IO\ByteSizeTypeExtensions.cs" />
     <Compile Include="IO\JasilyStringReader.cs" />
     <Compile Include="IO\MemoryTributary.cs" />
     <Compile Include="JasilyEnum.cs" />
@@ -123,9 +125,12 @@
     <Compile Include="Services\IServiceProvider.cs" />
     <Compile Include="Services\IServiceProviderFactory.cs" />
     <Compile Include="StringConverter.cs" />
+    <Compile Include="Text\NoneEncoding.cs" />
     <Compile Include="Text\TextReplacer.cs" />
-    <Compile Include="Threading\JasilySemaphore.cs" />
+    <Compile Include="Threading\ISemaphore.cs" />
+    <Compile Include="Threading\ThreadUnsafeSemaphore.cs" />
     <Compile Include="Threading\JasilyTimeout.cs" />
+    <Compile Include="Threading\LockFree\LockFreeSemaphore.cs" />
     <Compile Include="Threading\Tasks\JasilyTask.cs" />
     <Compile Include="Threading\Tasks\UniqueTask.cs" />
     <Compile Include="Windows\JasilyClipboard.cs" />
