@@ -1,11 +1,10 @@
-﻿
 using System.Collections.ObjectModel;
 using System.Linq;
 using JetBrains.Annotations;
 
 namespace System.Collections.Generic
 {
-    public static class DictionaryExtensions
+    public static class Dictionary
     {
         /* desciption:
          * 1. key don't need check "if (key == null) throw;" because .TryGetValue() will check it.

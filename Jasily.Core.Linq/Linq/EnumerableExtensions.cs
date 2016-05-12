@@ -352,6 +352,79 @@ namespace System.Linq
 
         #endregion
 
+        #region count
+
+        public static int TryGetCount<T>(this IEnumerable<T> source)
+            => (source as ICollection<T>)?.Count ??
+               (source as ICollection)?.Count ??
+               (source as IReadOnlyCollection<T>)?.Count ??
+               -1;
+
+        public static int TryGetCount(this IEnumerable source)
+            => (source as ICollection)?.Count ?? -1;
+
+        #endregion
+
+        public static T? FirstOrNull<T>([NotNull] this IEnumerable<T> source, [NotNull] Func<T, bool> predicate)
+            where T : struct
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            if (predicate == null) throw new ArgumentNullException(nameof(predicate));
+            foreach (var item in source.Where(predicate)) return item;
+            return null;
+        }
+
+        #region modify enumerable
+
+        #region insert
+
+        [PublicAPI]
+        public static IEnumerable<T> Insert<T>([NotNull] this IEnumerable<T> source, int index, T item)
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            var i = 0;
+            using (var itor = source.GetEnumerator())
+            {
+                while (i < index && itor.MoveNext())
+                {
+                    yield return itor.Current;
+                    i++;
+                }
+
+                if (i == index)
+                {
+                    yield return item;
+                }
+                else
+                {
+                    throw new IndexOutOfRangeException();
+                }
+
+                while (itor.MoveNext())
+                {
+                    yield return itor.Current;
+                }
+            }
+        }
+
+        [PublicAPI]
+        public static IEnumerable<T> InsertToEnd<T>([NotNull] IEnumerable<T> source, T next)
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            foreach (var item in source) yield return item;
+            yield return next;
+        }
+
+        [PublicAPI]
+        public static IEnumerable<T> InsertToStart<T>([NotNull] IEnumerable<T> source, T next)
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            yield return next;
+            foreach (var item in source) yield return item;
+        }
+
+        #endregion
+
         #region join
 
         public static IEnumerable<T> JoinWith<T>(this IEnumerable<T> source, T spliter)
@@ -398,68 +471,6 @@ namespace System.Linq
 
         #endregion
 
-        public static IEnumerable<T> Insert<T>([NotNull] this IEnumerable<T> source, int index, T item)
-        {
-            if (source == null) throw new ArgumentNullException(nameof(source));
-            var i = 0;
-            using (var itor = source.GetEnumerator())
-            {
-                while (i < index && itor.MoveNext())
-                {
-                    yield return itor.Current;
-                    i++;
-                }
-
-                if (i == index)
-                {
-                    yield return item;
-                }
-                else
-                {
-                    throw new IndexOutOfRangeException();
-                }
-
-                while (itor.MoveNext())
-                {
-                    yield return itor.Current;
-                }
-            }
-        }
-
-        public static IEnumerable<T> AppendToEnd<T>([NotNull] IEnumerable<T> source, T next)
-        {
-            if (source == null) throw new ArgumentNullException(nameof(source));
-            foreach (var item in source) yield return item;
-            yield return next;
-        }
-
-        public static IEnumerable<T> AppendToStart<T>([NotNull] IEnumerable<T> source, T next)
-        {
-            if (source == null) throw new ArgumentNullException(nameof(source));
-            yield return next;
-            foreach (var item in source) yield return item;
-        }
-
-        #region count
-
-        public static int TryGetCount<T>(this IEnumerable<T> source)
-            => (source as ICollection<T>)?.Count ??
-               (source as ICollection)?.Count ??
-               (source as IReadOnlyCollection<T>)?.Count ??
-               -1;
-
-        public static int TryGetCount(this IEnumerable source)
-            => (source as ICollection)?.Count ?? -1;
-
         #endregion
-
-        public static T? FirstOrNull<T>([NotNull] this IEnumerable<T> source, [NotNull] Func<T, bool> predicate)
-            where T : struct
-        {
-            if (source == null) throw new ArgumentNullException(nameof(source));
-            if (predicate == null) throw new ArgumentNullException(nameof(predicate));
-            foreach (var item in source.Where(predicate)) return item;
-            return null;
-        }
     }
 }

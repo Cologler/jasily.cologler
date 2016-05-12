@@ -80,6 +80,7 @@
     <Compile Include="Data\IJasilyEntitySetWriter.cs" />
     <Compile Include="Diagnostics\Logger\Provider\StreamWriterLoggerProvider.cs" />
     <Compile Include="EnumCache.cs" />
+    <Compile Include="CachedHashCode.cs" />
     <Compile Include="IConverter.cs" />
     <Compile Include="JasilyActivator.cs" />
     <Compile Include="JasilyDayOfWeek.cs" />

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using JetBrains.Annotations;
 
 namespace System
 {
@@ -30,16 +31,14 @@ namespace System
             for (var i = 0; i < count; i++) yield return array[i + index];
         }
 
-        public static IEnumerable<IndexValuePair<T>> EnumerateIndexValuePair<T>(this T[] array, int index)
-        {
-            array.CheckArray(index);
-            for (var i = index; i < array.Length; i++) yield return IndexValuePair.From(array, i);
-        }
+        public static int IndexOf<T>([NotNull] this T[] array, T value) => Array.IndexOf(array, value);
 
-        public static IEnumerable<IndexValuePair<T>> EnumerateIndexValuePair<T>(this T[] array, int index, int count)
+        public static T[] ToArray<T>([NotNull] this T[] array)
         {
-            array.CheckArray(index, count);
-            for (var i = 0; i < count; i++) yield return IndexValuePair.From(array, i + index);
+            if (array == null) throw new ArgumentNullException(nameof(array));
+            var ret = new T[array.Length];
+            Array.Copy(array, ret, array.Length);
+            return ret;
         }
     }
 }
