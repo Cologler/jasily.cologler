@@ -1,7 +1,7 @@
-﻿using JetBrains.Annotations;
-using System.IO;
+﻿using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 
 namespace System.Net
 {
@@ -12,25 +12,20 @@ namespace System.Net
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public static async Task<Stream> GetRequestStreamAsync([NotNull] this HttpWebRequest request)
+        public static Task<Stream> GetRequestStreamAsync([NotNull] this HttpWebRequest request)
+        {
+            if (request == null) throw new ArgumentNullException(nameof(request));
+            return AsyncCallbackHelper.ToTask(request.BeginGetRequestStream,
+                ac => request.EndGetRequestStream(ac));
+        }
+
+        public static Task<Stream> GetRequestStreamAsync([NotNull] this HttpWebRequest request,
+            CancellationToken cancellationToken)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
-            var task = new TaskCompletionSource<Stream>();
-
-            request.BeginGetRequestStream(ac =>
-            {
-                try
-                {
-                    task.SetResult(request.EndGetRequestStream(ac));
-                }
-                catch (Exception e)
-                {
-                    task.SetException(e);
-                }
-            }, null);
-
-            return await task.Task;
+            return AsyncCallbackHelper.ToTask(request.BeginGetRequestStream,
+                ac => request.EndGetRequestStream(ac), cancellationToken, request.Abort);
         }
 
         /// <summary>
@@ -38,49 +33,19 @@ namespace System.Net
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public static async Task<WebResponse> GetResponseAsync([NotNull] this HttpWebRequest request)
+        public static Task<WebResponse> GetResponseAsync([NotNull] this HttpWebRequest request)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
-
-            var task = new TaskCompletionSource<WebResponse>();
-
-            request.BeginGetResponse(ac =>
-            {
-                try
-                {
-                    task.SetResult(request.EndGetResponse(ac));
-                }
-                catch (Exception e)
-                {
-                    task.SetException(e);
-                }
-            }, null);
-
-            return await task.Task;
+            return AsyncCallbackHelper.ToTask(request.BeginGetResponse,
+                ac => request.EndGetResponse(ac));
         }
 
-        public static async Task<WebResponse> GetResponseAsync([NotNull] this HttpWebRequest request,
+        public static Task<WebResponse> GetResponseAsync([NotNull] this HttpWebRequest request,
             CancellationToken cancellationToken)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
-
-            var task = new TaskCompletionSource<WebResponse>();
-            cancellationToken.Register(() => task.TrySetCanceled());
-            request.BeginGetResponse(ac =>
-            {
-                WebResponse response;
-                try
-                {
-                    response = request.EndGetResponse(ac);
-                }
-                catch (Exception e)
-                {
-                    task.TrySetException(e);
-                    return;
-                }
-                task.TrySetResult(response);
-            }, null);
-            return await task.Task;
+            return AsyncCallbackHelper.ToTask(request.BeginGetResponse,
+                ac => request.EndGetResponse(ac), cancellationToken, request.Abort);
         }
 
         public static async Task SendAsync([NotNull] this HttpWebRequest request, [NotNull] Stream input)
@@ -100,7 +65,7 @@ namespace System.Net
             if (request == null) throw new ArgumentNullException(nameof(request));
             if (input == null) throw new ArgumentNullException(nameof(input));
 
-            using (var stream = await request.GetRequestStreamAsync())
+            using (var stream = await request.GetRequestStreamAsync(cancellationToken))
             {
                 await input.CopyToAsync(stream, cancellationToken);
             }
