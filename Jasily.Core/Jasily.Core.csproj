@@ -81,7 +81,7 @@
     <Compile Include="Reflection\IAccessor.cs" />
     <Compile Include="Reflection\IGetter.cs" />
     <Compile Include="Reflection\ISetter.cs" />
-    <Compile Include="Reflection\JasilyCustomAttributeExtensions.cs" />
+    <Compile Include="Reflection\CustomAttributeExtensions2.cs" />
     <Compile Include="Reflection\JasilyReflectionExtensions.cs" />
     <Compile Include="Reflection\MemberExtensions.cs" />
     <Compile Include="Reflection\PropertyExtensions.cs" />
