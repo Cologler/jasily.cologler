@@ -15,17 +15,19 @@ namespace System.Net
         public static Task<Stream> GetRequestStreamAsync([NotNull] this HttpWebRequest request)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
-            return AsyncCallbackHelper.ToTask(request.BeginGetRequestStream,
-                ac => request.EndGetRequestStream(ac));
+            return Task<Stream>.Factory.FromAsync(
+                request.BeginGetRequestStream,
+                request.EndGetRequestStream, null);
         }
 
         public static Task<Stream> GetRequestStreamAsync([NotNull] this HttpWebRequest request,
             CancellationToken cancellationToken)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
-
-            return AsyncCallbackHelper.ToTask(request.BeginGetRequestStream,
-                ac => request.EndGetRequestStream(ac), cancellationToken, request.Abort);
+            return Task<Stream>.Factory.FromAsync(
+                request.BeginGetRequestStream,
+                request.EndGetRequestStream,
+                cancellationToken, request.Abort);
         }
 
         /// <summary>
@@ -36,16 +38,19 @@ namespace System.Net
         public static Task<WebResponse> GetResponseAsync([NotNull] this HttpWebRequest request)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
-            return AsyncCallbackHelper.ToTask(request.BeginGetResponse,
-                ac => request.EndGetResponse(ac));
+            return Task<WebResponse>.Factory.FromAsync(
+                request.BeginGetResponse,
+                request.EndGetResponse, null);
         }
 
         public static Task<WebResponse> GetResponseAsync([NotNull] this HttpWebRequest request,
             CancellationToken cancellationToken)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
-            return AsyncCallbackHelper.ToTask(request.BeginGetResponse,
-                ac => request.EndGetResponse(ac), cancellationToken, request.Abort);
+            return Task<WebResponse>.Factory.FromAsync(
+                request.BeginGetResponse,
+                request.EndGetResponse,
+                cancellationToken, request.Abort);
         }
 
         public static async Task SendAsync([NotNull] this HttpWebRequest request, [NotNull] Stream input)

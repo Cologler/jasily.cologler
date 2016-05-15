@@ -93,9 +93,10 @@
     <Compile Include="Singleton.cs" />
     <Compile Include="Text\JasilyEncoding.cs" />
     <Compile Include="Text\StringBuilderExtensions.cs" />
-    <Compile Include="Threading\AsyncCallbackHelper.cs" />
     <Compile Include="Threading\ReaderWriterLockSlimExtensions.cs" />
     <Compile Include="Threading\SemaphoreSlimExtensions.cs" />
+    <Compile Include="Threading\Tasks\JasilyTaskFactory.cs" />
+    <Compile Include="Threading\Tasks\TaskFactoryExtensions.cs" />
     <Compile Include="TypedEventHandler.cs" />
     <Compile Include="TypeExtensions.cs" />
     <Compile Include="UfDateTimeConverter.cs" />

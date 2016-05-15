@@ -1,22 +1,23 @@
-﻿using System.Threading.Tasks;
 using JetBrains.Annotations;
 
-namespace System.Threading
+namespace System.Threading.Tasks
 {
-    public static class AsyncCallbackHelper
+    public static class JasilyTaskFactory
     {
-        public static async Task<T> ToTask<T>([NotNull] Func<AsyncCallback, object, IAsyncResult> asyncFunc,
-            [NotNull] Func<IAsyncResult, T> callback)
+        #region Task<T>
+
+        public static async Task<T> FromAsync<T>([NotNull] Func<AsyncCallback, object, IAsyncResult> beginMethod,
+            [NotNull] Func<IAsyncResult, T> endMethod)
         {
-            if (asyncFunc == null) throw new ArgumentNullException(nameof(asyncFunc));
-            if (callback == null) throw new ArgumentNullException(nameof(callback));
+            if (beginMethod == null) throw new ArgumentNullException(nameof(beginMethod));
+            if (endMethod == null) throw new ArgumentNullException(nameof(endMethod));
 
             var task = new TaskCompletionSource<T>();
-            asyncFunc(ac =>
+            beginMethod(ac =>
             {
                 try
                 {
-                    task.SetResult(callback(ac));
+                    task.SetResult(endMethod(ac));
                 }
                 catch (Exception e)
                 {
@@ -26,20 +27,21 @@ namespace System.Threading
             return await task.Task;
         }
 
-        public static async Task<T> ToTask<T>([NotNull] Func<AsyncCallback, object, IAsyncResult> asyncFunc,
-            [NotNull] Func<IAsyncResult, T> callback, CancellationToken cancellationToken)
+        public static async Task<T> FromAsync<T>([NotNull] Func<AsyncCallback, object, IAsyncResult> beginMethod,
+            [NotNull] Func<IAsyncResult, T> endMethod,
+            CancellationToken cancellationToken)
         {
-            if (asyncFunc == null) throw new ArgumentNullException(nameof(asyncFunc));
-            if (callback == null) throw new ArgumentNullException(nameof(callback));
+            if (beginMethod == null) throw new ArgumentNullException(nameof(beginMethod));
+            if (endMethod == null) throw new ArgumentNullException(nameof(endMethod));
 
             var task = new TaskCompletionSource<T>();
             using (cancellationToken.Register(() => task.TrySetCanceled(), false))
             {
-                asyncFunc(ac =>
+                beginMethod(ac =>
                 {
                     try
                     {
-                        task.TrySetResult(callback(ac));
+                        task.TrySetResult(endMethod(ac));
                     }
                     catch (Exception e)
                     {
@@ -50,12 +52,12 @@ namespace System.Threading
             }
         }
 
-        public static async Task<T> ToTask<T>([NotNull] Func<AsyncCallback, object, IAsyncResult> asyncFunc,
-            [NotNull] Func<IAsyncResult, T> callback, CancellationToken cancellationToken,
-            [NotNull] Action cancelingCallback)
+        public static async Task<T> FromAsync<T>([NotNull] Func<AsyncCallback, object, IAsyncResult> beginMethod,
+            [NotNull] Func<IAsyncResult, T> endMethod,
+            CancellationToken cancellationToken, [NotNull] Action cancelingCallback)
         {
-            if (asyncFunc == null) throw new ArgumentNullException(nameof(asyncFunc));
-            if (callback == null) throw new ArgumentNullException(nameof(callback));
+            if (beginMethod == null) throw new ArgumentNullException(nameof(beginMethod));
+            if (endMethod == null) throw new ArgumentNullException(nameof(endMethod));
             if (cancelingCallback == null) throw new ArgumentNullException(nameof(cancelingCallback));
 
             var task = new TaskCompletionSource<T>();
@@ -65,11 +67,11 @@ namespace System.Threading
                 task.TrySetCanceled();
             }, false))
             {
-                asyncFunc(ac =>
+                beginMethod(ac =>
                 {
                     try
                     {
-                        task.TrySetResult(callback(ac));
+                        task.TrySetResult(endMethod(ac));
                     }
                     catch (Exception e)
                     {
@@ -80,20 +82,21 @@ namespace System.Threading
             }
         }
 
-        public static async Task<T> ToTask<T>([NotNull] Func<AsyncCallback, object, IAsyncResult> asyncFunc,
-            [NotNull] Func<IAsyncResult, CancellationToken, T> callback, CancellationToken cancellationToken)
+        public static async Task<T> FromAsync<T>([NotNull] Func<AsyncCallback, object, IAsyncResult> beginMethod,
+            [NotNull] Func<IAsyncResult, CancellationToken, T> endMethod,
+            CancellationToken cancellationToken)
         {
-            if (asyncFunc == null) throw new ArgumentNullException(nameof(asyncFunc));
-            if (callback == null) throw new ArgumentNullException(nameof(callback));
+            if (beginMethod == null) throw new ArgumentNullException(nameof(beginMethod));
+            if (endMethod == null) throw new ArgumentNullException(nameof(endMethod));
 
             var task = new TaskCompletionSource<T>();
             using (cancellationToken.Register(() => task.TrySetCanceled(), false))
             {
-                asyncFunc(ac =>
+                beginMethod(ac =>
                 {
                     try
                     {
-                        task.TrySetResult(callback(ac, cancellationToken));
+                        task.TrySetResult(endMethod(ac, cancellationToken));
                     }
                     catch (Exception e)
                     {
@@ -104,12 +107,12 @@ namespace System.Threading
             }
         }
 
-        public static async Task<T> ToTask<T>([NotNull] Func<AsyncCallback, object, IAsyncResult> asyncFunc,
-            [NotNull] Func<IAsyncResult, CancellationToken, T> callback, CancellationToken cancellationToken,
-            [NotNull] Action cancelingCallback)
+        public static async Task<T> FromAsync<T>([NotNull] Func<AsyncCallback, object, IAsyncResult> beginMethod,
+            [NotNull] Func<IAsyncResult, CancellationToken, T> endMethod,
+            CancellationToken cancellationToken, [NotNull] Action cancelingCallback)
         {
-            if (asyncFunc == null) throw new ArgumentNullException(nameof(asyncFunc));
-            if (callback == null) throw new ArgumentNullException(nameof(callback));
+            if (beginMethod == null) throw new ArgumentNullException(nameof(beginMethod));
+            if (endMethod == null) throw new ArgumentNullException(nameof(endMethod));
             if (cancelingCallback == null) throw new ArgumentNullException(nameof(cancelingCallback));
 
             var task = new TaskCompletionSource<T>();
@@ -119,11 +122,11 @@ namespace System.Threading
                 task.TrySetCanceled();
             }, false))
             {
-                asyncFunc(ac =>
+                beginMethod(ac =>
                 {
                     try
                     {
-                        task.TrySetResult(callback(ac, cancellationToken));
+                        task.TrySetResult(endMethod(ac, cancellationToken));
                     }
                     catch (Exception e)
                     {
@@ -134,18 +137,22 @@ namespace System.Threading
             }
         }
 
-        public static async Task ToTask([NotNull] Func<AsyncCallback, object, IAsyncResult> asyncFunc,
-            [NotNull] Action<IAsyncResult> callback)
+        #endregion
+
+        #region Task
+
+        public static async Task FromAsync([NotNull] Func<AsyncCallback, object, IAsyncResult> beginMethod,
+            [NotNull] Action<IAsyncResult> endMethod)
         {
-            if (asyncFunc == null) throw new ArgumentNullException(nameof(asyncFunc));
-            if (callback == null) throw new ArgumentNullException(nameof(callback));
+            if (beginMethod == null) throw new ArgumentNullException(nameof(beginMethod));
+            if (endMethod == null) throw new ArgumentNullException(nameof(endMethod));
 
             var task = new TaskCompletionSource<bool>();
-            asyncFunc(ac =>
+            beginMethod(ac =>
             {
                 try
                 {
-                    callback(ac);
+                    endMethod(ac);
                     task.SetResult(true);
                 }
                 catch (Exception e)
@@ -156,20 +163,20 @@ namespace System.Threading
             await task.Task;
         }
 
-        public static async Task ToTask([NotNull] Func<AsyncCallback, object, IAsyncResult> asyncFunc,
-            [NotNull] Action<IAsyncResult> callback, CancellationToken cancellationToken)
+        public static async Task FromAsync([NotNull] Func<AsyncCallback, object, IAsyncResult> beginMethod,
+            [NotNull] Action<IAsyncResult> endMethod, CancellationToken cancellationToken)
         {
-            if (asyncFunc == null) throw new ArgumentNullException(nameof(asyncFunc));
-            if (callback == null) throw new ArgumentNullException(nameof(callback));
+            if (beginMethod == null) throw new ArgumentNullException(nameof(beginMethod));
+            if (endMethod == null) throw new ArgumentNullException(nameof(endMethod));
 
             var task = new TaskCompletionSource<bool>();
             using (cancellationToken.Register(() => task.TrySetCanceled(), false))
             {
-                asyncFunc(ac =>
+                beginMethod(ac =>
                 {
                     try
                     {
-                        callback(ac);
+                        endMethod(ac);
                         task.TrySetResult(true);
                     }
                     catch (Exception e)
@@ -181,12 +188,12 @@ namespace System.Threading
             }
         }
 
-        public static async Task ToTask([NotNull] Func<AsyncCallback, object, IAsyncResult> asyncFunc,
-            [NotNull] Action<IAsyncResult> callback, CancellationToken cancellationToken,
+        public static async Task FromAsync([NotNull] Func<AsyncCallback, object, IAsyncResult> beginMethod,
+            [NotNull] Action<IAsyncResult> endMethod, CancellationToken cancellationToken,
             [NotNull] Action cancelingCallback)
         {
-            if (asyncFunc == null) throw new ArgumentNullException(nameof(asyncFunc));
-            if (callback == null) throw new ArgumentNullException(nameof(callback));
+            if (beginMethod == null) throw new ArgumentNullException(nameof(beginMethod));
+            if (endMethod == null) throw new ArgumentNullException(nameof(endMethod));
             if (cancelingCallback == null) throw new ArgumentNullException(nameof(cancelingCallback));
 
             var task = new TaskCompletionSource<bool>();
@@ -196,11 +203,11 @@ namespace System.Threading
                 task.TrySetCanceled();
             }, false))
             {
-                asyncFunc(ac =>
+                beginMethod(ac =>
                 {
                     try
                     {
-                        callback(ac);
+                        endMethod(ac);
                         task.TrySetResult(true);
                     }
                     catch (Exception e)
@@ -212,20 +219,20 @@ namespace System.Threading
             }
         }
 
-        public static async Task ToTask([NotNull] Func<AsyncCallback, object, IAsyncResult> asyncFunc,
-            [NotNull] Action<IAsyncResult, CancellationToken> callback, CancellationToken cancellationToken)
+        public static async Task FromAsync([NotNull] Func<AsyncCallback, object, IAsyncResult> beginMethod,
+            [NotNull] Action<IAsyncResult, CancellationToken> endMethod, CancellationToken cancellationToken)
         {
-            if (asyncFunc == null) throw new ArgumentNullException(nameof(asyncFunc));
-            if (callback == null) throw new ArgumentNullException(nameof(callback));
+            if (beginMethod == null) throw new ArgumentNullException(nameof(beginMethod));
+            if (endMethod == null) throw new ArgumentNullException(nameof(endMethod));
 
             var task = new TaskCompletionSource<bool>();
             using (cancellationToken.Register(() => task.TrySetCanceled(), false))
             {
-                asyncFunc(ac =>
+                beginMethod(ac =>
                 {
                     try
                     {
-                        callback(ac, cancellationToken);
+                        endMethod(ac, cancellationToken);
                         task.TrySetResult(true);
                     }
                     catch (Exception e)
@@ -237,12 +244,12 @@ namespace System.Threading
             }
         }
 
-        public static async Task ToTask([NotNull] Func<AsyncCallback, object, IAsyncResult> asyncFunc,
-            [NotNull] Action<IAsyncResult, CancellationToken> callback, CancellationToken cancellationToken,
+        public static async Task FromAsync([NotNull] Func<AsyncCallback, object, IAsyncResult> beginMethod,
+            [NotNull] Action<IAsyncResult, CancellationToken> endMethod, CancellationToken cancellationToken,
             [NotNull] Action cancelingCallback)
         {
-            if (asyncFunc == null) throw new ArgumentNullException(nameof(asyncFunc));
-            if (callback == null) throw new ArgumentNullException(nameof(callback));
+            if (beginMethod == null) throw new ArgumentNullException(nameof(beginMethod));
+            if (endMethod == null) throw new ArgumentNullException(nameof(endMethod));
             if (cancelingCallback == null) throw new ArgumentNullException(nameof(cancelingCallback));
 
             var task = new TaskCompletionSource<bool>();
@@ -252,11 +259,11 @@ namespace System.Threading
                 task.TrySetCanceled();
             }, false))
             {
-                asyncFunc(ac =>
+                beginMethod(ac =>
                 {
                     try
                     {
-                        callback(ac, cancellationToken);
+                        endMethod(ac, cancellationToken);
                         task.TrySetResult(true);
                     }
                     catch (Exception e)
@@ -267,5 +274,7 @@ namespace System.Threading
                 await task.Task;
             }
         }
+
+        #endregion
     }
 }
