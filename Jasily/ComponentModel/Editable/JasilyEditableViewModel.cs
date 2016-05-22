@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
 
@@ -36,8 +37,10 @@ namespace Jasily.ComponentModel.Editable
                 Debug.Assert(this.ViewModelGetter != null);
             }
 
+            [Pure]
             public abstract void WriteToObject(object vm, object obj);
 
+            [Pure]
             public abstract void ReadFromObject(object obj, object vm);
 
             #region Implementation of IGetKey<out string>
@@ -49,6 +52,7 @@ namespace Jasily.ComponentModel.Editable
 
         private class SubViewModelCaller : Executor
         {
+            [Pure]
             public override void WriteToObject(object vm, object obj)
             {
                 Debug.Assert(vm != null && obj != null);
@@ -58,6 +62,7 @@ namespace Jasily.ComponentModel.Editable
                 ((IEditableViewModel)value).WriteToObject(obj);
             }
 
+            [Pure]
             public override void ReadFromObject(object obj, object vm)
             {
                 Debug.Assert(vm != null && obj != null);
@@ -112,6 +117,7 @@ namespace Jasily.ComponentModel.Editable
                 }
             }
 
+            [Pure]
             public override void WriteToObject(object vm, object obj)
             {
                 Debug.Assert(vm != null && obj != null);
@@ -137,6 +143,7 @@ namespace Jasily.ComponentModel.Editable
                 this.ObjectSetter.Set(obj, value);
             }
 
+            [Pure]
             public override void ReadFromObject(object obj, object vm)
             {
                 Debug.Assert(vm != null && obj != null);
@@ -280,6 +287,7 @@ namespace Jasily.ComponentModel.Editable
                 }
             }
 
+            [Pure]
             public void WriteToObject(object vm, object obj)
             {
                 Debug.Assert(vm != null);
@@ -293,6 +301,7 @@ namespace Jasily.ComponentModel.Editable
                 }
             }
 
+            [Pure]
             public void ReadFromObject(object obj, object vm)
             {
                 Debug.Assert(vm != null);
@@ -330,15 +339,13 @@ namespace Jasily.ComponentModel.Editable
         }
     }
 
-    public abstract class JasilyEditableViewModel<T> : JasilyViewModel<T>,
+    public abstract class JasilyEditableViewModel<T> : JasilyViewModel,
         JasilyEditableViewModel.IEditableViewModel
     {
         private JasilyEditableViewModel.Cache mapperCached;
 
-        protected JasilyEditableViewModel(T source)
-            : base(source)
-        {
-        }
+        [NotifyPropertyChanged(Order = -1)]
+        public T ReadCached { get; private set; }
 
         public virtual void WriteToObject(T obj)
         {
@@ -353,6 +360,7 @@ namespace Jasily.ComponentModel.Editable
             if (ReferenceEquals(obj, null)) return;
             if (this.mapperCached == null)
                 this.mapperCached = JasilyEditableViewModel.Cache<T>.GetMapperCache(this.GetType());
+            this.ReadCached = obj;
             this.mapperCached.ReadFromObject(obj, this);
         }
 
