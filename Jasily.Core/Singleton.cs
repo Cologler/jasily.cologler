@@ -1,5 +1,3 @@
-using JetBrains.Annotations;
-
 namespace System
 {
     public static class Singleton
@@ -13,24 +11,6 @@ namespace System
                     if (Shared<T>.instance == null)
                     {
                         Shared<T>.instance = new T();
-                    }
-                }
-            }
-
-            return Shared<T>.instance;
-        }
-
-        public static T Instance<T>([NotNull] Func<T> creator) where T : class
-        {
-            if (creator == null) throw new ArgumentNullException(nameof(creator));
-
-            if (Shared<T>.instance == null)
-            {
-                lock (typeof(Shared<T>))
-                {
-                    if (Shared<T>.instance == null)
-                    {
-                        Shared<T>.instance = creator();
                     }
                 }
             }
