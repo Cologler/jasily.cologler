@@ -1,4 +1,4 @@
-using System.Threading;
+using JetBrains.Annotations;
 
 namespace System
 {
@@ -8,24 +8,37 @@ namespace System
         {
             if (Shared<T>.instance == null)
             {
-                Interlocked.CompareExchange(ref Shared<T>.instance, new T(), null);
+                lock (typeof(Shared<T>))
+                {
+                    if (Shared<T>.instance == null)
+                    {
+                        Shared<T>.instance = new T();
+                    }
+                }
             }
+
             return Shared<T>.instance;
         }
 
-        public static T InstanceSafe<T>() where T : class, new()
+        public static T Instance<T>([NotNull] Func<T> creator) where T : class
         {
+            if (creator == null) throw new ArgumentNullException(nameof(creator));
+
             if (Shared<T>.instance == null)
             {
                 lock (typeof(Shared<T>))
                 {
-                    return Instance<T>();
+                    if (Shared<T>.instance == null)
+                    {
+                        Shared<T>.instance = creator();
+                    }
                 }
             }
+
             return Shared<T>.instance;
         }
 
-        private static class Shared<T>
+        private static class Shared<T> where T : class
         {
             // ReSharper disable once InconsistentNaming
             public static T instance;
@@ -36,7 +49,7 @@ namespace System
         public static T ThreadStaticInstance<T>() where T : class, new()
             => ThreadStatic<T>.instance ?? (ThreadStatic<T>.instance = new T());
 
-        private static class ThreadStatic<T>
+        private static class ThreadStatic<T> where T : class
         {
             [ThreadStatic]
             // ReSharper disable once InconsistentNaming
