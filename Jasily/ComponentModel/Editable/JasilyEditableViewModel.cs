@@ -91,6 +91,9 @@ namespace Jasily.ComponentModel.Editable
 
             public Setter<object, object> ObjectSetter { get; set; }
 
+            public List<WriteToObjectConditionAttribute> WriteConditions { get; }
+                = new List<WriteToObjectConditionAttribute>();
+
             public bool IsPropertyContainer { get; set; }
 
             public override void Verify()
@@ -137,6 +140,12 @@ namespace Jasily.ComponentModel.Editable
                     Debug.Assert(converter != null);
                     if (!converter.CanConvertBack(value)) return;
                     value = converter.ConvertBack(value);
+                }
+
+                // check for write
+                if (this.WriteConditions.Count > 0)
+                {
+                    if (this.WriteConditions.Any(z => !z.IsMatch(value))) return;
                 }
 
                 // set
@@ -216,6 +225,7 @@ namespace Jasily.ComponentModel.Editable
                                 {
                                     ViewModelGetter = field.CompileGetter()
                                 };
+                                executor.WriteConditions.AddRange(field.GetCustomAttributes<WriteToObjectConditionAttribute>());
                                 executor.IsPropertyContainer = typeof(IPropertyContainer)
                                     .GetTypeInfo()
                                     .IsAssignableFrom(field.FieldType.GetTypeInfo());
@@ -245,6 +255,7 @@ namespace Jasily.ComponentModel.Editable
                                 {
                                     ViewModelGetter = property.CompileGetter()
                                 };
+                                executor.WriteConditions.AddRange(property.GetCustomAttributes<WriteToObjectConditionAttribute>());
                                 executor.IsPropertyContainer = typeof(IPropertyContainer)
                                     .GetTypeInfo()
                                     .IsAssignableFrom(property.PropertyType.GetTypeInfo());

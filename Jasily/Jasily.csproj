@@ -66,6 +66,9 @@
     <Compile Include="ComponentModel\Editable\Converters\ToStringConverter.cs" />
     <Compile Include="ComponentModel\Editable\EditableFieldAttribute.cs" />
     <Compile Include="ComponentModel\Editable\JasilyEditableViewModel.cs" />
+    <Compile Include="ComponentModel\Editable\WriteToObjectConditionAttribute.cs" />
+    <Compile Include="ComponentModel\Editable\WriteToObjectIfNotNullOrEmptyAttribute.cs" />
+    <Compile Include="ComponentModel\Editable\WriteToObjectIfNotNullOrWhiteSpaceAttribute.cs" />
     <Compile Include="ComponentModel\IPropertyContainer.cs" />
     <Compile Include="ComponentModel\JasilyViewModel.cs" />
     <Compile Include="ComponentModel\NotifyPropertyChangedAttribute.cs" />
