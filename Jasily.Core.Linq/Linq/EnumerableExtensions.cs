@@ -164,32 +164,22 @@ namespace System.Linq
         /// <param name="giveup"></param>
         /// <returns></returns>
         [SuppressMessage("ReSharper", "PossibleMultipleEnumeration")]
-        public static IEnumerable<T> Giveup<T>(this IEnumerable<T> source, int giveup)
+        public static IEnumerable<T> Giveup<T>([NotNull] this IEnumerable<T> source, uint giveup)
         {
-            var total = source.TryGetCount();
-            if (total != -1)
+            if (source == null) throw new ArgumentNullException(nameof(source));
+
+            using (var itorMove = source.GetEnumerator())
             {
-                if (total <= giveup) yield break;
-                foreach (var item in source.Take(total - giveup))
+                while (giveup-- > 0)
                 {
-                    yield return item;
+                    if (!itorMove.MoveNext()) yield break;
                 }
-            }
-            else
-            {
-                var queue = new Queue<T>(giveup);
-                using (var itor = source.GetEnumerator())
+
+                using (var itorTake = source.GetEnumerator())
                 {
-                    while (giveup > 0)
+                    while (itorMove.MoveNext() && itorTake.MoveNext())
                     {
-                        if (!itor.MoveNext()) yield break;
-                        giveup--;
-                        queue.Enqueue(itor.Current);
-                    }
-                    while (itor.MoveNext())
-                    {
-                        yield return queue.Dequeue();
-                        queue.Enqueue(itor.Current);
+                        yield return itorTake.Current;
                     }
                 }
             }
@@ -236,27 +226,27 @@ namespace System.Linq
 
         #region orderby
 
-        public static IOrderedEnumerable<T> OrderBy<T>(
+        public static IOrderedEnumerable<T> OrderBy<T>([NotNull]
             this IEnumerable<T> source, IComparer<T> comparer)
             => source.OrderBy(z => z, comparer);
 
-        public static IOrderedEnumerable<T> OrderBy<T>(
+        public static IOrderedEnumerable<T> OrderBy<T>([NotNull]
             this IEnumerable<T> source, Comparison<T> comparison)
             => source.OrderBy(z => z, Comparer<T>.Create(comparison));
 
-        public static IOrderedEnumerable<TSource> OrderBy<TSource, TKey>(
+        public static IOrderedEnumerable<TSource> OrderBy<TSource, TKey>([NotNull]
             this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, Comparison<TKey> comparison)
             => source.OrderBy(keySelector, Comparer<TKey>.Create(comparison));
 
-        public static IOrderedEnumerable<T> OrderByDescending<T>(
+        public static IOrderedEnumerable<T> OrderByDescending<T>([NotNull]
             this IEnumerable<T> source, IComparer<T> comparer)
             => source.OrderByDescending(z => z, comparer);
 
-        public static IOrderedEnumerable<T> OrderByDescending<T>(
+        public static IOrderedEnumerable<T> OrderByDescending<T>([NotNull]
             this IEnumerable<T> source, Comparison<T> comparison)
             => source.OrderByDescending(z => z, Comparer<T>.Create(comparison));
 
-        public static IOrderedEnumerable<TSource> OrderByDescending<TSource, TKey>(
+        public static IOrderedEnumerable<TSource> OrderByDescending<TSource, TKey>([NotNull]
             this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, Comparison<TKey> comparison)
             => source.OrderByDescending(keySelector, Comparer<TKey>.Create(comparison));
 
