@@ -124,21 +124,21 @@ namespace System.Linq
 
         #region split
 
-        public static IEnumerable<IEnumerable<TSource>> Split<TSource>([NotNull] this IEnumerable<TSource> source, int chunkSize)
+        public static IEnumerable<IEnumerable<TSource>> SplitChunks<TSource>([NotNull] this IEnumerable<TSource> source, int chunkSize)
         {
             if (source == null) throw new ArgumentNullException(nameof(source));
             if (chunkSize < 1) throw new ArgumentOutOfRangeException(nameof(chunkSize), chunkSize, "must > 0.");
 
             if (chunkSize == 1)
             {
-                foreach (var item in source) yield return item.IntoArray();
+                foreach (var item in source) yield return new[] { item };
             }
             else // chunkSize > 1
             {
                 var count = chunkSize - 1; // > 0
                 using (var itor = source.GetEnumerator())
                 {
-                    if (itor.MoveNext()) yield return itor.Current.IntoArray().Concat(itor.Take(count));
+                    if (itor.MoveNext()) yield return new[] { itor.Current }.Concat(itor.Take(count));
                 }
             }
         }
