@@ -365,15 +365,6 @@ namespace System.Linq
 
         #endregion
 
-        public static T? FirstOrNull<T>([NotNull] this IEnumerable<T> source, [NotNull] Func<T, bool> predicate)
-            where T : struct
-        {
-            if (source == null) throw new ArgumentNullException(nameof(source));
-            if (predicate == null) throw new ArgumentNullException(nameof(predicate));
-            foreach (var item in source.Where(predicate)) return item;
-            return null;
-        }
-
         #region modify enumerable
 
         #region insert
@@ -470,6 +461,26 @@ namespace System.Linq
         }
 
         #endregion
+
+        #endregion
+
+        #region zip
+
+        public static IEnumerable<Tuple2<TFirst, TSecond>> Zip<TFirst, TSecond>([NotNull] this IEnumerable<TFirst> first,
+            [NotNull] IEnumerable<TSecond> second) => first.Zip(second, Tuple2.Create);
+
+        #endregion
+
+        #region for struct
+
+        public static T? FirstOrNull<T>([NotNull] this IEnumerable<T> source, [NotNull] Func<T, bool> predicate)
+            where T : struct
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            if (predicate == null) throw new ArgumentNullException(nameof(predicate));
+            foreach (var item in source.Where(predicate)) return item;
+            return null;
+        }
 
         #endregion
     }

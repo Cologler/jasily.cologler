@@ -98,6 +98,7 @@
     <Compile Include="Threading\SemaphoreSlimExtensions.cs" />
     <Compile Include="Threading\Tasks\JasilyTaskFactory.cs" />
     <Compile Include="Threading\Tasks\TaskFactoryExtensions.cs" />
+    <Compile Include="Tuple2.cs" />
     <Compile Include="TypedEventHandler.cs" />
     <Compile Include="TypeExtensions.cs" />
     <Compile Include="UfDateTimeConverter.cs" />
