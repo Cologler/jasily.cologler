@@ -118,6 +118,7 @@
     <Compile Include="Net\WebResultExtensions.cs" />
     <Compile Include="Net\WebResultType.cs" />
     <Compile Include="Orderable.cs" />
+    <Compile Include="OrderableComparer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reflection\JasilyMemberReader.cs" />
     <Compile Include="Reflection\JasilyMemberWriter.cs" />
