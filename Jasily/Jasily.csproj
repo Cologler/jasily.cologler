@@ -129,6 +129,7 @@
     <Compile Include="Reflection\WriteableMemberAttribute.cs" />
     <Compile Include="Services\IServiceProvider.cs" />
     <Compile Include="Services\IServiceProviderFactory.cs" />
+    <Compile Include="Start.cs" />
     <Compile Include="StringConverter.cs" />
     <Compile Include="Text\NoneEncoding.cs" />
     <Compile Include="Text\TextReplacer.cs" />
