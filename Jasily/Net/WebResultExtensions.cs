@@ -183,7 +183,7 @@ namespace Jasily.Net
             {
                 return new WebResult<T>(e);
             }
-            catch (IOException e) when (e.InnerException?.ToString() == "System.Net.Sockets.SocketException")
+            catch (IOException e) when (e.InnerException?.GetType().FullName == "System.Net.Sockets.SocketException")
             {
                 if (Debugger.IsAttached) Debugger.Break();
                 return new WebResult<T>(new WebException(e.InnerException.Message, e));
@@ -217,10 +217,15 @@ namespace Jasily.Net
             {
                 return new WebResult<T>(e);
             }
-            catch (IOException e) when (e.InnerException?.ToString() == "System.Net.Sockets.SocketException")
+            catch (IOException e) when (e.InnerException?.GetType().FullName == "System.Net.Sockets.SocketException")
             {
                 if (Debugger.IsAttached) Debugger.Break();
                 return new WebResult<T>(new WebException(e.InnerException.Message, e));
+            }
+            catch (Exception e)
+            {
+                if (Debugger.IsAttached) Debugger.Break();
+                throw;
             }
         }
 
