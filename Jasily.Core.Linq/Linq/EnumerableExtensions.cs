@@ -124,21 +124,21 @@ namespace System.Linq
 
         #region split
 
-        public static IEnumerable<IEnumerable<TSource>> Split<TSource>([NotNull] this IEnumerable<TSource> source, int chunkSize)
+        public static IEnumerable<IEnumerable<TSource>> SplitChunks<TSource>([NotNull] this IEnumerable<TSource> source, int chunkSize)
         {
             if (source == null) throw new ArgumentNullException(nameof(source));
             if (chunkSize < 1) throw new ArgumentOutOfRangeException(nameof(chunkSize), chunkSize, "must > 0.");
 
             if (chunkSize == 1)
             {
-                foreach (var item in source) yield return item.IntoArray();
+                foreach (var item in source) yield return new[] { item };
             }
             else // chunkSize > 1
             {
                 var count = chunkSize - 1; // > 0
                 using (var itor = source.GetEnumerator())
                 {
-                    if (itor.MoveNext()) yield return itor.Current.IntoArray().Concat(itor.Take(count));
+                    if (itor.MoveNext()) yield return new[] { itor.Current }.Concat(itor.Take(count));
                 }
             }
         }
@@ -164,32 +164,22 @@ namespace System.Linq
         /// <param name="giveup"></param>
         /// <returns></returns>
         [SuppressMessage("ReSharper", "PossibleMultipleEnumeration")]
-        public static IEnumerable<T> Giveup<T>(this IEnumerable<T> source, int giveup)
+        public static IEnumerable<T> Giveup<T>([NotNull] this IEnumerable<T> source, uint giveup)
         {
-            var total = source.TryGetCount();
-            if (total != -1)
+            if (source == null) throw new ArgumentNullException(nameof(source));
+
+            using (var itorMove = source.GetEnumerator())
             {
-                if (total <= giveup) yield break;
-                foreach (var item in source.Take(total - giveup))
+                while (giveup-- > 0)
                 {
-                    yield return item;
+                    if (!itorMove.MoveNext()) yield break;
                 }
-            }
-            else
-            {
-                var queue = new Queue<T>(giveup);
-                using (var itor = source.GetEnumerator())
+
+                using (var itorTake = source.GetEnumerator())
                 {
-                    while (giveup > 0)
+                    while (itorMove.MoveNext() && itorTake.MoveNext())
                     {
-                        if (!itor.MoveNext()) yield break;
-                        giveup--;
-                        queue.Enqueue(itor.Current);
-                    }
-                    while (itor.MoveNext())
-                    {
-                        yield return queue.Dequeue();
-                        queue.Enqueue(itor.Current);
+                        yield return itorTake.Current;
                     }
                 }
             }
@@ -236,27 +226,27 @@ namespace System.Linq
 
         #region orderby
 
-        public static IOrderedEnumerable<T> OrderBy<T>(
+        public static IOrderedEnumerable<T> OrderBy<T>([NotNull]
             this IEnumerable<T> source, IComparer<T> comparer)
             => source.OrderBy(z => z, comparer);
 
-        public static IOrderedEnumerable<T> OrderBy<T>(
+        public static IOrderedEnumerable<T> OrderBy<T>([NotNull]
             this IEnumerable<T> source, Comparison<T> comparison)
             => source.OrderBy(z => z, Comparer<T>.Create(comparison));
 
-        public static IOrderedEnumerable<TSource> OrderBy<TSource, TKey>(
+        public static IOrderedEnumerable<TSource> OrderBy<TSource, TKey>([NotNull]
             this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, Comparison<TKey> comparison)
             => source.OrderBy(keySelector, Comparer<TKey>.Create(comparison));
 
-        public static IOrderedEnumerable<T> OrderByDescending<T>(
+        public static IOrderedEnumerable<T> OrderByDescending<T>([NotNull]
             this IEnumerable<T> source, IComparer<T> comparer)
             => source.OrderByDescending(z => z, comparer);
 
-        public static IOrderedEnumerable<T> OrderByDescending<T>(
+        public static IOrderedEnumerable<T> OrderByDescending<T>([NotNull]
             this IEnumerable<T> source, Comparison<T> comparison)
             => source.OrderByDescending(z => z, Comparer<T>.Create(comparison));
 
-        public static IOrderedEnumerable<TSource> OrderByDescending<TSource, TKey>(
+        public static IOrderedEnumerable<TSource> OrderByDescending<TSource, TKey>([NotNull]
             this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, Comparison<TKey> comparison)
             => source.OrderByDescending(keySelector, Comparer<TKey>.Create(comparison));
 
@@ -365,15 +355,6 @@ namespace System.Linq
 
         #endregion
 
-        public static T? FirstOrNull<T>([NotNull] this IEnumerable<T> source, [NotNull] Func<T, bool> predicate)
-            where T : struct
-        {
-            if (source == null) throw new ArgumentNullException(nameof(source));
-            if (predicate == null) throw new ArgumentNullException(nameof(predicate));
-            foreach (var item in source.Where(predicate)) return item;
-            return null;
-        }
-
         #region modify enumerable
 
         #region insert
@@ -470,6 +451,26 @@ namespace System.Linq
         }
 
         #endregion
+
+        #endregion
+
+        #region zip
+
+        public static IEnumerable<Tuple2<TFirst, TSecond>> Zip<TFirst, TSecond>([NotNull] this IEnumerable<TFirst> first,
+            [NotNull] IEnumerable<TSecond> second) => first.Zip(second, Tuple2.Create);
+
+        #endregion
+
+        #region for struct
+
+        public static T? FirstOrNull<T>([NotNull] this IEnumerable<T> source, [NotNull] Func<T, bool> predicate)
+            where T : struct
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            if (predicate == null) throw new ArgumentNullException(nameof(predicate));
+            foreach (var item in source.Where(predicate)) return item;
+            return null;
+        }
 
         #endregion
     }

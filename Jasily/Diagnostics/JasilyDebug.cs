@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
@@ -38,6 +39,15 @@ namespace Jasily.Diagnostics
 
         [Conditional("DEBUG")]
         public static void AssertNotNull(object obj) => Debug.Assert(obj != null);
+
+        [Conditional("DEBUG")]
+        public static void AssertForEach<T>(IEnumerable<T> items, Func<T, bool> tester)
+        {
+            foreach (var item in items)
+            {
+                Debug.Assert(tester(item));
+            }
+        }
 
         #endregion
 
