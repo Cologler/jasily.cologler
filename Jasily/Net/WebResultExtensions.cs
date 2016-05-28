@@ -1,5 +1,4 @@
-﻿using JetBrains.Annotations;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -9,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using JetBrains.Annotations;
 
 namespace Jasily.Net
 {
@@ -170,11 +170,14 @@ namespace Jasily.Net
 
             try
             {
-                var response = await request.GetResponseAsync();
-                using (var stream = response.GetResponseStream())
+                return await Task.Run(async () =>
                 {
-                    return new WebResult<T>(response, selector(stream));
-                }
+                    var response = await request.GetResponseAsync();
+                    using (var stream = response.GetResponseStream())
+                    {
+                        return new WebResult<T>(response, selector(stream));
+                    }
+                });
             }
             catch (WebException e)
             {
@@ -200,12 +203,15 @@ namespace Jasily.Net
 
             try
             {
-                var response = await request.GetResponseAsync(cancellationToken);
-                cancellationToken.ThrowIfCancellationRequested();
-                using (var stream = response.GetResponseStream())
+                return await Task.Run(async () =>
                 {
-                    return new WebResult<T>(response, selector(stream, cancellationToken));
-                }
+                    var response = await request.GetResponseAsync(cancellationToken);
+                    cancellationToken.ThrowIfCancellationRequested();
+                    using (var stream = response.GetResponseStream())
+                    {
+                        return new WebResult<T>(response, selector(stream, cancellationToken));
+                    }
+                }, cancellationToken);
             }
             catch (WebException e)
             {
