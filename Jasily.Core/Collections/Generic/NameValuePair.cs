@@ -1,6 +1,11 @@
 ﻿
 namespace System.Collections.Generic
 {
+    public static class NameValuePair
+    {
+        public static NameValuePair<T> WithName<T>(this T obj, string name) => new NameValuePair<T>(name, obj);
+    }
+
     public struct NameValuePair<TValue> : IEquatable<NameValuePair<TValue>>, IEquatable<NameValuePair<string, TValue>>
     {
         public NameValuePair(string name, TValue value)

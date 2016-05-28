@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
 using JetBrains.Annotations;
 
 namespace System
@@ -94,44 +93,6 @@ namespace System
         /// <returns></returns>
         public static bool IsBetween<T>(this T self, T lower, T upper) where T : IComparable<T>
             => self.CompareTo(lower) >= 0 && self.CompareTo(upper) < 0;
-
-        #endregion
-
-        public static NameValuePair<T> WithName<T>(this T obj, string name) => new NameValuePair<T>(name, obj);
-
-        #region try
-
-        public static T Try<TSource, T>(this TSource obj, [NotNull] Func<T> func, [NotNull] Func<T, bool> match, int maxTryCount)
-        {
-            if (func == null) throw new ArgumentNullException(nameof(func));
-            if (match == null) throw new ArgumentNullException(nameof(match));
-            if (maxTryCount < 1) throw new ArgumentOutOfRangeException();
-
-            T r;
-            do
-            {
-                r = func();
-                if (match(r)) return r;
-                maxTryCount--;
-            } while (maxTryCount > 0);
-            return r;
-        }
-
-        public static async Task<T> TryAsync<TSource, T>(this TSource obj, [NotNull] Func<Task<T>> func, [NotNull] Func<T, bool> match, int maxTryCount)
-        {
-            if (func == null) throw new ArgumentNullException(nameof(func));
-            if (match == null) throw new ArgumentNullException(nameof(match));
-            if (maxTryCount < 1) throw new ArgumentOutOfRangeException();
-
-            T r;
-            do
-            {
-                r = await func();
-                if (match(r)) return r;
-                maxTryCount--;
-            } while (maxTryCount > 0);
-            return r;
-        }
 
         #endregion
 

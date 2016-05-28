@@ -5,10 +5,7 @@
         public event TypedEventHandler<Releaser, object> ReleaseRaised;
         private readonly object state;
 
-        private void Release()
-        {
-            this.ReleaseRaised?.Invoke(this, this.state);
-        }
+        private void Release() => this.ReleaseRaised?.Invoke(this, this.state);
 
         public Releaser(bool isAcquired, object state = null)
         {
@@ -32,10 +29,7 @@
         public event TypedEventHandler<Releaser<T>, T> ReleaseRaised;
         private readonly T state;
 
-        private void Release()
-        {
-            this.ReleaseRaised?.Invoke(this, this.state);
-        }
+        private void Release() => this.ReleaseRaised?.Invoke(this, this.state);
 
         public Releaser(bool isAcquired, T state = default(T))
         {
