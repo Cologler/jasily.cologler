@@ -294,7 +294,7 @@ namespace Jasily.Net
                 return new WebResult<T>(e);
             }
 
-            return await request.GetResultAsync<T>(selector);
+            return await request.GetResultAsync(selector);
         }
 
         public static async Task<WebResult<T>> SendAndGetResultAsync<T>([NotNull] this HttpWebRequest request,
@@ -340,12 +340,12 @@ namespace Jasily.Net
 
         #region loop request
 
-        private static async Task<TWebResult> TryLoop<TWebResult>([NotNull] HttpWebRequest request, int tryTime,
+        private static async Task<TWebResult> TryLoop<TWebResult>([NotNull] HttpWebRequest request, int retryTime,
             Func<HttpWebRequest, Task<TWebResult>> func)
             where TWebResult : WebResult
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
-            if (tryTime <= 0) throw new ArgumentOutOfRangeException(nameof(tryTime), "must > 0");
+            if (retryTime <= 0) throw new ArgumentOutOfRangeException(nameof(retryTime), "must > 0");
             Debug.Assert(func != null);
 
             TWebResult r;
@@ -353,16 +353,16 @@ namespace Jasily.Net
             {
                 r = await func(request);
                 if (r.IsSuccess) return r;
-            } while (--tryTime > 0);
+            } while (--retryTime > 0);
             return r;
         }
 
-        private static async Task<TWebResult> TryLoop<TWebResult>([NotNull] HttpWebRequest request, int tryTime,
+        private static async Task<TWebResult> TryLoop<TWebResult>([NotNull] HttpWebRequest request, int retryTime,
             Func<HttpWebRequest, CancellationToken, Task<TWebResult>> func, CancellationToken token)
             where TWebResult : WebResult
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
-            if (tryTime <= 0) throw new ArgumentOutOfRangeException(nameof(tryTime), "must > 0");
+            if (retryTime <= 0) throw new ArgumentOutOfRangeException(nameof(retryTime), "must > 0");
             Debug.Assert(func != null);
 
             TWebResult r;
@@ -370,18 +370,18 @@ namespace Jasily.Net
             {
                 r = await func(request, token);
                 if (r.IsSuccess) return r;
-            } while (--tryTime > 0);
+            } while (--retryTime > 0);
             return r;
         }
 
-        public static async Task<WebResult> GetResultAsync(this HttpWebRequest request, int tryTime)
-            => await TryLoop(request, tryTime, GetResultAsync);
+        public static async Task<WebResult> GetResultAsync(this HttpWebRequest request, int retryTime)
+            => await TryLoop(request, retryTime, GetResultAsync);
 
         public static async Task<WebResult<T>> GetResultAsync<T>(this HttpWebRequest request, Func<Stream, T> selector,
-            int tryTime) => await TryLoop(request, tryTime, z => z.GetResultAsync(selector));
+            int retryTime) => await TryLoop(request, retryTime, z => z.GetResultAsync(selector));
 
-        public static async Task<WebResult<byte[]>> GetResultAsBytesAsync(this HttpWebRequest request, int tryTime)
-            => await TryLoop(request, tryTime, GetResultAsBytesAsync);
+        public static async Task<WebResult<byte[]>> GetResultAsBytesAsync(this HttpWebRequest request, int retryTime)
+            => await TryLoop(request, retryTime, GetResultAsBytesAsync);
 
         #endregion
     }
