@@ -17,15 +17,9 @@ namespace Jasily.Desktop.Windows.Navigation
             this.service.Navigated += this.Service_Navigated;
         }
 
-        private void Service_Navigated(object sender, NavigationEventArgs e)
-        {
-            this.Status = NavigationServiceStatus.Navigated;
-        }
+        private void Service_Navigated(object sender, NavigationEventArgs e) => this.Status = NavigationServiceStatus.Navigated;
 
-        private void Service_Navigating(object sender, NavigatingCancelEventArgs e)
-        {
-            this.Status = NavigationServiceStatus.Navigating;
-        }
+        private void Service_Navigating(object sender, NavigatingCancelEventArgs e) => this.Status = NavigationServiceStatus.Navigating;
 
         public NavigationServiceStatus Status { get; private set; }
 

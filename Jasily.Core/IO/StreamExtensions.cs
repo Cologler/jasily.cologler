@@ -1,9 +1,9 @@
-﻿using JetBrains.Annotations;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 
 namespace System.IO
 {
@@ -33,6 +33,27 @@ namespace System.IO
             {
                 if (stream.CanSeek && stream.Position != 0) stream.Position = 0;
                 stream.CopyTo(ms, cancellationToken);
+                return ms.ToArray();
+            }
+        }
+
+        public static async Task<byte[]> ToArrayAsync([NotNull] this Stream stream)
+        {
+            if (stream == null) throw new ArgumentNullException(nameof(stream));
+            using (var ms = stream.CanSeek ? new MemoryStream(Convert.ToInt32(stream.Length)) : new MemoryStream())
+            {
+                if (stream.CanSeek && stream.Position != 0) stream.Position = 0;
+                await stream.CopyToAsync(ms);
+                return ms.ToArray();
+            }
+        }
+
+        public static async Task<byte[]> ToArrayAsync(this Stream stream, CancellationToken cancellationToken)
+        {
+            using (var ms = stream.CanSeek ? new MemoryStream(Convert.ToInt32(stream.Length)) : new MemoryStream())
+            {
+                if (stream.CanSeek && stream.Position != 0) stream.Position = 0;
+                await stream.CopyToAsync(ms, cancellationToken);
                 return ms.ToArray();
             }
         }
