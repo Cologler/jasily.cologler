@@ -9,21 +9,24 @@ namespace System
     {
         public static bool NormalEquals<T>(this T obj, T other) => EqualityComparer<T>.Default.Equals(obj, other);
 
+        #region c# 6.0 null condition extensions
+
         /// <summary>
-        /// if obj is special type, action
+        /// if obj is special type, do action().
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="obj"></param>
         /// <param name="action"></param>
-        public static void IfType<T>(this object obj, Action<T> action)
+        public static void IfType<T>(this object obj, [NotNull] Action<T> action)
             where T : class
         {
+            if (action == null) throw new ArgumentNullException(nameof(action));
             var t = obj as T;
-
             if (t != null) action(t);
         }
+
         /// <summary>
-        /// if obj is special type, selector, or return def
+        /// if obj is special type, return selector(obj), else return def.
         /// </summary>
         /// <typeparam name="TIn"></typeparam>
         /// <typeparam name="TOut"></typeparam>
@@ -31,15 +34,17 @@ namespace System
         /// <param name="selector"></param>
         /// <param name="def"></param>
         /// <returns></returns>
-        public static TOut IfType<TIn, TOut>(this object obj, Func<TIn, TOut> selector, TOut def = default(TOut))
+        public static TOut IfType<TIn, TOut>(this object obj, [NotNull] Func<TIn, TOut> selector,
+            TOut def = default(TOut))
             where TIn : class
         {
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
             var t = obj as TIn;
-
             return t == null ? def : selector(t);
         }
+
         /// <summary>
-        /// if obj is special type, selector, or call def()
+        /// if obj is special type, return selector(obj), else return def().
         /// </summary>
         /// <typeparam name="TIn"></typeparam>
         /// <typeparam name="TOut"></typeparam>
@@ -47,123 +52,14 @@ namespace System
         /// <param name="selector"></param>
         /// <param name="def"></param>
         /// <returns></returns>
-        public static TOut IfType<TIn, TOut>(this object obj, Func<TIn, TOut> selector, Func<TOut> def)
+        public static TOut IfType<TIn, TOut>(this object obj, [NotNull] Func<TIn, TOut> selector,
+            [NotNull] Func<TOut> def)
             where TIn : class
         {
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
+            if (def == null) throw new ArgumentNullException(nameof(def));
             var t = obj as TIn;
-
             return t == null ? def() : selector(t);
-        }
-
-        #region type convert
-
-        /// <summary>
-        /// if obj is type, return the obj self, else return a new object.
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        public static bool TryTypeConvert(this object obj, Type type, out object dest)
-        {
-            if (ReferenceEquals(obj, null) || obj.GetType() == type)
-            {
-                dest = obj;
-                return true;
-            }
-
-            switch (obj.GetType().FullName)
-            {
-                case "System.String":
-                    return TryTypeConvert((string)obj, type, out dest);
-
-                case "System.Int32":
-                    return TryTypeConvert((int)obj, type, out dest);
-
-                case "System.Int64":
-                    return TryTypeConvert((long)obj, type, out dest);
-
-                default:
-                    dest = null;
-                    return false;
-            }
-        }
-
-        public static bool TryTypeConvert(this string obj, Type type, out object dest)
-        {
-            if (ReferenceEquals(obj, null) || obj.GetType() == type)
-            {
-                dest = obj;
-                return true;
-            }
-
-            switch (type.Name)
-            {
-                case "System.Int32":
-                    dest = Int32.Parse(obj);
-                    break;
-
-                case "System.Int64":
-                    dest = Int64.Parse(obj);
-                    break;
-
-                default:
-                    dest = null;
-                    return false;
-            }
-
-            return true;
-        }
-
-        public static bool TryTypeConvert(this int obj, Type type, out object dest)
-        {
-            if (obj.GetType() == type)
-            {
-                dest = obj;
-                return true;
-            }
-
-            switch (type.Name)
-            {
-                case "System.String":
-                    dest = obj.ToString();
-                    break;
-
-                case "System.Int64":
-                    dest = Convert.ToInt64(obj);
-                    break;
-
-                default:
-                    dest = null;
-                    return false;
-            }
-
-            return true;
-        }
-
-        public static bool TryTypeConvert(this long obj, Type type, out object dest)
-        {
-            if (obj.GetType() == type)
-            {
-                dest = obj;
-                return true;
-            }
-
-            switch (type.Name)
-            {
-                case "System.String":
-                    dest = obj.ToString();
-                    break;
-
-                case "System.Int32":
-                    dest = Convert.ToInt32(obj);
-                    break;
-
-                default:
-                    dest = null;
-                    return false;
-            }
-
-            return true;
         }
 
         #endregion
