@@ -55,6 +55,7 @@
     <Compile Include="ConsoleActivator.cs" />
     <Compile Include="ConsoleTempEnvironment.cs" />
     <Compile Include="Windows\Data\ValueConverters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Windows\Data\ValueConverters\ItemsEmptyToCollapsedConverter.cs" />
     <Compile Include="Windows\Interactivity\Behaviors\NonSelectBehavior.cs" />
     <Compile Include="Windows\Navigation\NavigationStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
