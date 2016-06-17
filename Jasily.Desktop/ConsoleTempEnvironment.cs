@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Jasily.Desktop
+namespace Jasily
 {
     public class ConsoleTempEnvironment : IDisposable
     {

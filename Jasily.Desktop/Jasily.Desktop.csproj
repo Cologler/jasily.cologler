@@ -52,6 +52,7 @@
       <Link>Windows\Data\JasilySelectorCollectionView.cs</Link>
     </Compile>
     <Compile Include="Api\Explorer.cs" />
+    <Compile Include="ConsoleActivator.cs" />
     <Compile Include="ConsoleTempEnvironment.cs" />
     <Compile Include="Windows\Data\ValueConverters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Windows\Interactivity\Behaviors\NonSelectBehavior.cs" />
