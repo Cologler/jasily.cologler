@@ -7,14 +7,14 @@ namespace System.Collections.Generic
     {
         #region ICollection
 
-        #region add or remove range
-
         public static T BeAdd<T>(this T obj, [NotNull] ICollection<T> collection)
         {
             if (collection == null) throw new ArgumentNullException(nameof(collection));
             collection.Add(obj);
             return obj;
         }
+
+        #region add range
 
         public static ICollection<T> AddRange<T>([NotNull] this ICollection<T> collection, [NotNull] params T[] items)
         {
@@ -24,6 +24,7 @@ namespace System.Collections.Generic
             foreach (var item in items) collection.Add(item);
             return collection;
         }
+
         public static ICollection<T> AddRange<T>([NotNull] this ICollection<T> collection, [NotNull] IEnumerable<T> items)
         {
             if (collection == null) throw new ArgumentNullException(nameof(collection));
@@ -33,6 +34,30 @@ namespace System.Collections.Generic
             return collection;
         }
 
+        public static TSelf AddRange2<TSelf, T>([NotNull] this TSelf collection, [NotNull] params T[] items)
+            where TSelf : ICollection<T>
+        {
+            if (collection == null) throw new ArgumentNullException(nameof(collection));
+            if (items == null) throw new ArgumentNullException(nameof(items));
+
+            foreach (var item in items) collection.Add(item);
+            return collection;
+        }
+
+        public static TSelf AddRange2<TSelf, T>([NotNull] this TSelf collection, [NotNull] IEnumerable<T> items)
+            where TSelf : ICollection<T>
+        {
+            if (collection == null) throw new ArgumentNullException(nameof(collection));
+            if (items == null) throw new ArgumentNullException(nameof(items));
+
+            foreach (var item in items) collection.Add(item);
+            return collection;
+        }
+
+        #endregion
+
+        #region remove range
+
         public static int RemoveRange<T>([NotNull] this ICollection<T> collection, [NotNull] params T[] items)
         {
             if (collection == null) throw new ArgumentNullException(nameof(collection));
@@ -40,6 +65,7 @@ namespace System.Collections.Generic
 
             return items.Count(collection.Remove);
         }
+
         public static int RemoveRange<T>([NotNull] this ICollection<T> collection, [NotNull] IEnumerable<T> items)
         {
             if (collection == null) throw new ArgumentNullException(nameof(collection));

@@ -63,7 +63,9 @@
     <Compile Include="Collections\ReaderWriterCollections\ReaderWriterList.cs" />
     <Compile Include="Collections\ReaderWriterCollections\ReaderWriterQueue.cs" />
     <Compile Include="Collections\ReaderWriterCollections\ReaderWriterStack.cs" />
-    <Compile Include="ComponentModel\Editable\Converters\Int32Converter.cs" />
+    <Compile Include="ComponentModel\Editable\Converters\CollectionConverter.cs" />
+    <Compile Include="ComponentModel\Editable\Converters\EmptyToNullCollectionConverter.cs" />
+    <Compile Include="ComponentModel\Editable\Converters\Int32ToStringConverter.cs" />
     <Compile Include="ComponentModel\Editable\Converters\ToStringConverter.cs" />
     <Compile Include="ComponentModel\Editable\EditableFieldAttribute.cs" />
     <Compile Include="ComponentModel\Editable\JasilyEditableViewModel.cs" />
