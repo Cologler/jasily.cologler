@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="AsyncLazy.cs" />
     <Compile Include="Collections\Generic\CriticalValue.cs" />
+    <Compile Include="Collections\Generic\GroupedList.cs" />
     <Compile Include="Collections\Generic\HashSetExtensions.cs" />
     <Compile Include="Collections\Generic\IQueue.cs" />
     <Compile Include="Collections\Generic\JasilyEqualityComparer.cs" />
