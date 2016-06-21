@@ -65,8 +65,13 @@
     <Compile Include="Collections\ReaderWriterCollections\ReaderWriterStack.cs" />
     <Compile Include="ComponentModel\Editable\Converters\CollectionConverter.cs" />
     <Compile Include="ComponentModel\Editable\Converters\EmptyToNullCollectionConverter.cs" />
+    <Compile Include="ComponentModel\Editable\Converters\EmptyToNullOrTrimStringConverter.cs" />
+    <Compile Include="ComponentModel\Editable\Converters\EmptyToNullStringConverter.cs" />
     <Compile Include="ComponentModel\Editable\Converters\Int32ToStringConverter.cs" />
     <Compile Include="ComponentModel\Editable\Converters\ToStringConverter.cs" />
+    <Compile Include="ComponentModel\Editable\Converters\TrimStringConverter.cs" />
+    <Compile Include="ComponentModel\Editable\Converters\WhiteSpaceToNullOrTrimStringConverter.cs" />
+    <Compile Include="ComponentModel\Editable\Converters\WhiteSpaceToNullStringConverter.cs" />
     <Compile Include="ComponentModel\Editable\EditableFieldAttribute.cs" />
     <Compile Include="ComponentModel\Editable\JasilyEditableViewModel.cs" />
     <Compile Include="ComponentModel\Editable\WriteToObjectConditionAttribute.cs" />

@@ -1,3 +1,5 @@
+using JetBrains.Annotations;
+
 namespace System
 {
     public sealed class Boxing<T>
@@ -23,5 +25,11 @@ namespace System
         #endregion
 
         public static implicit operator Boxing<T>(T value) => new Boxing<T>(value);
+
+        public static implicit operator T([NotNull] Boxing<T> box)
+        {
+            if (box == null) throw new ArgumentNullException(nameof(box));
+            return box.Value;
+        }
     }
 }
