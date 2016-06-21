@@ -140,6 +140,7 @@
     <Compile Include="Services\IServiceProviderFactory.cs" />
     <Compile Include="Start.cs" />
     <Compile Include="StringConverter.cs" />
+    <Compile Include="StringRange.cs" />
     <Compile Include="Text\NoneEncoding.cs" />
     <Compile Include="Text\TextReplacer.cs" />
     <Compile Include="Threading\ISemaphore.cs" />
