@@ -164,7 +164,7 @@ namespace System.Linq
         /// <param name="giveup"></param>
         /// <returns></returns>
         [SuppressMessage("ReSharper", "PossibleMultipleEnumeration")]
-        public static IEnumerable<T> Giveup<T>([NotNull] this IEnumerable<T> source, uint giveup)
+        public static IEnumerable<T> GiveUp<T>([NotNull] this IEnumerable<T> source, uint giveup)
         {
             if (source == null) throw new ArgumentNullException(nameof(source));
 
@@ -470,6 +470,42 @@ namespace System.Linq
             if (predicate == null) throw new ArgumentNullException(nameof(predicate));
             foreach (var item in source.Where(predicate)) return item;
             return null;
+        }
+
+        #endregion
+
+        #region min & max
+
+        public static T MaxOrDefault<T>([NotNull] IEnumerable<T> source, T @default) where T : IComparable<T>
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+
+            using (var itor = source.GetEnumerator())
+            {
+                if (!itor.MoveNext()) return @default;
+                var item = itor.Current;
+                while (itor.MoveNext())
+                {
+                    item = item.Max(itor.Current);
+                }
+                return item;
+            }
+        }
+
+        public static T MinOrDefault<T>([NotNull] IEnumerable<T> source, T @default) where T : IComparable<T>
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+
+            using (var itor = source.GetEnumerator())
+            {
+                if (!itor.MoveNext()) return @default;
+                var item = itor.Current;
+                while (itor.MoveNext())
+                {
+                    item = item.Min(itor.Current);
+                }
+                return item;
+            }
         }
 
         #endregion
