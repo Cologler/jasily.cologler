@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using JetBrains.Annotations;
 
 namespace Jasily
@@ -37,6 +38,21 @@ namespace Jasily
         public bool StartsWith(StringRange value, StringComparison comparison = StringComparison.Ordinal)
             => this.length >= value.length && this.SubRange(0, value.length).Equals(value, comparison);
 
+        public StringRange TrimStart()
+        {
+            var index = this.startIndex;
+            while (char.IsWhiteSpace(this.document, index)) index++;
+            return this.SubRange(index);
+        }
+
+        public StringRange TrimStart([NotNull] params char[] trimChars)
+        {
+            if (trimChars.Length == 0) return this;
+            var index = this.startIndex;
+            while (trimChars.Contains(this.document[index])) index++;
+            return this.SubRange(index);
+        }
+
         #region string range
 
         [Pure]
@@ -52,6 +68,10 @@ namespace Jasily
                    first.document, first.startIndex, second.document,
                    second.startIndex, first.length, comparison
                );
+
+        [Pure]
+        public StringRange SubRange(int startIndex)
+            => new StringRange(this.document, this.startIndex + startIndex, this.length - startIndex);
 
         [Pure]
         public StringRange SubRange(int startIndex, int length)
