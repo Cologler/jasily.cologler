@@ -389,7 +389,7 @@ namespace System.Linq
         }
 
         [PublicAPI]
-        public static IEnumerable<T> InsertToEnd<T>([NotNull] IEnumerable<T> source, T next)
+        public static IEnumerable<T> InsertToEnd<T>([NotNull] this IEnumerable<T> source, T next)
         {
             if (source == null) throw new ArgumentNullException(nameof(source));
             foreach (var item in source) yield return item;
@@ -397,7 +397,7 @@ namespace System.Linq
         }
 
         [PublicAPI]
-        public static IEnumerable<T> InsertToStart<T>([NotNull] IEnumerable<T> source, T next)
+        public static IEnumerable<T> InsertToStart<T>([NotNull] this IEnumerable<T> source, T next)
         {
             if (source == null) throw new ArgumentNullException(nameof(source));
             yield return next;
