@@ -1,9 +1,9 @@
-﻿using JetBrains.Annotations;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using JetBrains.Annotations;
 
 namespace System
 {
@@ -345,9 +345,9 @@ namespace System
 
         #region get string
 
-        public static string GetString(this char[] array) => new string(array);
+        public static string GetString([NotNull] this char[] array) => new string(array);
 
-        public static string GetString(this IEnumerable<char> array) => new string(array.ToArray());
+        public static string GetString([NotNull] this IEnumerable<char> array) => new string(array.ToArray());
 
         #endregion
 
