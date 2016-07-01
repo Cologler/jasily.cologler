@@ -44,6 +44,7 @@
     <Compile Include="Linq\AsyncEnumerableExtensions.cs" />
     <Compile Include="Linq\EnumerableExtensions.cs" />
     <Compile Include="Linq\EnumeratorExtensions.cs" />
+    <Compile Include="Linq\Generater.cs" />
     <Compile Include="Linq\ListExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
