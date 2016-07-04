@@ -30,6 +30,12 @@ namespace Jasily
             this.hashCode = null;
         }
 
+        private void SubRangeCheck(int startIndex)
+        {
+            if (startIndex < 0) throw new ArgumentOutOfRangeException(nameof(startIndex));
+            if (startIndex >= this.length) throw new IndexOutOfRangeException();
+        }
+
         private void SubRangeCheck(int startIndex, int length)
         {
             if (startIndex < 0) throw new ArgumentOutOfRangeException(nameof(startIndex));
@@ -59,6 +65,47 @@ namespace Jasily
 
         #endregion
 
+        #region index & contain
+
+        [Pure]
+        public int IndexOf([NotNull] string value, StringComparison comparisonType = StringComparison.Ordinal)
+        {
+            if (value == null) throw new ArgumentNullException(nameof(value));
+            return this.document.IndexOf(value, this.startIndex, this.length, comparisonType);
+        }
+
+        [Pure]
+        public int IndexOf([NotNull] string value, int startIndex, StringComparison comparisonType = StringComparison.Ordinal)
+        {
+            if (value == null) throw new ArgumentNullException(nameof(value));
+            this.SubRangeCheck(startIndex);
+            return this.document.IndexOf(value, this.startIndex + startIndex, this.length - startIndex, comparisonType);
+        }
+
+        [Pure]
+        public int IndexOf([NotNull] string value, int startIndex, int length, StringComparison comparisonType = StringComparison.Ordinal)
+        {
+            if (value == null) throw new ArgumentNullException(nameof(value));
+            this.SubRange(startIndex, length);
+            return this.document.IndexOf(value, this.startIndex + startIndex, length, comparisonType);
+        }
+
+        [Pure]
+        public bool Contains([NotNull] string value, StringComparison comparisonType = StringComparison.Ordinal)
+            => this.IndexOf(value, comparisonType) > -1;
+
+        [Pure]
+        public bool Contains([NotNull] string value, int startIndex,
+            StringComparison comparisonType = StringComparison.Ordinal)
+            => this.IndexOf(value, startIndex, comparisonType) > -1;
+
+        [Pure]
+        public bool Contains([NotNull] string value, int startIndex, int length,
+            StringComparison comparisonType = StringComparison.Ordinal)
+            => this.IndexOf(value, startIndex, length, comparisonType) > -1;
+
+        #endregion
+
         #region trim
 
         [Pure]
@@ -67,7 +114,7 @@ namespace Jasily
             var index = this.startIndex;
             var maxIndex = this.startIndex + this.length;
             while (index <= maxIndex && char.IsWhiteSpace(this.document, index)) index++;
-            return this.SubRange(index);
+            return this.SubRange(index - this.startIndex);
         }
 
         [Pure]
@@ -77,7 +124,7 @@ namespace Jasily
             var index = this.startIndex;
             var maxIndex = this.startIndex + this.length;
             while (index <= maxIndex && trimChars.Contains(this.document[index])) index++;
-            return this.SubRange(index);
+            return this.SubRange(index - this.startIndex);
         }
 
         [Pure]
@@ -87,7 +134,7 @@ namespace Jasily
 
             var index = this.startIndex + this.length - 1;
             while (index >= this.startIndex && char.IsWhiteSpace(this.document, index)) index--;
-            return this.SubRange(this.startIndex, index - this.startIndex + 1);
+            return this.SubRangeOfLength(index - this.startIndex + 1);
         }
 
         [Pure]
@@ -98,7 +145,7 @@ namespace Jasily
 
             var index = this.startIndex + this.length - 1;
             while (index >= this.startIndex && trimChars.Contains(this.document[index])) index--;
-            return this.SubRange(this.startIndex, index - this.startIndex + 1);
+            return this.SubRangeOfLength(index - this.startIndex + 1);
         }
 
         [Pure]
@@ -116,33 +163,36 @@ namespace Jasily
         public StringRange SubRange(int startIndex) => this.SubRange(startIndex, this.length - startIndex);
 
         [Pure]
-        public StringRange SubRangeOfLength(int length) => this.SubRange(0, length);
-
-        [Pure]
         public StringRange SubRange(int startIndex, int length)
         {
-            startIndex += this.startIndex;
             this.SubRangeCheck(startIndex, length);
-            return new StringRange(this.document, startIndex, length);
+            return new StringRange(this.document, startIndex + this.startIndex, length);
         }
+
+        [Pure]
+        public StringRange SubRangeOfLength(int length) => this.SubRange(0, length);
 
         #endregion
 
         #region to string
 
         [Pure]
-        public string SubString(int startIndex, int length)
+        public string Substring(int startIndex)
         {
-            if (startIndex < 0) throw new ArgumentOutOfRangeException(nameof(startIndex));
-            if (length < 0) throw new ArgumentOutOfRangeException(nameof(length));
-            if (startIndex + length > this.length) throw new IndexOutOfRangeException();
+            this.SubRangeCheck(startIndex);
+            return this.document.Substring(this.startIndex + startIndex);
+        }
 
+        [Pure]
+        public string Substring(int startIndex, int length)
+        {
+            this.SubRangeCheck(startIndex, length);
             return this.document.Substring(this.startIndex + startIndex, length);
         }
 
         [Pure]
         public override string ToString() => this.document.Substring(this.startIndex, this.length);
-        
+
 
         #endregion
 
