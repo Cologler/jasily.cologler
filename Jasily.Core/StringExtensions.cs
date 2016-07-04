@@ -272,8 +272,18 @@ namespace System
 
         #endregion
 
-        public static bool Contains(this string str, string value, StringComparison comparisonType)
+        #region contains
+
+        public static bool Contains([NotNull] this string str, [NotNull] string value, StringComparison comparisonType)
             => str.IndexOf(value, comparisonType) > -1;
+
+        public static bool Contains([NotNull] this string str, [NotNull] string value, int startIndex, StringComparison comparisonType)
+            => str.IndexOf(value, startIndex, comparisonType) > -1;
+
+        public static bool Contains([NotNull] this string str, [NotNull] string value, int startIndex, int count, StringComparison comparisonType)
+            => str.IndexOf(value, startIndex, count, comparisonType) > -1;
+
+        #endregion
 
         #region split & join
 
