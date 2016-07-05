@@ -293,6 +293,42 @@ namespace System
         public static string[] Split([NotNull] this string text, string separator, int count, StringSplitOptions options = StringSplitOptions.None)
             => text.Split(new[] { separator }, count, options);
 
+        /// <summary>
+        /// if set includeSeparator = true, return [ block, separator, block, separator, ... ].
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="separator"></param>
+        /// <param name="comparisonType"></param>
+        /// <param name="options"></param>
+        /// <param name="includeSeparator"></param>
+        /// <returns></returns>
+        public static string[] Split([NotNull] this string text, [NotNull] string separator, StringComparison comparisonType,
+            StringSplitOptions options = StringSplitOptions.None, bool includeSeparator = false)
+        {
+            if (text == null) throw new ArgumentNullException(nameof(text));
+            if (separator == null) throw new ArgumentNullException(nameof(separator));
+            if (separator.Length == 0) throw new ArgumentException(nameof(separator));
+
+            var rets = new List<string>();
+            var ptr = 0;
+            while (true)
+            {
+                var index = text.IndexOf(separator, ptr, comparisonType);
+                if (index < 0)
+                {
+                    rets.Add(text.Substring(ptr));
+                    break;
+                }
+                rets.Add(text.Substring(ptr, index - ptr));
+                if (includeSeparator)
+                {
+                    rets.Add(text.Substring(index, separator.Length));
+                }
+                ptr = index + separator.Length;
+            }
+            return options == StringSplitOptions.None ? rets.ToArray() : rets.Where(z => !string.IsNullOrEmpty(z)).ToArray();
+        }
+
         public static string JoinWith([NotNull] this IEnumerable<string> texts, string spliter)
             => string.Join(spliter, texts);
 

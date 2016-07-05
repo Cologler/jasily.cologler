@@ -28,9 +28,13 @@ namespace Jasily.Windows.Interactivity.Behaviors
             nameof(HighLightBackground), typeof(Brush), typeof(TextBlockHighLightBehavior),
             new PropertyMetadata(default(Brush), OnDependencyPropertyChanged));
 
+        public static readonly DependencyProperty StringComparisonProperty = DependencyProperty.Register(
+            nameof(StringComparison), typeof(StringComparison), typeof(TextBlockHighLightBehavior),
+            new PropertyMetadata(default(StringComparison), OnDependencyPropertyChanged));
+
         private static void OnDependencyPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var changed = false;
+            var changed = true;
             if (e.Property.PropertyType == typeof(string))
             {
                 changed = !string.Equals((string)e.NewValue, (string)e.OldValue);
@@ -66,6 +70,12 @@ namespace Jasily.Windows.Interactivity.Behaviors
             set { this.SetValue(HighLightBackgroundProperty, value); }
         }
 
+        public StringComparison StringComparison
+        {
+            get { return (StringComparison)this.GetValue(StringComparisonProperty); }
+            set { this.SetValue(StringComparisonProperty, value); }
+        }
+
         /// <summary>
         /// 在行为附加到 AssociatedObject 后调用。
         /// </summary>
@@ -86,7 +96,7 @@ namespace Jasily.Windows.Interactivity.Behaviors
             var plaintext = this.PlainText ?? string.Empty;
             var highlight = this.HighLightContent ?? string.Empty;
             textBlock.Inlines.Clear();
-            if (plaintext.Length == 0 || plaintext.Length < highlight.Length)
+            if (plaintext.Length == 0 || highlight.Length == 0 || plaintext.Length < highlight.Length)
             {
                 textBlock.Inlines.Add(new Run(plaintext));
             }
@@ -97,12 +107,21 @@ namespace Jasily.Windows.Interactivity.Behaviors
                 var highlightBackground = this.HighLightBackground ??
                     (Brush)HighLightBackgroundProperty.DefaultMetadata.DefaultValue;
 
-                var splited = plaintext.Split(highlight)
-                    .Select(z => new Run(z))
-                    .JoinWith(() => new Run(highlight)
+                var splited = plaintext.Split(highlight, this.StringComparison, includeSeparator: true)
+                    .Select((z, i) =>
                     {
-                        Foreground = highlightForeground,
-                        Background = highlightBackground
+                        if (i % 2 == 0)
+                        {
+                            return new Run(z);
+                        }
+                        else
+                        {
+                            return new Run(z)
+                            {
+                                Foreground = highlightForeground,
+                                Background = highlightBackground
+                            };
+                        }
                     })
                     .ToArray();
                 foreach (var run in splited)
