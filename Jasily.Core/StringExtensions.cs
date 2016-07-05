@@ -287,13 +287,13 @@ namespace System
 
         #region split & join
 
-        public static string[] Split(this string text, string separator, StringSplitOptions options = StringSplitOptions.None)
+        public static string[] Split([NotNull] this string text, string separator, StringSplitOptions options = StringSplitOptions.None)
             => text.Split(new[] { separator }, options);
 
-        public static string[] Split(this string text, string separator, int count, StringSplitOptions options = StringSplitOptions.None)
+        public static string[] Split([NotNull] this string text, string separator, int count, StringSplitOptions options = StringSplitOptions.None)
             => text.Split(new[] { separator }, count, options);
 
-        public static string JoinWith(this IEnumerable<string> texts, string spliter)
+        public static string JoinWith([NotNull] this IEnumerable<string> texts, string spliter)
             => string.Join(spliter, texts);
 
         /// <summary>
