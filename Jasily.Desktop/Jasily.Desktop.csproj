@@ -54,8 +54,14 @@
     <Compile Include="..\Jasily.Shared\Windows\Data\ValueConverters\BooleanToVisibilityConverter.cs">
       <Link>Windows\Data\ValueConverters\BooleanToVisibilityConverter.cs</Link>
     </Compile>
+    <Compile Include="..\Jasily.Shared\Windows\Data\ValueConverters\EmptyCollapsedValueConverter.cs">
+      <Link>Windows\Data\ValueConverters\EmptyCollapsedValueConverter.cs</Link>
+    </Compile>
     <Compile Include="..\Jasily.Shared\Windows\Data\ValueConverters\ItemsEmptyToCollapsedConverter.cs">
       <Link>Windows\Data\ValueConverters\ItemsEmptyToCollapsedConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Jasily.Shared\Windows\Data\ValueConverters\NullCollapsedValueConverter.cs">
+      <Link>Windows\Data\ValueConverters\NullCollapsedValueConverter.cs</Link>
     </Compile>
     <Compile Include="..\Jasily.Shared\Windows\Data\ValueConverters\ScaleConverter.cs">
       <Link>Windows\Data\ValueConverters\ScaleConverter.cs</Link>
