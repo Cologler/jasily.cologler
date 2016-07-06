@@ -40,7 +40,7 @@ namespace System.Reflection
             return type.IsConstructedGenericType
                 ? String.Format("{0}<{1}>",
                     type.Name.Substring(0, type.Name.IndexOf("`", StringComparison.Ordinal)),
-                    type.GenericTypeArguments.Select(GetCSharpName).JoinWith(", "))
+                    type.GenericTypeArguments.Select(GetCSharpName).JoinAsString(", "))
                 : type.Name;
         }
 

@@ -94,7 +94,7 @@ namespace Jasily
         public string ToString(T e)
         {
             var value = this.isFlags
-                ? this.SplitFlagItems(e, true)?.Select(z => z.Name).JoinWith(", ")
+                ? this.SplitFlagItems(e, true)?.Select(z => z.Name).JoinAsString(", ")
                 : this.TryGetEnumItem(e)?.Name;
             return value ?? e.ToString();
         }

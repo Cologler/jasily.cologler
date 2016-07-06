@@ -180,7 +180,7 @@ namespace System
             }
 
             if (count == 0) return str;
-            return string.Concat(AppendEnd(Enumerable.Repeat(newValue, count), str.Substring(ptr)));
+            return string.Concat(Enumerable.Repeat(newValue, count).Concat(new[] { str.Substring(ptr) }));
         }
 
         public static string ReplaceEnd([NotNull] this string str, [NotNull] string oldValue,
@@ -201,7 +201,7 @@ namespace System
             }
 
             if (count == 0) return str;
-            return string.Concat(AppendStart(Enumerable.Repeat(newValue, count), str.Take(str.Length - ptr)));
+            return string.Concat(new[] { str.Take(str.Length - ptr) }.Concat(Enumerable.Repeat(newValue, count)));
         }
 
         public static string ReplaceChar([NotNull] this string str, char value, int index)
@@ -308,6 +308,45 @@ namespace System
                 ptr = index + separator.Length;
             }
             return options == StringSplitOptions.None ? rets.ToArray() : rets.Where(z => !string.IsNullOrEmpty(z)).ToArray();
+        }
+
+        public static string[] SplitWhen([NotNull] this string text, [NotNull] Func<char, bool> separator,
+            StringSplitOptions options = StringSplitOptions.None)
+        {
+            if (text == null) throw new ArgumentNullException(nameof(text));
+            if (separator == null) throw new ArgumentNullException(nameof(separator));
+            return SplitWhen(text, (c, i) => separator(c), options);
+        }
+
+        public static string[] SplitWhen([NotNull] this string text, [NotNull] Func<char, int, bool> separator,
+            StringSplitOptions options = StringSplitOptions.None)
+        {
+            if (text == null) throw new ArgumentNullException(nameof(text));
+            if (separator == null) throw new ArgumentNullException(nameof(separator));
+
+            var rets = new List<string>();
+            var start = 0;
+            var ptr = 0;
+            for (; ptr < text.Length; ptr++)
+            {
+                if (separator(text[ptr], ptr))
+                {
+                    if (ptr == start)
+                    {
+                        rets.Add(string.Empty);
+                    }
+                    else
+                    {
+                        rets.Add(text.Substring(start, ptr - start));
+                        start = ptr;
+                    }
+                }
+            }
+            if (ptr > start + 1)
+            {
+                rets.Add(text.Substring(start, ptr - start));
+            }
+            return options == StringSplitOptions.None ? rets.ToArray() : rets.Where(z => z.Length > 0).ToArray();
         }
 
         /// <summary>
