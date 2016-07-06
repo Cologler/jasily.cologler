@@ -274,6 +274,15 @@ namespace System
 
         #region contains
 
+        public static bool Contains([NotNull] this string str, char value)
+            => str.IndexOf(value) > -1;
+
+        public static bool Contains([NotNull] this string str, char value, int startIndex)
+            => str.IndexOf(value, startIndex) > -1;
+
+        public static bool Contains([NotNull] this string str, char value, int startIndex, int count)
+            => str.IndexOf(value, startIndex, count) > -1;
+
         public static bool Contains([NotNull] this string str, [NotNull] string value, StringComparison comparisonType)
             => str.IndexOf(value, comparisonType) > -1;
 
@@ -329,7 +338,7 @@ namespace System
             return options == StringSplitOptions.None ? rets.ToArray() : rets.Where(z => !string.IsNullOrEmpty(z)).ToArray();
         }
 
-        public static string JoinWith([NotNull] this IEnumerable<string> texts, string spliter)
+        public static string JoinAsString([NotNull] this IEnumerable<string> texts, string spliter)
             => string.Join(spliter, texts);
 
         /// <summary>
