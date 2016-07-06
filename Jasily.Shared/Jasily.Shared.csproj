@@ -61,6 +61,7 @@
     <Compile Include="Windows\Data\ValueConverters\ItemsEmptyToCollapsedConverter.cs" />
     <Compile Include="Windows\Data\ValueConverters\NullCollapsedValueConverter.cs" />
     <Compile Include="Windows\Data\ValueConverters\ScaleConverter.cs" />
+    <Compile Include="Windows\Data\ValueConverters\ZeroToCollapsedConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Jasily.Core\Jasily.Core.csproj">

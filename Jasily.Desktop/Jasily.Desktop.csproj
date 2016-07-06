@@ -66,6 +66,9 @@
     <Compile Include="..\Jasily.Shared\Windows\Data\ValueConverters\ScaleConverter.cs">
       <Link>Windows\Data\ValueConverters\ScaleConverter.cs</Link>
     </Compile>
+    <Compile Include="..\Jasily.Shared\Windows\Data\ValueConverters\ZeroToCollapsedConverter.cs">
+      <Link>Windows\Data\ValueConverters\ZeroToCollapsedConverter.cs</Link>
+    </Compile>
     <Compile Include="Api\Explorer.cs" />
     <Compile Include="ConsoleActivator.cs" />
     <Compile Include="ConsoleTempEnvironment.cs" />

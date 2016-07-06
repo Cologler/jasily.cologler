@@ -141,19 +141,22 @@
       <Link>Security\Cryptography\SymmetricAlgorithmType.cs</Link>
     </Compile>
     <Compile Include="..\Jasily.Shared\Windows\Data\ValueConverters\BooleanToVisibilityConverter.cs">
-      <Link>Storage\Data\ValueConverters\BooleanToVisibilityConverter.cs</Link>
+      <Link>Windows\Data\ValueConverters\BooleanToVisibilityConverter.cs</Link>
     </Compile>
     <Compile Include="..\Jasily.Shared\Windows\Data\ValueConverters\EmptyCollapsedValueConverter.cs">
-      <Link>Storage\Data\ValueConverters\EmptyCollapsedValueConverter.cs</Link>
+      <Link>Windows\Data\ValueConverters\EmptyCollapsedValueConverter.cs</Link>
     </Compile>
     <Compile Include="..\Jasily.Shared\Windows\Data\ValueConverters\ItemsEmptyToCollapsedConverter.cs">
-      <Link>Storage\Data\ValueConverters\ItemsEmptyToCollapsedConverter.cs</Link>
+      <Link>Windows\Data\ValueConverters\ItemsEmptyToCollapsedConverter.cs</Link>
     </Compile>
     <Compile Include="..\Jasily.Shared\Windows\Data\ValueConverters\NullCollapsedValueConverter.cs">
-      <Link>Storage\Data\ValueConverters\NullCollapsedValueConverter.cs</Link>
+      <Link>Windows\Data\ValueConverters\NullCollapsedValueConverter.cs</Link>
     </Compile>
     <Compile Include="..\Jasily.Shared\Windows\Data\ValueConverters\ScaleConverter.cs">
-      <Link>Storage\Data\ValueConverters\ScaleConverter.cs</Link>
+      <Link>Windows\Data\ValueConverters\ScaleConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Jasily.Shared\Windows\Data\ValueConverters\ZeroToCollapsedConverter.cs">
+      <Link>Windows\Data\ValueConverters\ZeroToCollapsedConverter.cs</Link>
     </Compile>
     <Compile Include="ApplicationModel\Background\BackgroundTaskRegister.cs" />
     <Compile Include="Collections\ObjectModel\IncrementalLoadingObservableCollection.cs" />
