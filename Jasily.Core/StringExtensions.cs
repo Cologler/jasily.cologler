@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -23,24 +22,6 @@ namespace System
         public static string UrlEncode(this string str) => Net.WebUtility.UrlEncode(str);
 
         public static string UrlDecode(this string str) => Net.WebUtility.UrlDecode(str);
-
-        #endregion
-
-        #region is
-
-        /// <summary>
-        /// return String.IsNullOrEmpty(text)
-        /// </summary>
-        /// <param name="text"></param>
-        /// <returns></returns>
-        public static bool IsNullOrEmpty(this string text) => string.IsNullOrEmpty(text);
-
-        /// <summary>
-        /// return String.IsNullOrWhiteSpace(text)
-        /// </summary>
-        /// <param name="text"></param>
-        /// <returns></returns>
-        public static bool IsNullOrWhiteSpace(this string text) => string.IsNullOrWhiteSpace(text);
 
         #endregion
 
@@ -152,27 +133,11 @@ namespace System
 
         public static string Take([NotNull] this string str, int count)
         {
-            if (str == null) throw new ArgumentNullException(nameof(str));
-            if (count < 0) throw new ArgumentOutOfRangeException();
             if (count > str.Length) return str;
             return str.Substring(0, count);
         }
 
         #region replace
-
-        private static IEnumerable<string> AppendStart(IEnumerable<string> source, string next)
-        {
-            Debug.Assert(source != null);
-            yield return next;
-            foreach (var item in source) yield return item;
-        }
-
-        private static IEnumerable<string> AppendEnd(IEnumerable<string> source, string next)
-        {
-            Debug.Assert(source != null);
-            foreach (var item in source) yield return item;
-            yield return next;
-        }
 
         public static string Replace([NotNull] this string str, [NotNull] string oldValue,
             [NotNull] string newValue, StringComparison comparisonType)
@@ -237,6 +202,13 @@ namespace System
 
             if (count == 0) return str;
             return string.Concat(AppendStart(Enumerable.Repeat(newValue, count), str.Take(str.Length - ptr)));
+        }
+
+        public static string ReplaceChar([NotNull] this string str, char value, int index)
+        {
+            var array = str.ToCharArray();
+            array[index] = value;
+            return new string(array);
         }
 
         #endregion
@@ -337,9 +309,6 @@ namespace System
             }
             return options == StringSplitOptions.None ? rets.ToArray() : rets.Where(z => !string.IsNullOrEmpty(z)).ToArray();
         }
-
-        public static string JoinAsString([NotNull] this IEnumerable<string> texts, string spliter)
-            => string.Join(spliter, texts);
 
         /// <summary>
         /// use '\r\n' or '\n' to split text.
@@ -536,6 +505,42 @@ namespace System
             var index = str.LastIndexOf(spliter, comparisonType);
             return index <= 0 ? string.Empty : str.Substring(0, index);
         }
+
+        #endregion
+
+        #region static method to extension method
+
+        /// <summary>
+        /// return String.IsNullOrEmpty(text)
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        public static bool IsNullOrEmpty(this string text) => string.IsNullOrEmpty(text);
+
+        /// <summary>
+        /// return String.IsNullOrWhiteSpace(text)
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        public static bool IsNullOrWhiteSpace(this string text) => string.IsNullOrWhiteSpace(text);
+
+        /// <summary>
+        /// return String.Concat(texts)
+        /// </summary>
+        /// <param name="texts"></param>
+        /// <param name="spliter"></param>
+        /// <returns></returns>
+        public static string ConcatAsString([NotNull] this IEnumerable<string> texts)
+            => string.Concat(texts);
+
+        /// <summary>
+        /// return String.Join(spliter, texts)
+        /// </summary>
+        /// <param name="texts"></param>
+        /// <param name="spliter"></param>
+        /// <returns></returns>
+        public static string JoinAsString([NotNull] this IEnumerable<string> texts, string spliter)
+            => string.Join(spliter, texts);
 
         #endregion
 
