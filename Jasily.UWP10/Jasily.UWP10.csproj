@@ -140,6 +140,21 @@
     <Compile Include="..\Jasily.Shared\Security\Cryptography\SymmetricAlgorithmType.cs">
       <Link>Security\Cryptography\SymmetricAlgorithmType.cs</Link>
     </Compile>
+    <Compile Include="..\Jasily.Shared\Windows\Data\ValueConverters\BooleanToVisibilityConverter.cs">
+      <Link>Storage\Data\ValueConverters\BooleanToVisibilityConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Jasily.Shared\Windows\Data\ValueConverters\EmptyCollapsedValueConverter.cs">
+      <Link>Storage\Data\ValueConverters\EmptyCollapsedValueConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Jasily.Shared\Windows\Data\ValueConverters\ItemsEmptyToCollapsedConverter.cs">
+      <Link>Storage\Data\ValueConverters\ItemsEmptyToCollapsedConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Jasily.Shared\Windows\Data\ValueConverters\NullCollapsedValueConverter.cs">
+      <Link>Storage\Data\ValueConverters\NullCollapsedValueConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Jasily.Shared\Windows\Data\ValueConverters\ScaleConverter.cs">
+      <Link>Storage\Data\ValueConverters\ScaleConverter.cs</Link>
+    </Compile>
     <Compile Include="ApplicationModel\Background\BackgroundTaskRegister.cs" />
     <Compile Include="Collections\ObjectModel\IncrementalLoadingObservableCollection.cs" />
     <Compile Include="Collections\ObjectModel\IncrementalLoadingResult.cs" />
@@ -168,7 +183,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Storage\" />
+    <Folder Include="Windows\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="PresentationFramework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\PresentationFramework.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

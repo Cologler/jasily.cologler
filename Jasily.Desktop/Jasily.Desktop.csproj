@@ -17,7 +17,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;DESKTOP</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -51,12 +51,18 @@
     <Compile Include="..\Jasily.Shared\Windows\Data\JasilySelectorCollectionView.cs">
       <Link>Windows\Data\JasilySelectorCollectionView.cs</Link>
     </Compile>
+    <Compile Include="..\Jasily.Shared\Windows\Data\ValueConverters\BooleanToVisibilityConverter.cs">
+      <Link>Windows\Data\ValueConverters\BooleanToVisibilityConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Jasily.Shared\Windows\Data\ValueConverters\ItemsEmptyToCollapsedConverter.cs">
+      <Link>Windows\Data\ValueConverters\ItemsEmptyToCollapsedConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Jasily.Shared\Windows\Data\ValueConverters\ScaleConverter.cs">
+      <Link>Windows\Data\ValueConverters\ScaleConverter.cs</Link>
+    </Compile>
     <Compile Include="Api\Explorer.cs" />
     <Compile Include="ConsoleActivator.cs" />
     <Compile Include="ConsoleTempEnvironment.cs" />
-    <Compile Include="Windows\Data\ValueConverters\BooleanToVisibilityConverter.cs" />
-    <Compile Include="Windows\Data\ValueConverters\ItemsEmptyToCollapsedConverter.cs" />
-    <Compile Include="Windows\Data\ValueConverters\ScaleConverter.cs" />
     <Compile Include="Windows\Interactivity\Behaviors\NonSelectBehavior.cs" />
     <Compile Include="Windows\Interactivity\Behaviors\TextBlockHighLightBehavior.cs" />
     <Compile Include="Windows\Navigation\NavigationStatus.cs" />

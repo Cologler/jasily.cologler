@@ -102,12 +102,6 @@
     <Compile Include="..\Jasily.Core.CSShared\Shell\MicrosoftSingleInstanceProvider.cs">
       <Link>Shell\MicrosoftSingleInstanceProvider.cs</Link>
     </Compile>
-    <Compile Include="..\Jasily.Core.CSShared\Windows\Data\EmptyCollapsedValueConverter.cs">
-      <Link>Windows\Data\EmptyCollapsedValueConverter.cs</Link>
-    </Compile>
-    <Compile Include="..\Jasily.Core.CSShared\Windows\Data\NullCollapsedValueConverter.cs">
-      <Link>Windows\Data\NullCollapsedValueConverter.cs</Link>
-    </Compile>
     <Compile Include="..\Jasily.Core.CSShared\Windows\DispatcherExtensions.cs">
       <Link>Windows\DispatcherExtensions.cs</Link>
     </Compile>
