@@ -166,6 +166,7 @@
     <Compile Include="Security\Cryptography\UAPEncryptAlgorithmProvider.cs" />
     <Compile Include="Security\Cryptography\UAPHashAlgorithmProvider.cs" />
     <Compile Include="Security\Cryptography\UAPSymmetricKeyAlgorithmProvider.cs" />
+    <Compile Include="Storage\StorageFolderExtensions.cs" />
     <Content Include="Properties\Jasily.UAP10.rd.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -186,15 +187,7 @@
       <Name>Jasily</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Windows\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="PresentationFramework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\PresentationFramework.dll</HintPath>
-    </Reference>
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
