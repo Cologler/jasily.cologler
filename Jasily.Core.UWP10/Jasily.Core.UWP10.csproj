@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Windows</RootNamespace>
-    <AssemblyName>Jasily.Core.UAP10</AssemblyName>
+    <AssemblyName>Jasily.Core.UWP10</AssemblyName>
     <DefaultLanguage>zh-CN</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.10240.0</TargetPlatformVersion>
@@ -135,9 +135,17 @@
     <Content Include="Properties\Jasily.Core.UAP10.rd.xml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Jasily.Core.Linq\Jasily.Core.Linq.csproj">
+      <Project>{801800ea-fe7c-40ad-838d-f2a887de03de}</Project>
+      <Name>Jasily.Core.Linq</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Jasily.Core\Jasily.Core.csproj">
       <Project>{8442e8e7-d515-4481-8a36-71711b1fbf79}</Project>
       <Name>Jasily.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Jasily\Jasily.csproj">
+      <Project>{6adb6547-070b-4518-a2d1-e3bc349730bc}</Project>
+      <Name>Jasily</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

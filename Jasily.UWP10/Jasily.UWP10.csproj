@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Jasily</RootNamespace>
-    <AssemblyName>Jasily.UAP10</AssemblyName>
+    <AssemblyName>Jasily.UWP10</AssemblyName>
     <DefaultLanguage>zh-CN</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.10240.0</TargetPlatformVersion>
@@ -180,6 +180,10 @@
     <ProjectReference Include="..\Jasily.Core\Jasily.Core.csproj">
       <Project>{8442e8e7-d515-4481-8a36-71711b1fbf79}</Project>
       <Name>Jasily.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Jasily\Jasily.csproj">
+      <Project>{6adb6547-070b-4518-a2d1-e3bc349730bc}</Project>
+      <Name>Jasily</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
