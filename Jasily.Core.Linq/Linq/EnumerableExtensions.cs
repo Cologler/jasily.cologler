@@ -344,14 +344,48 @@ namespace System.Linq
 
         #region count
 
-        public static int TryGetCount<T>(this IEnumerable<T> source)
-            => (source as ICollection<T>)?.Count ??
-               (source as ICollection)?.Count ??
-               (source as IReadOnlyCollection<T>)?.Count ??
-               -1;
+        public static int TryGetCount<T>([NotNull] this IEnumerable<T> source)
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
 
-        public static int TryGetCount(this IEnumerable source)
-            => (source as ICollection)?.Count ?? -1;
+            return (source as ICollection<T>)?.Count ??
+                   (source as ICollection)?.Count ??
+                   (source as IReadOnlyCollection<T>)?.Count ??
+                   -1;
+        }
+
+        public static int TryGetCount([NotNull] this IEnumerable source)
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+
+            return (source as ICollection)?.Count ?? -1;
+        }
+
+        public static int Count([NotNull] this IEnumerable source)
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+
+            var collection = source as ICollection;
+            if (collection != null) return collection.Count;
+
+            var count = 0;
+            var itor = source.GetEnumerator();
+            while (itor.MoveNext()) count++;
+            return count;
+        }
+
+        public static long LongCount([NotNull] this IEnumerable source)
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+
+            var collection = source as ICollection;
+            if (collection != null) return collection.Count;
+
+            var count = 0L;
+            var itor = source.GetEnumerator();
+            while (itor.MoveNext()) count++;
+            return count;
+        }
 
         #endregion
 
