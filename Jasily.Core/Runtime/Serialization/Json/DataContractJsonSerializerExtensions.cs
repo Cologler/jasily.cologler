@@ -1,7 +1,7 @@
-﻿using JetBrains.Annotations;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
 using System.Text;
+using JetBrains.Annotations;
 
 namespace System.Runtime.Serialization.Json
 {
@@ -16,6 +16,13 @@ namespace System.Runtime.Serialization.Json
                 : new DataContractJsonSerializer(typeof(T), SerializerSettings);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="stream"></param>
+        /// <exception cref="System.Runtime.Serialization.SerializationException"></exception>
+        /// <returns></returns>
         public static T JsonToObject<T>([NotNull] this Stream stream)
         {
             if (stream == null) throw new ArgumentNullException(nameof(stream));
@@ -24,7 +31,6 @@ namespace System.Runtime.Serialization.Json
             var bytes = stream.ToArray();
             stream = bytes.ToMemoryStream();
 #endif
-
             try
             {
                 var ser = GetSerializer<T>();
@@ -40,6 +46,13 @@ namespace System.Runtime.Serialization.Json
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="bytes"></param>
+        /// <exception cref="System.Runtime.Serialization.SerializationException"></exception>
+        /// <returns></returns>
         public static T JsonToObject<T>([NotNull] this byte[] bytes)
         {
             using (var ms = new MemoryStream(bytes))
@@ -48,6 +61,14 @@ namespace System.Runtime.Serialization.Json
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="jsonDoc"></param>
+        /// <param name="encoding"></param>
+        /// <exception cref="System.Runtime.Serialization.SerializationException"></exception>
+        /// <returns></returns>
         public static T JsonToObject<T>([NotNull] this string jsonDoc, [NotNull] Encoding encoding)
         {
             if (jsonDoc == null) throw new ArgumentNullException(nameof(jsonDoc));
@@ -56,6 +77,13 @@ namespace System.Runtime.Serialization.Json
             return encoding.GetBytes(jsonDoc).JsonToObject<T>();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="jsonDoc"></param>
+        /// <exception cref="System.Runtime.Serialization.SerializationException"></exception>
+        /// <returns></returns>
         public static T JsonToObject<T>([NotNull] this string jsonDoc)
             => jsonDoc.JsonToObject<T>(Encoding.UTF8);
 
@@ -66,9 +94,8 @@ namespace System.Runtime.Serialization.Json
             {
                 return stream.JsonToObject<T>();
             }
-            catch (Exception)
+            catch (SerializationException)
             {
-                if (Debugger.IsAttached) Debugger.Break();
                 return null;
             }
         }
@@ -80,9 +107,8 @@ namespace System.Runtime.Serialization.Json
             {
                 return bytes.JsonToObject<T>();
             }
-            catch (Exception)
+            catch (SerializationException)
             {
-                if (Debugger.IsAttached) Debugger.Break();
                 return null;
             }
         }
@@ -96,9 +122,8 @@ namespace System.Runtime.Serialization.Json
             {
                 return jsonDoc.JsonToObject<T>(encoding);
             }
-            catch (Exception)
+            catch (SerializationException)
             {
-                if (Debugger.IsAttached) Debugger.Break();
                 return null;
             }
         }
@@ -110,9 +135,8 @@ namespace System.Runtime.Serialization.Json
             {
                 return jsonDoc.JsonToObject<T>();
             }
-            catch (Exception)
+            catch (SerializationException)
             {
-                if (Debugger.IsAttached) Debugger.Break();
                 return null;
             }
         }
