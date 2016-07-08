@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Jasily.Data
@@ -30,5 +31,7 @@ namespace Jasily.Data
         Task<IEnumerable<TEntity>> ListAsync(int skip, int take);
 
         Task CursorAsync(Action<TEntity> callback);
+
+        Task CursorAsync(Expression<Func<TEntity, bool>> filter, Action<TEntity> callback);
     }
 }
