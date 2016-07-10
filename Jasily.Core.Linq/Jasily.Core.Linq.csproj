@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Linq\AsyncEnumerableExtensions.cs" />
+    <Compile Include="Linq\Enumerable2.cs" />
     <Compile Include="Linq\EnumerableExtensions.cs" />
     <Compile Include="Linq\EnumeratorExtensions.cs" />
     <Compile Include="Linq\Generater.cs" />

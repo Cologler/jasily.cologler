@@ -543,5 +543,88 @@ namespace System.Linq
         }
 
         #endregion
+
+        #region ignore Exception
+
+        /// <summary>
+        /// ignore some Exception from MoveNext() of Enumerable
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TException"></typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> Ignore<T, TException>([NotNull] this IEnumerable<T> source)
+            where TException : Exception
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+
+            using (var itor = source.GetEnumerator())
+            {
+                while (true)
+                {
+                    bool moveNext;
+                    try
+                    {
+                        moveNext = itor.MoveNext();
+                    }
+                    catch (TException)
+                    {
+                        continue;
+                    }
+                    if (moveNext)
+                    {
+                        yield return itor.Current;
+                    }
+                    else
+                    {
+                        yield break;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// ignore some Exception from MoveNext() of Enumerable
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TException"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="exceptionFilter"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> Ignore<T, TException>([NotNull] this IEnumerable<T> source,
+            [NotNull] Func<TException, bool> exceptionFilter)
+            where TException : Exception
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            if (exceptionFilter == null) throw new ArgumentNullException(nameof(exceptionFilter));
+
+            using (var itor = source.GetEnumerator())
+            {
+                while (true)
+                {
+                    bool moveNext;
+                    try
+                    {
+                        moveNext = itor.MoveNext();
+                    }
+                    catch (TException error) when (exceptionFilter(error))
+                    {
+                        continue;
+                    }
+                    if (moveNext)
+                    {
+                        yield return itor.Current;
+                    }
+                    else
+                    {
+                        yield break;
+                    }
+                }
+            }
+        }
+
+        #endregion
+
+        public static Enumerable2<T> As2<T>(this IEnumerable<T> source) => new Enumerable2<T>(source);
     }
 }
