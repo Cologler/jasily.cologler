@@ -12,9 +12,9 @@ namespace System.Linq
     {
         private readonly IEnumerable<T> baseEnumerable;
 
-        public Enumerable2([NotNull] IEnumerable<T> baseEnumerable)
+        public Enumerable2(IEnumerable<T> baseEnumerable)
         {
-            if (baseEnumerable == null) throw new ArgumentNullException(nameof(baseEnumerable));
+            // can be null if next func accept null argument.
             this.baseEnumerable = baseEnumerable;
         }
 
