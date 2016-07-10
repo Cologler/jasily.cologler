@@ -5,11 +5,7 @@ namespace System.Threading.Tasks
 {
     public static class TaskExtensions
     {
-        public static async Task<IEnumerable<T>> AsTask<T>([NotNull] this IEnumerable<Task<T>> source)
-        {
-            if (source == null) throw new ArgumentNullException(nameof(source));
-            return await Task.WhenAll(source);
-        }
+        public static async Task<IEnumerable<T>> AsTask<T>([NotNull] this IEnumerable<Task<T>> tasks) => await Task.WhenAll(tasks);
 
         public static Task<TOut> GetAsync<TIn, TOut>([NotNull] this TIn obj, [NotNull] Func<TIn, TOut> getter)
         {
