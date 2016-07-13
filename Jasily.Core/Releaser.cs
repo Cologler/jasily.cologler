@@ -1,4 +1,6 @@
-﻿namespace System
+﻿using JetBrains.Annotations;
+
+namespace System
 {
     public struct Releaser : IDisposable
     {
@@ -39,6 +41,12 @@
         }
 
         public bool IsAcquired { get; }
+
+        public void AcquiredCallback([NotNull] Action action)
+        {
+            if (action == null) throw new ArgumentNullException(nameof(action));
+            if (this.IsAcquired) action();
+        }
 
         #region Implementation of IDisposable
 
