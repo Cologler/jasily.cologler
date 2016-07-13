@@ -42,10 +42,11 @@ namespace System
 
         public bool IsAcquired { get; }
 
-        public void AcquiredCallback([NotNull] Action action)
+        public Releaser<T> AcquiredCallback([NotNull] Action action)
         {
             if (action == null) throw new ArgumentNullException(nameof(action));
             if (this.IsAcquired) action();
+            return this;
         }
 
         #region Implementation of IDisposable
