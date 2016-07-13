@@ -70,6 +70,7 @@
     <Compile Include="UnitTestForObject.cs" />
     <Compile Include="UnitTestForPrint.cs" />
     <Compile Include="UnitTestForString.cs" />
+    <Compile Include="UnitTestForStringRange.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Jasily.Core.Desktop\Jasily.Core.Desktop.csproj">

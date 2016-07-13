@@ -10,5 +10,17 @@ namespace Jasily
             if (str == null) throw new ArgumentNullException(nameof(str));
             return new StringRange(str);
         }
+
+        public static StringRange SubRange([NotNull] this string str, int startIndex)
+        {
+            if (str == null) throw new ArgumentNullException(nameof(str));
+            return new StringRange(str).SubRange(startIndex);
+        }
+
+        public static StringRange SubRange([NotNull] this string str, int startIndex, int length)
+        {
+            if (str == null) throw new ArgumentNullException(nameof(str));
+            return new StringRange(str).SubRange(startIndex, length);
+        }
     }
 }

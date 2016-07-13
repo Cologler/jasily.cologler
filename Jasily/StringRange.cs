@@ -21,7 +21,7 @@ namespace Jasily
         public StringRange([NotNull] string document, int startIndex, int length)
         {
             if (document == null) throw new ArgumentNullException(nameof(document));
-            if (startIndex < 0 || document.Length <= startIndex) throw new ArgumentOutOfRangeException(nameof(startIndex));
+            if (startIndex < 0 || document.Length < startIndex) throw new ArgumentOutOfRangeException(nameof(startIndex));
             if (length < 0 || document.Length < length) throw new ArgumentOutOfRangeException(nameof(length));
 
             this.document = document;
@@ -191,8 +191,7 @@ namespace Jasily
         }
 
         [Pure]
-        public override string ToString() => this.document.Substring(this.startIndex, this.length);
-
+        public override string ToString() => this.length == 0 ? string.Empty : this.document.Substring(this.startIndex, this.length);
 
         #endregion
 
@@ -202,14 +201,7 @@ namespace Jasily
         /// <returns>
         /// 一个 32 位有符号整数，它是该实例的哈希代码。
         /// </returns>
-        public override int GetHashCode()
-        {
-            if (!this.hashCode.HasValue)
-            {
-                this.hashCode = this.ToString().GetHashCode();
-            }
-            return this.hashCode.Value;
-        }
+        public override int GetHashCode() => this.hashCode ?? (int)(this.hashCode = this.ToString().GetHashCode());
 
         #region equal
 
