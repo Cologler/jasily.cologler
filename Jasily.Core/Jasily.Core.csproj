@@ -45,6 +45,7 @@
     <Compile Include="Collections\Generic\IndexValuePair.cs" />
     <Compile Include="Collections\Generic\List.cs" />
     <Compile Include="Comparable.cs" />
+    <Compile Include="CreateOrNull.cs" />
     <Compile Include="DelegateExtensions.cs" />
     <Compile Include="Attributes\PrintAttribute.cs" />
     <Compile Include="Collections\Generic\TryGetValueExtensions.cs" />
