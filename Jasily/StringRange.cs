@@ -119,6 +119,7 @@ namespace Jasily
         [Pure]
         public StringRange TrimStart()
         {
+            if (this.length == 0) return this;
             var index = this.startIndex;
             var maxIndex = this.startIndex + this.length;
             while (index <= maxIndex && char.IsWhiteSpace(this.document, index)) index++;
@@ -128,7 +129,7 @@ namespace Jasily
         [Pure]
         public StringRange TrimStart([NotNull] params char[] trimChars)
         {
-            if (trimChars.Length == 0) return this;
+            if (this.length == 0 || trimChars.Length == 0) return this;
             var index = this.startIndex;
             var maxIndex = this.startIndex + this.length;
             while (index <= maxIndex && trimChars.Contains(this.document[index])) index++;
@@ -139,7 +140,6 @@ namespace Jasily
         public StringRange TrimEnd()
         {
             if (this.length == 0) return this;
-
             var index = this.startIndex + this.length - 1;
             while (index >= this.startIndex && char.IsWhiteSpace(this.document, index)) index--;
             return this.SubRangeOfLength(index - this.startIndex + 1);
@@ -148,9 +148,7 @@ namespace Jasily
         [Pure]
         public StringRange TrimEnd([NotNull] params char[] trimChars)
         {
-            if (trimChars.Length == 0) return this;
-            if (this.length == 0) return this;
-
+            if (this.length == 0 || trimChars.Length == 0) return this;
             var index = this.startIndex + this.length - 1;
             while (index >= this.startIndex && trimChars.Contains(this.document[index])) index--;
             return this.SubRangeOfLength(index - this.startIndex + 1);
