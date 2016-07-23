@@ -43,25 +43,33 @@ namespace Jasily
             if (startIndex + length > this.length) throw new IndexOutOfRangeException();
         }
 
+        public int Length => this.length;
+
         #region start & end
 
-        public bool StartsWith(char value) => this.length != 0 && this.document[this.startIndex] == value;
-
-        public bool StartsWith(char value, StringComparison comparison)
-        {
-            if (0 == this.length) return false;
-            return string.Compare(this.document, this.startIndex, value.ToString(), 0, 1, comparison) == 0;
-        }
+        public bool StartsWith(char value) => this.length > 0 && this.document[this.startIndex] == value;
 
         public bool StartsWith([NotNull] string value, StringComparison comparison = StringComparison.Ordinal)
         {
             if (value == null) throw new ArgumentNullException(nameof(value));
             if (value.Length > this.length) return false;
-            return string.Compare(this.document, this.startIndex, value, 0, value.Length, comparison) == 0;
+            return this.SubRange(0, value.Length).Equals(value, comparison);
         }
 
         public bool StartsWith(StringRange value, StringComparison comparison = StringComparison.Ordinal)
             => this.length >= value.length && this.SubRange(0, value.length).Equals(value, comparison);
+
+        public bool EndsWith(char value) => this.length > 0 && this.document[this.startIndex + this.length - 1] == value;
+
+        public bool EndsWith([NotNull] string value, StringComparison comparison = StringComparison.Ordinal)
+        {
+            if (value == null) throw new ArgumentNullException(nameof(value));
+            if (value.Length > this.length) return false;
+            return this.SubRange(this.length - value.Length).Equals(value, comparison);
+        }
+
+        public bool EndsWith(StringRange value, StringComparison comparison = StringComparison.Ordinal)
+            => this.length >= value.length && this.SubRange(this.length, value.length).Equals(value, comparison);
 
         #endregion
 
