@@ -49,4 +49,21 @@ namespace Jasily.ApplicationModel.Background
             }
         }
     }
+
+    public abstract class BackgroundTaskRegister<T> : BackgroundTaskRegister
+        where T : IBackgroundTask
+    {
+        protected override void Register()
+        {
+            var builder = new BackgroundTaskBuilder
+            {
+                Name = this.TaskName,
+                TaskEntryPoint = typeof(T).FullName
+            };
+            this.Configuration(builder);
+            builder.Register();
+        }
+
+        protected abstract void Configuration(BackgroundTaskBuilder builder);
+    }
 }
