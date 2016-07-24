@@ -82,10 +82,14 @@ namespace Jasily.Diagnostics
         public static void Pointer(string message = null,
             [CallerFilePath] string path = "", [CallerMemberName] string member = "", [CallerLineNumber] int line = 0)
         {
-            Debug.WriteLine(message == null
+            var msg = message == null
                 ? $"[POINTER] {path} ({line}) {member}"
-                : $"[POINTER] [{message}] {path} ({line}) {member}");
+                : $"[POINTER] [{message}] {path} ({line}) {member}";
+            Debug.WriteLine(msg);
+            OnPointer?.Invoke(null, msg);
         }
+
+        public static event EventHandler<string> OnPointer;
 
         #endregion
     }
