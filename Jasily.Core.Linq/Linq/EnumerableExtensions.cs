@@ -254,31 +254,45 @@ namespace System.Linq
 
         #region random
 
-        public static T RandomTake<T>(this IList<T> t, Random random = null)
+        public static T RandomTake<T>([NotNull] this IList<T> source, Random random = null)
         {
-            switch (t.Count)
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            switch (source.Count)
             {
-                case 0:
-                    return default(T);
-                case 1:
-                    return t[0];
+                case 0: return default(T);
+                case 1: return source[0];
             }
-
             random = random ?? Singleton.ThreadStaticInstance<Random>();
-            var n = random.Next(t.Count);
-            return t[n];
+            return source[random.Next(source.Count)];
+        }
+
+        public static T RandomTake<T>([NotNull] this IReadOnlyList<T> source, Random random = null)
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            switch (source.Count)
+            {
+                case 0: return default(T);
+                case 1: return source[0];
+            }
+            random = random ?? Singleton.ThreadStaticInstance<Random>();
+            return source[random.Next(source.Count)];
         }
 
         [SuppressMessage("ReSharper", "PossibleMultipleEnumeration")]
-        public static T RandomTake<T>(this IEnumerable<T> t, Random random = null)
+        public static T RandomTake<T>([NotNull] this IEnumerable<T> source, Random random = null)
         {
-            var list = t as IList<T>;
+            if (source == null) throw new ArgumentNullException(nameof(source));
+
+            var list = source as IList<T>;
             if (list != null) return list.RandomTake(random);
 
-            var c = t.TryGetCount();
+            var rList = source as IReadOnlyList<T>;
+            if (rList != null) return rList.RandomTake(random);
+
+            var c = source.TryGetCount();
             if (c < 0)
             {
-                return t.ToArray().RandomTake(random);
+                return ((IList<T>)source.ToArray()).RandomTake(random);
             }
 
             switch (c)
@@ -286,20 +300,21 @@ namespace System.Linq
                 case 0:
                     return default(T);
                 case 1:
-                    return t.First();
+                    return source.First();
                 default:
-                    return t.Skip((random ?? Singleton.ThreadStaticInstance<Random>()).Next(c)).First();
+                    return source.Skip((random ?? Singleton.ThreadStaticInstance<Random>()).Next(c)).First();
             }
         }
 
-        public static IEnumerable<T> RandomSort<T>(this IEnumerable<T> source, Random random = null)
+        public static IEnumerable<T> RandomSort<T>([NotNull] this IEnumerable<T> source, Random random = null)
         {
+            if (source == null) throw new ArgumentNullException(nameof(source));
             return (source as IList<T>)?.RandomSort(random) ??
                    (source as ICollection<T>)?.RandomSort(random) ??
                    (source.ToArray()).RandomSort(random);
         }
 
-        public static IEnumerable<T> RandomSort<T>(this ICollection<T> source, Random random = null)
+        public static IEnumerable<T> RandomSort<T>([NotNull] this ICollection<T> source, Random random = null)
         {
             var count = source.Count;
             if (count == 0) yield break;
@@ -324,7 +339,7 @@ namespace System.Linq
             }
         }
 
-        public static IEnumerable<T> RandomSort<T>(this IList<T> source, Random random = null)
+        public static IEnumerable<T> RandomSort<T>([NotNull] this IList<T> source, Random random = null)
         {
             var count = source.Count;
             if (count == 0) yield break;
@@ -350,14 +365,12 @@ namespace System.Linq
 
             return (source as ICollection<T>)?.Count ??
                    (source as ICollection)?.Count ??
-                   (source as IReadOnlyCollection<T>)?.Count ??
-                   -1;
+                   (source as IReadOnlyCollection<T>)?.Count ?? -1;
         }
 
         public static int TryGetCount([NotNull] this IEnumerable source)
         {
             if (source == null) throw new ArgumentNullException(nameof(source));
-
             return (source as ICollection)?.Count ?? -1;
         }
 
@@ -540,6 +553,16 @@ namespace System.Linq
                 }
                 return item;
             }
+        }
+
+        #endregion
+
+        #region sum
+
+        public static long LongSum([NotNull] this IEnumerable<int> source)
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            return source.Aggregate(0L, (current, item) => current + item);
         }
 
         #endregion
