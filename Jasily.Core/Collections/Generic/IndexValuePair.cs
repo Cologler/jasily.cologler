@@ -15,13 +15,13 @@ namespace System.Collections.Generic
 
         public static IEnumerable<IndexValuePair<T>> EnumerateIndexValuePair<T>(this T[] array, int startIndex = 0)
         {
-            array.CheckArray(startIndex);
+            array.CheckRange(startIndex);
             for (var i = startIndex; i < array.Length; i++) yield return From(array, i);
         }
 
         public static IEnumerable<IndexValuePair<T>> EnumerateIndexValuePair<T>(this T[] array, int startIndex, int count)
         {
-            array.CheckArray(startIndex, count);
+            array.CheckRange(startIndex, count);
             for (var i = 0; i < count; i++) yield return From(array, i + startIndex);
         }
 
