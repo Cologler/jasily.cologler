@@ -26,10 +26,10 @@ namespace System
 
         public static implicit operator ValueReference<T>(T value) => new ValueReference<T>(value);
 
-        public static explicit operator T([NotNull] ValueReference<T> box)
+        public static explicit operator T([NotNull] ValueReference<T> value)
         {
-            if (box == null) throw new ArgumentNullException(nameof(box));
-            return box.Value;
+            if (value == null) throw new ArgumentNullException(nameof(value));
+            return value.Value;
         }
     }
 }
