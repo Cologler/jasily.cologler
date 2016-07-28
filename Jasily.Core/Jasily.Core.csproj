@@ -35,7 +35,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ArrayExtensions.cs" />
-    <Compile Include="Boxing.cs" />
+    <Compile Include="Linq\AsyncEnumerableExtensions.cs" />
+    <Compile Include="Linq\Enumerable2.cs" />
+    <Compile Include="Linq\EnumerableExtensions.cs" />
+    <Compile Include="Linq\EnumeratorExtensions.cs" />
+    <Compile Include="Linq\Generater.cs" />
+    <Compile Include="Linq\ListExtensions.cs" />
+    <Compile Include="ValueReference.cs" />
     <Compile Include="Can.cs" />
     <Compile Include="CharExtensions.cs" />
     <Compile Include="Collections\Generic\Collection.cs" />
@@ -59,7 +65,7 @@
     <Compile Include="Collections\Generic\NameValuePair.cs" />
     <Compile Include="Collections\ObjectModel\CollectionChangedEventArgs.cs" />
     <Compile Include="Collections\ObjectModel\ObservableCollectionGroup.cs" />
-    <Compile Include="ComponentModel\INotifyPropertyChangedExtensions.cs" />
+    <Compile Include="ComponentModel\NotifyPropertyChangedExtensions.cs" />
     <Compile Include="Enums\CollectionChangedAction.cs" />
     <Compile Include="Enums\ObjectChangedAction.cs" />
     <Compile Include="EventArgs.cs" />

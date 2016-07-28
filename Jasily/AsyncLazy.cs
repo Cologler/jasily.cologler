@@ -1,7 +1,7 @@
-﻿using Jasily.Threading.Tasks;
-using JetBrains.Annotations;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using Jasily.Threading.Tasks;
+using JetBrains.Annotations;
 
 namespace Jasily
 {
@@ -15,6 +15,6 @@ namespace Jasily
             this.task = new UniqueTask<T>(initFunc);
         }
 
-        public async Task<T> GetValue() => await this.task.Run();
+        public async Task<T> GetValueAsync() => await this.task.Run();
     }
 }

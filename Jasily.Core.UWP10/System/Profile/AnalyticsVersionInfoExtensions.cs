@@ -7,8 +7,11 @@
             switch (info.DeviceFamily)
             {
                 case "Desktop":
+                case "Windows.Desktop":
                     return DeviceFamilyType.Desktop;
+
                 case "Mobile":
+                case "Windows.Mobile":
                     return DeviceFamilyType.Mobile;
                 default:
                     return DeviceFamilyType.Unknown;

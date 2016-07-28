@@ -4,8 +4,8 @@ using JetBrains.Annotations;
 namespace System.Linq
 {
     /// <summary>
-    /// let static IEnumerable&lt;T&gt; Func&lt;T, T2&gt;(this IEnumerable&lt;T&gt; source) => 
-    /// IEnumerable&lt;T&gt; Func&lt;T2&gt;()
+    /// let static IEnumerable&lt;T&gt;.Func&lt;T, T2&gt;(this IEnumerable&lt;T&gt; source) => 
+    /// IEnumerable&lt;T&gt;.Func&lt;T2&gt;()
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public struct Enumerable2<T>

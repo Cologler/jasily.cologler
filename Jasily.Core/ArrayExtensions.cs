@@ -5,29 +5,23 @@ namespace System
 {
     public static class ArrayExtensions
     {
-        public static void CheckArray<T>(this T[] array, int index)
+        public static void CheckRange<T>([NotNull] this T[] array, int startIndex)
         {
-            if (array == null) throw new ArgumentNullException();
-            if (index < 0 || index >= array.Length) throw new ArgumentOutOfRangeException();
+            if (array == null) throw new ArgumentNullException(nameof(array));
+            if (startIndex < 0 || startIndex >= array.Length) throw new ArgumentOutOfRangeException(nameof(startIndex));
         }
 
-        public static void CheckArray<T>(this T[] array, int index, int count)
+        public static void CheckRange<T>([NotNull] this T[] array, int startIndex, int count)
         {
-            if (array == null) throw new ArgumentNullException();
-            if (index < 0 || index >= array.Length) throw new ArgumentOutOfRangeException();
-            if (count < 0) throw new ArgumentOutOfRangeException();
-            if (index + count > array.Length) throw new ArgumentOutOfRangeException();
-        }
-
-        public static IEnumerable<T> Enumerate<T>(this T[] array, int index)
-        {
-            array.CheckArray(index);
-            for (var i = 0; i < array.Length; i++) yield return array[i + index];
+            if (array == null) throw new ArgumentNullException(nameof(array));
+            if (startIndex < 0 || startIndex >= array.Length) throw new ArgumentOutOfRangeException(nameof(startIndex));
+            if (count < 0) throw new ArgumentOutOfRangeException(nameof(count));
+            if (startIndex + count > array.Length) throw new ArgumentException();
         }
 
         public static IEnumerable<T> Enumerate<T>(this T[] array, int index, int count)
         {
-            array.CheckArray(index, count);
+            array.CheckRange(index, count);
             for (var i = 0; i < count; i++) yield return array[i + index];
         }
 

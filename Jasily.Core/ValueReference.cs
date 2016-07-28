@@ -2,12 +2,12 @@ using JetBrains.Annotations;
 
 namespace System
 {
-    public sealed class Boxing<T>
+    public sealed class ValueReference<T>
         where T : struct
     {
-        public T Value { get; set; }
+        public T Value { get; }
 
-        public Boxing(T value = default(T))
+        public ValueReference(T value)
         {
             this.Value = value;
         }
@@ -24,12 +24,12 @@ namespace System
 
         #endregion
 
-        public static implicit operator Boxing<T>(T value) => new Boxing<T>(value);
+        public static implicit operator ValueReference<T>(T value) => new ValueReference<T>(value);
 
-        public static implicit operator T([NotNull] Boxing<T> box)
+        public static explicit operator T([NotNull] ValueReference<T> value)
         {
-            if (box == null) throw new ArgumentNullException(nameof(box));
-            return box.Value;
+            if (value == null) throw new ArgumentNullException(nameof(value));
+            return value.Value;
         }
     }
 }
