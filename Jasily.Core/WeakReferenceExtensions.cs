@@ -13,10 +13,7 @@ namespace System
             where T : class
         {
             T r;
-            if (weakRef.TryGetTarget(out r))
-                return r;
-            else
-                return null;
+            return weakRef.TryGetTarget(out r) ? r : null;
         }
     }
 }

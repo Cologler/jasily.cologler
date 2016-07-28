@@ -35,7 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ArrayExtensions.cs" />
-    <Compile Include="Boxing.cs" />
+    <Compile Include="ValueReference.cs" />
     <Compile Include="Can.cs" />
     <Compile Include="CharExtensions.cs" />
     <Compile Include="Collections\Generic\Collection.cs" />
