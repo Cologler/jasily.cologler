@@ -65,7 +65,7 @@
     <Compile Include="Collections\Generic\NameValuePair.cs" />
     <Compile Include="Collections\ObjectModel\CollectionChangedEventArgs.cs" />
     <Compile Include="Collections\ObjectModel\ObservableCollectionGroup.cs" />
-    <Compile Include="ComponentModel\INotifyPropertyChangedExtensions.cs" />
+    <Compile Include="ComponentModel\NotifyPropertyChangedExtensions.cs" />
     <Compile Include="Enums\CollectionChangedAction.cs" />
     <Compile Include="Enums\ObjectChangedAction.cs" />
     <Compile Include="EventArgs.cs" />
