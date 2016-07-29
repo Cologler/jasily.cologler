@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using JetBrains.Annotations;
@@ -8,91 +9,47 @@ namespace System.Linq
 {
     public static class EnumerableExtensions
     {
-        #region to
-
-        public static TSource[] ToArray<TSource>([NotNull] this IEnumerable<TSource> source, CancellationToken token)
-            => source.ToList(token).ToArray();
-
-        public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this IEnumerable<TSource> source,
-            Func<TSource, TKey> keySelector, CancellationToken token)
-        {
-            var result = new Dictionary<TKey, TSource>();
-            foreach (var item in source)
-            {
-                token.ThrowIfCancellationRequested();
-                result.Add(keySelector(item), item);
-            }
-            return result;
-        }
-        public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this IEnumerable<TSource> source,
-            Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, CancellationToken token)
-        {
-            var result = new Dictionary<TKey, TElement>();
-            foreach (var item in source)
-            {
-                token.ThrowIfCancellationRequested();
-                result.Add(keySelector(item), elementSelector(item));
-            }
-            return result;
-        }
-        public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this IEnumerable<TSource> source,
-            Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer, CancellationToken token)
-        {
-            var result = new Dictionary<TKey, TSource>(comparer);
-            foreach (var item in source)
-            {
-                token.ThrowIfCancellationRequested();
-                result.Add(keySelector(item), item);
-            }
-            return result;
-        }
-        public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this IEnumerable<TSource> source,
-            Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer, CancellationToken token)
-        {
-            var result = new Dictionary<TKey, TElement>(comparer);
-            foreach (var item in source)
-            {
-                token.ThrowIfCancellationRequested();
-                result.Add(keySelector(item), elementSelector(item));
-            }
-            return result;
-        }
-
-        public static List<T> ToList<T>([NotNull] this IEnumerable<T> source, CancellationToken token, int detect = 30)
+        public static IEnumerable<T> EnumerateWith<T>([NotNull] this IEnumerable<T> source,
+            CancellationToken token, uint checkCycle = 30)
         {
             if (source == null) throw new ArgumentNullException(nameof(source));
-            if (detect <= 0) throw new ArgumentOutOfRangeException(nameof(detect));
+            if (checkCycle == 0) throw new ArgumentOutOfRangeException(nameof(checkCycle));
 
-            // ReSharper disable once PossibleMultipleEnumeration
-            var count = source.TryGetCount();
-            var result = count >= 0 ? new List<T>(count) : new List<T>();
-            if (detect == 1)
+            return EnumerateWithIterator(source, token, checkCycle);
+        }
+
+        private static IEnumerable<T> EnumerateWithIterator<T>([NotNull] this IEnumerable<T> source,
+            CancellationToken token, uint checkCycle)
+        {
+            Debug.Assert(source != null);
+            Debug.Assert(checkCycle > 0);
+
+            using (var enumerator = source.GetEnumerator())
             {
-                // ReSharper disable once PossibleMultipleEnumeration
-                foreach (var item in source)
+                if (checkCycle == 1)
                 {
-                    token.ThrowIfCancellationRequested();
-                    result.Add(item);
+                    while (enumerator.MoveNext())
+                    {
+                        token.ThrowIfCancellationRequested();
+                        yield return enumerator.Current;
+                    }
                 }
-                return result;
-            }
-            else
-            {
-                // ReSharper disable once PossibleMultipleEnumeration
-                using (var itor = source.GetEnumerator())
+                else
                 {
                     while (true)
                     {
                         token.ThrowIfCancellationRequested();
-                        for (var i = 0; i < detect; i++)
+                        for (var i = 0; i < checkCycle; i++)
                         {
-                            if (!itor.MoveNext()) return result;
-                            result.Add(itor.Current);
+                            if (enumerator.MoveNext()) yield return enumerator.Current;
+                            else yield break;
                         }
                     }
                 }
             }
         }
+
+        #region to
 
         public static List<T> ToList<T>([NotNull] this IEnumerable<T> source, int capacity)
         {
