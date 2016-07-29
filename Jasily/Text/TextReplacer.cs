@@ -88,29 +88,30 @@ namespace Jasily.Text
         private class KeyValueFinder : IEnumerator<int>
         {
             [NotNull]
+            private readonly TextReplacer replacer;
+
+            [NotNull]
             public readonly string From;
+
             [NotNull]
             public readonly string To;
-            [NotNull]
-            private readonly TextReplacer parent;
 
-            public KeyValueFinder([NotNull] TextReplacer parent, [NotNull] string from, [NotNull] string to)
+            public KeyValueFinder([NotNull] TextReplacer replacer, [NotNull] string from, [NotNull] string to)
             {
                 this.From = from;
                 this.To = to;
-                this.parent = parent;
-
+                this.replacer = replacer;
+                
                 this.Reset();
                 this.MoveNext();
             }
 
             public bool MoveNext()
             {
-                if (this.parent.originText.Length - this.parent.startIndex < this.From.Length) return false;
-                if (this.parent.startIndex <= this.Current) return true; // last time
-                var start = this.Current < 0 ? 0 : this.Current + this.From.Length;
-                if (start >= this.parent.originText.Length) return false;
-                this.Current = this.parent.originText.IndexOf(this.From, start, this.parent.comparison);
+                if (this.replacer.originText.Length < this.replacer.startIndex + this.From.Length) return false;
+                if (this.replacer.startIndex <= this.Current) return true; // last time was newest
+                var start = this.replacer.startIndex < 0 ? 0 : this.replacer.startIndex;
+                this.Current = this.replacer.originText.IndexOf(this.From, start, this.replacer.comparison);
                 return this.Current >= 0;
             }
 

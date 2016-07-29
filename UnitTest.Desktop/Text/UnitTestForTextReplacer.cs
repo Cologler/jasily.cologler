@@ -1,7 +1,7 @@
-﻿using Jasily.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Jasily.Text;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace UnitTest.Desktop.Text
 {
@@ -36,24 +36,22 @@ namespace UnitTest.Desktop.Text
         public void Conflict()
         {
             const string origin = "abcABC";
-            var replacements = new Dictionary<string, string>()
+            Assert.AreEqual("a2C", TextReplacer.Replace(origin, new Dictionary<string, string>()
             {
                 ["bcA"] = "1",
                 ["bcAB"] = "2"
-            };
-            Assert.AreEqual("a2C", TextReplacer.Replace(origin, replacements));
+            }));
         }
 
         [TestMethod]
         public void ConflictNoPadding()
         {
             const string origin = "bcAB";
-            var replacements = new Dictionary<string, string>()
+            Assert.AreEqual("2", TextReplacer.Replace(origin, new Dictionary<string, string>()
             {
                 ["bcA"] = "1",
                 ["bcAB"] = "2"
-            };
-            Assert.AreEqual("2", TextReplacer.Replace(origin, replacements));
+            }));
         }
 
         [ExpectedException(typeof(ArgumentException))]
@@ -61,12 +59,11 @@ namespace UnitTest.Desktop.Text
         public void ArgumentException()
         {
             const string origin = "bcAB";
-            var replacements = new Dictionary<string, string>()
+            Assert.AreEqual(null, TextReplacer.Replace(origin, new Dictionary<string, string>()
             {
                 ["bcA"] = "1",
                 ["bca"] = "2"
-            };
-            Assert.AreEqual(null, TextReplacer.Replace(origin, replacements, StringComparison.OrdinalIgnoreCase));
+            }, StringComparison.OrdinalIgnoreCase));
         }
     }
 }

@@ -46,7 +46,7 @@
     <Compile Include="Collections\Generic\GroupedList.cs" />
     <Compile Include="Collections\Generic\HashSetExtensions.cs" />
     <Compile Include="Collections\Generic\IQueue.cs" />
-    <Compile Include="Collections\Generic\JasilyEqualityComparer.cs" />
+    <Compile Include="Collections\Generic\CachedLastEqualityComparer.cs" />
     <Compile Include="Collections\Generic\Queue.cs" />
     <Compile Include="Collections\Generic\Range.cs" />
     <Compile Include="Collections\Generic\RangeDictionary.cs" />
