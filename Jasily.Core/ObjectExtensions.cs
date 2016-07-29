@@ -115,32 +115,32 @@ namespace System
                 this.source = source;
             }
 
-            public TDest To<TDest>() => ConvertChecked<T, TDest>.Caster(this.source);
+            public TDest To<TDest>() => CheckedConverter<TDest>.Convert(this.source);
 
-            public TDest UncheckedTo<TDest>() => ConvertUnchecked<T, TDest>.Caster(this.source);
-        }
+            public TDest UncheckedTo<TDest>() => UncheckedConverter<TDest>.Convert(this.source);
 
-        private static class ConvertChecked<TSource, TDest>
-        {
-            internal static readonly Func<TSource, TDest> Caster;
-
-            static ConvertChecked()
+            private static class CheckedConverter<TDest>
             {
-                var p = Expression.Parameter(typeof(TSource));
-                var c = Expression.ConvertChecked(p, typeof(TDest));
-                Caster = Expression.Lambda<Func<TSource, TDest>>(c, p).Compile();
+                internal static readonly Func<T, TDest> Convert;
+
+                static CheckedConverter()
+                {
+                    var p = Expression.Parameter(typeof(T));
+                    var c = Expression.ConvertChecked(p, typeof(TDest));
+                    Convert = Expression.Lambda<Func<T, TDest>>(c, p).Compile();
+                }
             }
-        }
 
-        private static class ConvertUnchecked<TSource, TDest>
-        {
-            internal static readonly Func<TSource, TDest> Caster;
-
-            static ConvertUnchecked()
+            private static class UncheckedConverter<TDest>
             {
-                var p = Expression.Parameter(typeof(TSource));
-                var c = Expression.Convert(p, typeof(TDest));
-                Caster = Expression.Lambda<Func<TSource, TDest>>(c, p).Compile();
+                internal static readonly Func<T, TDest> Convert;
+
+                static UncheckedConverter()
+                {
+                    var p = Expression.Parameter(typeof(T));
+                    var c = Expression.Convert(p, typeof(TDest));
+                    Convert = Expression.Lambda<Func<T, TDest>>(c, p).Compile();
+                }
             }
         }
 
