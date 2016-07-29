@@ -7,7 +7,7 @@ namespace Jasily.Collections.Generic
     public static class HashSetExtensions
     {
         /// <summary>
-        /// O(time): comparer of source is JasilyEqualityComparer ? was O(1) : O(n);
+        /// O(time): comparer of source is CachedLastEqualityComparer ? was O(1) : O(n);
         /// because of struct alway is copy, so we require T is class.
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -20,7 +20,7 @@ namespace Jasily.Collections.Generic
             var comparer = source.Comparer;
             if (source.Contains(item))
             {
-                var jc = comparer as JasilyEqualityComparer<T>;
+                var jc = comparer as CachedLastEqualityComparer<T>;
                 existsItem = jc != null
                     ? (ReferenceEquals(jc.LastCompareItem1, item) ? jc.LastCompareItem2 : jc.LastCompareItem1)
                     : source.First(z => comparer.Equals(z, item));

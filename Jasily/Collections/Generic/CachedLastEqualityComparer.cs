@@ -1,14 +1,14 @@
-﻿using JetBrains.Annotations;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 
 namespace Jasily.Collections.Generic
 {
-    public class JasilyEqualityComparer<T> : IEqualityComparer<T>
+    public class CachedLastEqualityComparer<T> : IEqualityComparer<T>
     {
         private readonly IEqualityComparer<T> baseComparer;
 
-        public JasilyEqualityComparer([NotNull] IEqualityComparer<T> baseComparer)
+        public CachedLastEqualityComparer([NotNull] IEqualityComparer<T> baseComparer)
         {
             if (baseComparer == null) throw new ArgumentNullException(nameof(baseComparer));
             this.baseComparer = baseComparer;

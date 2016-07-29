@@ -1,9 +1,9 @@
-﻿using Jasily.Collections.Generic;
-using JetBrains.Annotations;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using Jasily.Collections.Generic;
+using JetBrains.Annotations;
 
 namespace Jasily.Text
 {
@@ -17,7 +17,7 @@ namespace Jasily.Text
 
             if (text.Length == 0 || replacements.Count == 0) return text;
 
-            var comparer = new JasilyEqualityComparer<string>(JasilyComparer.GetStringComparer(comparison));
+            var comparer = new CachedLastEqualityComparer<string>(JasilyComparer.GetStringComparer(comparison));
             var hashSet = new HashSet<string>(comparer);
             var replacer = new TextReplacer(text, comparison);
             var finders = new List<KeyValueFinder>(replacements.Count);
