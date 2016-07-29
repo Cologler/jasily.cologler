@@ -5,6 +5,11 @@ namespace System.Linq
 {
     public static class Generater
     {
+        /// <summary>
+        /// same as Enumerable.Range(0, count)
+        /// </summary>
+        /// <param name="count"></param>
+        /// <returns></returns>
         public static IEnumerable<int> Repeat(int count)
         {
             if (count < 0) throw new ArgumentOutOfRangeException(nameof(count));

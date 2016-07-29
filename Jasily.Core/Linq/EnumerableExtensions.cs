@@ -138,7 +138,7 @@ namespace System.Linq
                 var count = chunkSize - 1; // > 0
                 using (var itor = source.GetEnumerator())
                 {
-                    while (itor.MoveNext()) yield return new[] { itor.Current }.Concat(itor.Take(count));
+                    while (itor.MoveNext()) yield return new[] { itor.Current }.Concat(itor.TakeIterator(count));
                 }
             }
         }
