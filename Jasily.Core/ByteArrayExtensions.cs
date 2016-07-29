@@ -37,5 +37,10 @@ namespace System
 
         public static string GetHexString(this byte[] bytes, int startIndex, int length)
             => BitConverter.ToString(bytes, startIndex, length);
+
+        public static void F(byte[] bytes, string template)
+        {
+            if (string.IsNullOrEmpty(template)) throw new ArgumentException("Argument is null or empty", nameof(template));
+        }
     }
 }

@@ -34,22 +34,22 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ArgumentEmptyException.cs" />
+    <Compile Include="ArgumentWhiteSpaceException.cs" />
     <Compile Include="ArrayExtensions.cs" />
     <Compile Include="Linq\AsyncEnumerableExtensions.cs" />
     <Compile Include="Linq\Enumerable2.cs" />
     <Compile Include="Linq\EnumerableExtensions.cs" />
     <Compile Include="Linq\EnumeratorExtensions.cs" />
     <Compile Include="Linq\Generater.cs" />
-    <Compile Include="Linq\ListExtensions.cs" />
     <Compile Include="ValueReference.cs" />
     <Compile Include="Can.cs" />
     <Compile Include="CharExtensions.cs" />
     <Compile Include="Collections\Generic\Collection.cs" />
     <Compile Include="Collections\Generic\Dictionary.cs" />
-    <Compile Include="Collections\Generic\Enumerable2.cs" />
     <Compile Include="Collections\Generic\IGetKey.cs" />
     <Compile Include="Collections\Generic\IndexValuePair.cs" />
-    <Compile Include="Collections\Generic\List.cs" />
+    <Compile Include="Linq\List.cs" />
     <Compile Include="Comparable.cs" />
     <Compile Include="CreateOrNull.cs" />
     <Compile Include="DelegateExtensions.cs" />

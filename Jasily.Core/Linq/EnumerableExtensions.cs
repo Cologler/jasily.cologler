@@ -648,6 +648,9 @@ namespace System.Linq
 
         #endregion
 
-        public static Enumerable2<T> As2<T>(this IEnumerable<T> source) => new Enumerable2<T>(source);
+        public static Enumerable2<T> As2<T>([CanBeNull] this IEnumerable<T> source) => new Enumerable2<T>(source);
+
+        public static object GetOrCreateSyncRoot<T>(this IEnumerable<T> enumerable)
+            => (enumerable as ICollection)?.SyncRoot ?? new object();
     }
 }

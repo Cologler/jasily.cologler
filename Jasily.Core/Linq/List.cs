@@ -1,10 +1,11 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 
-namespace System.Collections.Generic
+namespace System.Linq
 {
     public static class List
     {
@@ -509,6 +510,16 @@ namespace System.Collections.Generic
         #endregion
 
         #endregion
+
+        #endregion
+
+        #region Linq
+
+        public static IEnumerable<T> Skip<T>([NotNull] this IList<T> source, int count)
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            for (var i = count; i < source.Count; i++) yield return source[i];
+        }
 
         #endregion
     }

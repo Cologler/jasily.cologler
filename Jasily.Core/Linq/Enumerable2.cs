@@ -12,7 +12,7 @@ namespace System.Linq
     {
         private readonly IEnumerable<T> baseEnumerable;
 
-        public Enumerable2(IEnumerable<T> baseEnumerable)
+        public Enumerable2([CanBeNull] IEnumerable<T> baseEnumerable)
         {
             // can be null if next func accept null argument.
             this.baseEnumerable = baseEnumerable;
