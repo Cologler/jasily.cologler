@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Windows;
 
-namespace Jasily.Desktop.Windows
+namespace Jasily.Windows
 {
     public class WindowStatusCached
     {

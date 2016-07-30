@@ -72,6 +72,7 @@
     <Compile Include="Api\Explorer.cs" />
     <Compile Include="ConsoleActivator.cs" />
     <Compile Include="ConsoleTempEnvironment.cs" />
+    <Compile Include="Windows\Controls\MediaElementHolder.cs" />
     <Compile Include="Windows\Interactivity\Behaviors\NonSelectBehavior.cs" />
     <Compile Include="Windows\Interactivity\Behaviors\TextBlockHighLightBehavior.cs" />
     <Compile Include="Windows\Navigation\NavigationStatus.cs" />
