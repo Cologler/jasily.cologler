@@ -1,12 +1,15 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows.Controls;
 
 namespace Jasily.Windows.Controls
 {
-    public class MediaElementHolder
+    public class MediaElementHolder : INotifyPropertyChanged
     {
         private readonly MediaElement mediaElement;
         private MediaState currentStatus;
+        private bool isPlaying;
         public event EventHandler<MediaState> StatusChanged;
 
         public MediaElementHolder(MediaElement mediaElement)
@@ -32,6 +35,7 @@ namespace Jasily.Windows.Controls
             private set
             {
                 if (this.currentStatus == value) return;
+                this.IsPlaying = value == MediaState.Play;
                 this.currentStatus = value;
                 this.StatusChanged?.Invoke(this, value);
             }
@@ -59,6 +63,22 @@ namespace Jasily.Windows.Controls
         {
             this.CurrentStatus = MediaState.Close;
             this.mediaElement.Close();
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+            => this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+        public bool IsPlaying
+        {
+            get { return this.isPlaying; }
+            set
+            {
+                if (this.isPlaying == value) return;
+                this.isPlaying = value;
+                this.OnPropertyChanged();
+            }
         }
     }
 }
