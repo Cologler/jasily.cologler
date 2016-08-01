@@ -138,7 +138,9 @@
     <Compile Include="StringConverter.cs" />
     <Compile Include="StringRange.cs" />
     <Compile Include="StringRangeExtensions.cs" />
+    <Compile Include="Text\IStringFinderSource.cs" />
     <Compile Include="Text\NoneEncoding.cs" />
+    <Compile Include="Text\StringFinder.cs" />
     <Compile Include="Text\TextReplacer.cs" />
     <Compile Include="Threading\ISemaphore.cs" />
     <Compile Include="Threading\ThreadUnsafeSemaphore.cs" />
