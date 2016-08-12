@@ -37,6 +37,7 @@
     <Compile Include="ArgumentEmptyException.cs" />
     <Compile Include="ArgumentWhiteSpaceException.cs" />
     <Compile Include="ArrayExtensions.cs" />
+    <Compile Include="Collections\ObjectModel\CollectionChangedAction.cs" />
     <Compile Include="Linq\AsyncEnumerableExtensions.cs" />
     <Compile Include="Linq\Enumerable2.cs" />
     <Compile Include="Linq\EnumerableExtensions.cs" />
@@ -66,8 +67,6 @@
     <Compile Include="Collections\ObjectModel\CollectionChangedEventArgs.cs" />
     <Compile Include="Collections\ObjectModel\ObservableCollectionGroup.cs" />
     <Compile Include="ComponentModel\NotifyPropertyChangedExtensions.cs" />
-    <Compile Include="Enums\CollectionChangedAction.cs" />
-    <Compile Include="Enums\ObjectChangedAction.cs" />
     <Compile Include="EventArgs.cs" />
     <Compile Include="EventArgses\JasilyProgressChangedEventArgs.cs" />
     <Compile Include="IBuilder.cs" />
