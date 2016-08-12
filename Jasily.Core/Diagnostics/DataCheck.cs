@@ -86,6 +86,12 @@ namespace System.Diagnostics
             }
         }
 
+        /// <summary>
+        /// value must be true.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="path"></param>
+        /// <param name="line"></param>
         public static void True(bool value,
             [CallerFilePath] string path = null, [CallerLineNumber] int line = 0)
         {
@@ -95,6 +101,12 @@ namespace System.Diagnostics
             }
         }
 
+        /// <summary>
+        /// value must be false.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="path"></param>
+        /// <param name="line"></param>
         public static void False(bool value,
             [CallerFilePath] string path = null, [CallerLineNumber] int line = 0)
         {
