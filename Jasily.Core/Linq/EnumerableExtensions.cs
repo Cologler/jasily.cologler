@@ -211,6 +211,9 @@ namespace System.Linq
 
         #region random
 
+        public static T RandomTake<T>([NotNull] this List<T> source, Random random = null)
+            => RandomTake(source as IList<T>, random);
+
         public static T RandomTake<T>([NotNull] this IList<T> source, Random random = null)
         {
             if (source == null) throw new ArgumentNullException(nameof(source));
