@@ -51,7 +51,7 @@
     <Compile Include="Collections\Generic\Dictionary.cs" />
     <Compile Include="Collections\Generic\IGetKey.cs" />
     <Compile Include="Collections\Generic\IndexValuePair.cs" />
-    <Compile Include="Linq\List.cs" />
+    <Compile Include="Collections\Generic\List.cs" />
     <Compile Include="Comparable.cs" />
     <Compile Include="CreateOrNull.cs" />
     <Compile Include="DelegateExtensions.cs" />

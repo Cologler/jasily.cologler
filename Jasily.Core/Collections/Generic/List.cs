@@ -1,11 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 
-namespace System.Linq
+namespace System.Collections.Generic
 {
     public static class List
     {
@@ -26,10 +25,7 @@ namespace System.Linq
         /// <typeparam name="T"></typeparam>
         /// <param name="list"></param>
         /// <returns></returns>
-        public static IList<T> AsSynchronized<T>(IList<T> list)
-        {
-            return new SynchronizedList<T>(list);
-        }
+        public static IList<T> AsSynchronized<T>(IList<T> list) => new SynchronizedList<T>(list);
 
         private class SynchronizedList<T> : IList<T>, ICollection
         {
