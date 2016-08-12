@@ -38,6 +38,7 @@
     <Compile Include="ArgumentWhiteSpaceException.cs" />
     <Compile Include="ArrayExtensions.cs" />
     <Compile Include="Collections\ObjectModel\CollectionChangedAction.cs" />
+    <Compile Include="Diagnostics\DataCheck.cs" />
     <Compile Include="Linq\AsyncEnumerableExtensions.cs" />
     <Compile Include="Linq\Enumerable2.cs" />
     <Compile Include="Linq\EnumerableExtensions.cs" />
@@ -114,7 +115,6 @@
     <Compile Include="JasilyException.cs" />
     <Compile Include="ObjectExtensions.cs" />
     <Compile Include="StringExtensions.cs" />
-    <Compile Include="JasilyThrow.cs" />
     <Compile Include="WeakReferenceExtensions.cs" />
     <Compile Include="Runtime\Serialization\Json\DataContractJsonSerializerExtensions.cs" />
     <Compile Include="UsingAnything.cs" />

@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
 
 namespace System
@@ -145,5 +147,16 @@ namespace System
         }
 
         #endregion
+
+        public static T ThrowIfNull<T>(this T obj,
+            [CallerFilePath] string path = "", [CallerLineNumber] int line = 0)
+        {
+            if (obj == null)
+            {
+                throw new NullReferenceException($"{DataCheck.Format(path, line)} null reference.");
+            }
+
+            return obj;
+        }
     }
 }
