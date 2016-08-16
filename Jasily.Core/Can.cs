@@ -39,5 +39,11 @@ namespace System
                 return false;
             }
         }
+
+        public static bool ParseGuid(string input)
+        {
+            Guid value;
+            return Guid.TryParse(input, out value);
+        }
     }
 }
