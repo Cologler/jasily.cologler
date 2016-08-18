@@ -140,6 +140,9 @@
     <Compile Include="..\Jasily.Shared\Security\Cryptography\SymmetricAlgorithmType.cs">
       <Link>Security\Cryptography\SymmetricAlgorithmType.cs</Link>
     </Compile>
+    <Compile Include="..\Jasily.Shared\Threading\UISynchronizationContext.cs">
+      <Link>Threading\UISynchronizationContext.cs</Link>
+    </Compile>
     <Compile Include="..\Jasily.Shared\Windows\Data\ValueConverters\BooleanToVisibilityConverter.cs">
       <Link>Windows\Data\ValueConverters\BooleanToVisibilityConverter.cs</Link>
     </Compile>

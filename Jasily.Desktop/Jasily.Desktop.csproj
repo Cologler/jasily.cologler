@@ -45,6 +45,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Jasily.Shared\Threading\UISynchronizationContext.cs">
+      <Link>Threading\UISynchronizationContext.cs</Link>
+    </Compile>
     <Compile Include="..\Jasily.Shared\Windows\Data\JasilyCollectionView.cs">
       <Link>Windows\Data\JasilyCollectionView.cs</Link>
     </Compile>

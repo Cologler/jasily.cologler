@@ -54,6 +54,7 @@
     <Compile Include="Security\Cryptography\IJasilySymmetricKeyAlgorithmProvider.cs" />
     <Compile Include="Security\Cryptography\JasilyCryptographyFactory.cs" />
     <Compile Include="Security\Cryptography\SymmetricAlgorithmType.cs" />
+    <Compile Include="Threading\UISynchronizationContext.cs" />
     <Compile Include="Windows\Data\JasilyCollectionView.cs" />
     <Compile Include="Windows\Data\JasilySelectorCollectionView.cs" />
     <Compile Include="Windows\Data\ValueConverters\BooleanToVisibilityConverter.cs" />
