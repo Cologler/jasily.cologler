@@ -44,6 +44,7 @@
     <Compile Include="Linq\EnumerableExtensions.cs" />
     <Compile Include="Linq\Enumerator.cs" />
     <Compile Include="Linq\Generater.cs" />
+    <Compile Include="ObjectContainer.cs" />
     <Compile Include="ReachableException.cs" />
     <Compile Include="Threading\SynchronizationContextExtensions.cs" />
     <Compile Include="ValueReference.cs" />

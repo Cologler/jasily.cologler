@@ -15,8 +15,11 @@ namespace Jasily.Threading
 {
     public sealed class UISynchronizationContext : SynchronizationContext
     {
+        private static SynchronizationContext instance;
+
         public static async Task<SynchronizationContext> GetForCurrentViewAsync()
         {
+            if (instance != null) return instance;
             SynchronizationContext sc = null;
 #if WINDOWS_UWP
             var dispatcher = (CoreApplication.GetCurrentView() ?? CoreApplication.MainView)?.Dispatcher;
@@ -28,6 +31,7 @@ namespace Jasily.Threading
             var dispatcher = Application.Current.Dispatcher;
             if (dispatcher.CheckAccess()) return Current;
             await dispatcher.InvokeAsync(() => sc = Current);
+            instance = sc;
             return sc;
 #else
             throw new NotSupportedException();
