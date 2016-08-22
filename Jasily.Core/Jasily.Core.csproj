@@ -41,6 +41,7 @@
     <Compile Include="Diagnostics\DataCheck.cs" />
     <Compile Include="Diagnostics\IPrintable.cs" />
     <Compile Include="ExceptionExtensions.cs" />
+    <Compile Include="IReleaser.cs" />
     <Compile Include="Linq\AsyncEnumerableExtensions.cs" />
     <Compile Include="Linq\EnumerableExtensions.cs" />
     <Compile Include="Linq\Enumerator.cs" />
@@ -103,7 +104,6 @@
     <Compile Include="Reflection\TypeExtensions.cs" />
     <Compile Include="Releaser.cs" />
     <Compile Include="RequestActionEventArgs.cs" />
-    <Compile Include="ITryEnter.cs" />
     <Compile Include="Singleton.cs" />
     <Compile Include="Text\JasilyEncoding.cs" />
     <Compile Include="Text\StringBuilderExtensions.cs" />
@@ -119,6 +119,7 @@
     <Compile Include="JasilyException.cs" />
     <Compile Include="ObjectExtensions.cs" />
     <Compile Include="StringExtensions.cs" />
+    <Compile Include="ValueReferenceExtensions.cs" />
     <Compile Include="WeakReferenceExtensions.cs" />
     <Compile Include="Runtime\Serialization\Json\DataContractJsonSerializerExtensions.cs" />
     <Compile Include="Disposer.cs" />

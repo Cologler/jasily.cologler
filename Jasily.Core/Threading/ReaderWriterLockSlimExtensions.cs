@@ -1,57 +1,70 @@
-﻿namespace System.Threading
+﻿using System.Diagnostics;
+using JetBrains.Annotations;
+
+namespace System.Threading
 {
     public static class ReaderWriterLockSlimExtensions
     {
-        public static IDisposable StartRead(this ReaderWriterLockSlim @lock)
+        public static Releaser<ReaderWriterLockSlim> StartRead([NotNull] this ReaderWriterLockSlim locker)
         {
-            @lock.EnterReadLock();
-            return new ReadMode(@lock);
+            if (locker == null) throw new ArgumentNullException(nameof(locker));
+            locker.EnterReadLock();
+            return Read(locker);
         }
 
-        public static IDisposable StartWrite(this ReaderWriterLockSlim @lock)
+        public static Releaser<ReaderWriterLockSlim> StartWrite([NotNull] this ReaderWriterLockSlim locker)
         {
-            @lock.EnterWriteLock();
-            return new WriteMode(@lock);
+            if (locker == null) throw new ArgumentNullException(nameof(locker));
+            locker.EnterWriteLock();
+            return Write(locker);
         }
 
-        public static ITryEnter TryStartRead(this ReaderWriterLockSlim @lock, int millisecondsTimeout)
-            => @lock.TryEnterReadLock(millisecondsTimeout) ? new ReadMode(@lock) : new ReadMode(null);
-
-        public static ITryEnter TryStartRead(this ReaderWriterLockSlim @lock, TimeSpan timeout)
-            => @lock.TryEnterReadLock(timeout) ? new ReadMode(@lock) : new ReadMode(null);
-
-        public static ITryEnter TryStartWrite(this ReaderWriterLockSlim @lock, int millisecondsTimeout)
-            => @lock.TryEnterWriteLock(millisecondsTimeout) ? new WriteMode(@lock) : new WriteMode(null);
-
-        public static ITryEnter TryStartWrite(this ReaderWriterLockSlim @lock, TimeSpan timeout)
-            => @lock.TryEnterWriteLock(timeout) ? new WriteMode(@lock) : new WriteMode(null);
-
-        private class ReadMode : ITryEnter
+        public static Releaser<ReaderWriterLockSlim> TryStartRead([NotNull] this ReaderWriterLockSlim locker, int millisecondsTimeout)
         {
-            private readonly ReaderWriterLockSlim @lock;
-
-            public ReadMode(ReaderWriterLockSlim @lock)
-            {
-                this.@lock = @lock;
-            }
-
-            public void Dispose() => this.@lock?.ExitReadLock();
-
-            public bool IsEntered => this.@lock != null;
+            if (locker == null) throw new ArgumentNullException(nameof(locker));
+            return locker.TryEnterReadLock(millisecondsTimeout) ? Read(locker) : new Releaser<ReaderWriterLockSlim>();
         }
 
-        private class WriteMode : ITryEnter
+        public static Releaser<ReaderWriterLockSlim> TryStartRead([NotNull] this ReaderWriterLockSlim locker, TimeSpan timeout)
         {
-            private readonly ReaderWriterLockSlim @lock;
+            if (locker == null) throw new ArgumentNullException(nameof(locker));
+            return locker.TryEnterReadLock(timeout) ? Read(locker) : new Releaser<ReaderWriterLockSlim>();
+        }
 
-            public WriteMode(ReaderWriterLockSlim @lock)
-            {
-                this.@lock = @lock;
-            }
+        public static Releaser<ReaderWriterLockSlim> TryStartWrite([NotNull] this ReaderWriterLockSlim locker, int millisecondsTimeout)
+        {
+            if (locker == null) throw new ArgumentNullException(nameof(locker));
+            return locker.TryEnterWriteLock(millisecondsTimeout) ? Write(locker) : new Releaser<ReaderWriterLockSlim>();
+        }
 
-            public void Dispose() => this.@lock?.ExitWriteLock();
+        public static Releaser<ReaderWriterLockSlim> TryStartWrite([NotNull] this ReaderWriterLockSlim locker, TimeSpan timeout)
+        {
+            if (locker == null) throw new ArgumentNullException(nameof(locker));
+            return locker.TryEnterWriteLock(timeout) ? Write(locker) : new Releaser<ReaderWriterLockSlim>();
+        }
 
-            public bool IsEntered => this.@lock != null;
+        private static Releaser<ReaderWriterLockSlim> Read(ReaderWriterLockSlim locker)
+        {
+            Debug.Assert(locker != null);
+            var releaser = new Releaser<ReaderWriterLockSlim>(true, locker);
+            releaser.ReleaseRaised += (s, e) => e.ExitReadLock();
+            return releaser;
+        }
+
+        private static Releaser<ReaderWriterLockSlim> UpgradeableRead(ReaderWriterLockSlim locker)
+        {
+            Debug.Assert(locker != null);
+            var releaser = new Releaser<ReaderWriterLockSlim>(true, locker);
+            releaser.ReleaseRaised += (s, e) => e.ExitUpgradeableReadLock();
+            return releaser;
+        }
+
+        private static Releaser<ReaderWriterLockSlim> Write(ReaderWriterLockSlim locker)
+        {
+            Debug.Assert(locker != null);
+            var releaser = new Releaser<ReaderWriterLockSlim>(true, locker);
+            releaser.ReleaseRaised += (s, e) => e.ExitWriteLock();
+            return releaser;
         }
     }
 }

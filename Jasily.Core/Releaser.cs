@@ -2,7 +2,7 @@
 
 namespace System
 {
-    public struct Releaser : IDisposable
+    public struct Releaser : IReleaser
     {
         public event TypedEventHandler<Releaser, object> ReleaseRaised;
         private readonly object state;
@@ -26,7 +26,7 @@ namespace System
         #endregion
     }
 
-    public struct Releaser<T> : IDisposable
+    public struct Releaser<T> : IReleaser
     {
         public event TypedEventHandler<Releaser<T>, T> ReleaseRaised;
         private readonly T state;
