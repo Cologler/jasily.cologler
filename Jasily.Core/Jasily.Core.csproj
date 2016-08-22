@@ -41,7 +41,6 @@
     <Compile Include="Diagnostics\DataCheck.cs" />
     <Compile Include="ExceptionExtensions.cs" />
     <Compile Include="Linq\AsyncEnumerableExtensions.cs" />
-    <Compile Include="Linq\Enumerable2.cs" />
     <Compile Include="Linq\EnumerableExtensions.cs" />
     <Compile Include="Linq\Enumerator.cs" />
     <Compile Include="Linq\Generater.cs" />

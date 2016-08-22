@@ -608,9 +608,32 @@ namespace System.Linq
 
         #endregion
 
-        public static Enumerable2<T> As2<T>([CanBeNull] this IEnumerable<T> source) => new Enumerable2<T>(source);
-
         public static object GetOrCreateSyncRoot<T>(this IEnumerable<T> enumerable)
             => (enumerable as ICollection)?.SyncRoot ?? new object();
+
+        public static EnumerableHelper<T> As2<T>([CanBeNull] this IEnumerable<T> source) => new EnumerableHelper<T>(source);
+
+        /// <summary>
+        /// let static IEnumerable&lt;T&gt;.Func&lt;T, T2&gt;(this IEnumerable&lt;T&gt; source) => 
+        /// IEnumerable&lt;T&gt;.Func&lt;T2&gt;()
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        public struct EnumerableHelper<T>
+        {
+            private readonly IEnumerable<T> baseEnumerable;
+
+            public EnumerableHelper([CanBeNull] IEnumerable<T> baseEnumerable)
+            {
+                // can be null if next func accept null argument.
+                this.baseEnumerable = baseEnumerable;
+            }
+
+            public IEnumerable<T> Ignore<TException>() where TException : Exception
+                => this.baseEnumerable.Ignore<T, TException>();
+
+            public IEnumerable<T> Ignore<TException>([NotNull] Func<TException, bool> exceptionFilter)
+                where TException : Exception
+                => this.baseEnumerable.Ignore(exceptionFilter);
+        }
     }
 }
