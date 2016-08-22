@@ -6,17 +6,17 @@ namespace Jasily.Threading.Tasks
 {
     public sealed class UniqueTask<T>
     {
+        private object syncRoot = new object();
         private bool isCompleted;
         private T result;
-        private Func<Task<T>> taskFunc;
+        private Func<Task<T>> target;
         private Task<T> task;
-        private object syncRoot = new object();
 
-        public UniqueTask([NotNull] Func<Task<T>> taskFunc)
+        public UniqueTask([NotNull] Func<Task<T>> target)
         {
-            if (taskFunc == null) throw new ArgumentNullException(nameof(taskFunc));
+            if (target == null) throw new ArgumentNullException(nameof(target));
 
-            this.taskFunc = taskFunc;
+            this.target = target;
         }
 
         public async Task<T> Run()
@@ -27,20 +27,25 @@ namespace Jasily.Threading.Tasks
             {
                 lock (this.syncRoot)
                 {
+                    if (this.isCompleted) return this.result;
                     if (this.task == null)
                     {
-                        this.task = JasilyTask.Run(this.taskFunc);
+                        this.task = this.target().StartIfAllowed();
                     }
                 }
             }
 
             this.result = await this.task;
-            this.isCompleted = true;
+
+            lock (this.syncRoot)
+            {
+                this.isCompleted = true;
+            }
 
             // remove
             this.task = null;
             this.syncRoot = null;
-            this.taskFunc = null;
+            this.target = null;
 
             return this.result;
         }
@@ -49,15 +54,15 @@ namespace Jasily.Threading.Tasks
     public sealed class UniqueTask
     {
         private bool isCompleted;
-        private Func<Task> taskFunc;
+        private Func<Task> target;
         private Task task;
         private object syncRoot = new object();
 
-        public UniqueTask([NotNull] Func<Task> taskFunc)
+        public UniqueTask([NotNull] Func<Task> target)
         {
-            if (taskFunc == null) throw new ArgumentNullException(nameof(taskFunc));
+            if (target == null) throw new ArgumentNullException(nameof(target));
 
-            this.taskFunc = taskFunc;
+            this.target = target;
         }
 
         public async Task Run()
@@ -68,20 +73,25 @@ namespace Jasily.Threading.Tasks
             {
                 lock (this.syncRoot)
                 {
+                    if (this.isCompleted) return;
                     if (this.task == null)
                     {
-                        this.task = JasilyTask.Run(this.taskFunc);
+                        this.task = this.target().StartIfAllowed();
                     }
                 }
             }
 
             await this.task;
-            this.isCompleted = true;
+
+            lock (this.syncRoot)
+            {
+                this.isCompleted = true;
+            }
 
             // remove
             this.task = null;
             this.syncRoot = null;
-            this.taskFunc = null;
+            this.target = null;
         }
     }
 }

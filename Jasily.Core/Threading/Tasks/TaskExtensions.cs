@@ -5,20 +5,28 @@ namespace System.Threading.Tasks
 {
     public static class TaskExtensions
     {
-        public static async Task<IEnumerable<T>> AsTask<T>([NotNull] this IEnumerable<Task<T>> tasks) => await Task.WhenAll(tasks);
+        #region for static
 
-        public static Task<TOut> GetAsync<TIn, TOut>([NotNull] this TIn obj, [NotNull] Func<TIn, TOut> getter)
-        {
-            if (obj == null) throw new ArgumentNullException(nameof(obj));
-            if (getter == null) throw new ArgumentNullException(nameof(getter));
-            return Task.Run(() => getter(obj));
-        }
+        public static async Task<T[]> WhenAllAsync<T>([NotNull] this IEnumerable<Task<T>> tasks) => await Task.WhenAll(tasks);
 
-        public static Task DoAsync<T>([NotNull] this T obj, [NotNull] Action<T> action)
+        #endregion
+
+        public static T StartIfAllowed<T>([NotNull] this T task, TaskScheduler scheduler = null) where T : Task
         {
-            if (obj == null) throw new ArgumentNullException(nameof(obj));
-            if (action == null) throw new ArgumentNullException(nameof(action));
-            return Task.Run(() => action(obj));
+            if (task == null) throw new ArgumentNullException(nameof(task));
+
+            if (task.Status == TaskStatus.Created)
+            {
+                if (scheduler == null)
+                {
+                    task.Start();
+                }
+                else
+                {
+                    task.Start(scheduler);
+                }
+            }
+            return task;
         }
     }
 }

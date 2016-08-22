@@ -47,6 +47,7 @@
     <Compile Include="ObjectContainer.cs" />
     <Compile Include="ReachableException.cs" />
     <Compile Include="Threading\SynchronizationContextExtensions.cs" />
+    <Compile Include="Threading\Tasks\TaskFactory2.cs" />
     <Compile Include="ValueReference.cs" />
     <Compile Include="Can.cs" />
     <Compile Include="CharExtensions.cs" />
