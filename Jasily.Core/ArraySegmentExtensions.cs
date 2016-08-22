@@ -12,5 +12,13 @@ namespace System
             }
             return segment;
         }
+
+        public static T Index<T>(this ArraySegment<T> segment, int index)
+        {
+            segment.ThrowIfInvalid(nameof(segment));
+            if (index < 0) throw new ArgumentOutOfRangeException(nameof(index));
+            if (index >= segment.Count) throw new IndexOutOfRangeException();
+            return segment.Array[segment.Offset + index];
+        }
     }
 }

@@ -608,6 +608,32 @@ namespace System.Linq
 
         #endregion
 
+        public static T Index<T>([NotNull] this IEnumerable<T> source, int index)
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            if (index < 0) throw new ArgumentOutOfRangeException(nameof(index));
+
+            var list = source as IList<T>;
+            if (list != null)
+            {
+                if (list.Count <= index) throw new IndexOutOfRangeException();
+                return list[index];
+            }
+
+            var rolist = source as IReadOnlyList<T>;
+            if (rolist != null)
+            {
+                if (rolist.Count <= index) throw new IndexOutOfRangeException();
+                return rolist[index];
+            }
+
+            using (var itor = source.Skip(index).GetEnumerator())
+            {
+                if (!itor.MoveNext()) throw new IndexOutOfRangeException();
+                return itor.Current;
+            }
+        }
+
         public static object GetOrCreateSyncRoot<T>(this IEnumerable<T> enumerable)
             => (enumerable as ICollection)?.SyncRoot ?? new object();
 
