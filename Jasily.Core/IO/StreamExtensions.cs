@@ -67,9 +67,17 @@ namespace System.IO
         /// </summary>
         /// <param name="stream"></param>
         /// <param name="buffer"></param>
-        public static void Write(this Stream stream, byte[] buffer)
+        public static void Write([NotNull] this Stream stream, byte[] buffer)
         {
+            if (stream == null) throw new ArgumentNullException(nameof(stream));
             stream.Write(buffer, 0, buffer.Length);
+        }
+
+        public static void Write([NotNull] this Stream stream, ArraySegment<byte> buffer)
+        {
+            if (stream == null) throw new ArgumentNullException(nameof(stream));
+            buffer.ThrowIfInvalid(nameof(buffer));
+            stream.Write(buffer.Array, buffer.Offset, buffer.Count);
         }
 
         /// <summary>
