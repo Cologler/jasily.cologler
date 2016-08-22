@@ -39,7 +39,7 @@ namespace System.Linq
                     while (true)
                     {
                         token.ThrowIfCancellationRequested();
-                        for (var i = 0; i < checkCycle; i++)
+                        for (var i = 0u; i < checkCycle; i++)
                         {
                             if (enumerator.MoveNext()) yield return enumerator.Current;
                             else yield break;

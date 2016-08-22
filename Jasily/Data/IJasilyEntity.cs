@@ -1,8 +1,8 @@
-﻿using System;
+﻿using System.Diagnostics;
 
 namespace Jasily.Data
 {
-    public interface IJasilyEntity<TKey> : IPrint
+    public interface IJasilyEntity<TKey> : IPrintable
     {
         /// <summary>
         /// key of entity

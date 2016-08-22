@@ -1,30 +1,55 @@
 ﻿using System.Attributes;
 using System.Collections;
-using System.Diagnostics;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace System
+namespace System.Diagnostics
 {
     public static class PrintExtensions
     {
+        private const int MaxLevel = 10;
+
+        /// <summary>
+        /// print class or struct's member value.
+        /// <para>if use Print attribute on class or struct, only print it's member which has Print attribute.</para>
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="indent"></param>
+        /// <returns></returns>
+        public static string Print(this IPrintable obj, int indent = 2) => new PrintObjectWalker(obj, indent).Build();
+
         private interface IWalker
         {
             int Indent { get; }
+
             int Level { get; }
+
             StringBuilder Builder { get; }
 
             void Walk(object obj);
         }
 
+        private static void WriteNewLine<T>(this T walker) where T : IWalker
+        {
+            walker.Builder.AppendLine();
+            if (walker.Level > 0 && walker.Indent > 0)
+            {
+                walker.Builder.Append(' ', walker.Indent * walker.Level);
+            }
+        }
+
+        private static void WriteTypeName<T>(this T walker, Type type) where T : IWalker
+            => walker.Builder.Append(type.GetCSharpName()).Append("()");
+
         private struct PrintObjectWalker : IBuilder<string>
         {
-            private readonly IPrint obj;
+            private readonly IPrintable obj;
             private readonly int indent;
 
-            public PrintObjectWalker(IPrint obj, int indent)
+            public PrintObjectWalker(IPrintable obj, int indent)
             {
                 this.obj = obj;
                 this.indent = indent;
@@ -54,12 +79,14 @@ namespace System
                 }
 
                 public int Indent { get; }
+
                 public int Level { get; }
+
                 public StringBuilder Builder { get; }
 
                 public void Walk(object obj)
                 {
-                    this.WriteIndent();
+                    this.WriteNewLine();
                     this.Builder.Append("[Field] ");
 
                     if (this.field.IsPublic)
@@ -76,7 +103,6 @@ namespace System
                         this.field.Name);
 
                     this.valueWalker.Walk(this.field.GetValue(obj));
-                    this.Builder.AppendLine();
                 }
             }
 
@@ -96,12 +122,14 @@ namespace System
                 }
 
                 public int Indent { get; }
+
                 public int Level { get; }
+
                 public StringBuilder Builder { get; }
 
                 public void Walk(object obj)
                 {
-                    this.WriteIndent();
+                    this.WriteNewLine();
                     this.Builder.Append("[Property] ");
 
                     this.Builder.AppendFormat("{0} {1} ",
@@ -133,7 +161,9 @@ namespace System
             private struct ObjectWalker : IWalker
             {
                 public int Indent { get; }
+
                 public int Level { get; }
+
                 public StringBuilder Builder { get; }
 
                 public ObjectWalker(int indent, int level, StringBuilder builder)
@@ -143,18 +173,17 @@ namespace System
                     this.Builder = builder;
                 }
 
-                //public void Walk(object obj)
-                //{
-                //    this.InnerWalk(obj);
-                //    this.WriteEnd();
-                //}
-
                 public void Walk(object obj)
                 {
                     if (obj == null)
                     {
                         this.WriteNull();
                         return;
+                    }
+
+                    if (this.Level > MaxLevel)
+                    {
+                        this.Builder.Append("...");
                     }
 
                     var str = obj as string;
@@ -164,10 +193,10 @@ namespace System
                         return;
                     }
 
-                    var printer = obj as IPrint;
+                    var printer = obj as IPrintable;
                     if (printer != null)
                     {
-                        this.Builder.AppendFormat("new {0}()", printer.GetType().GetCSharpName());
+                        this.WriteTypeName(printer.GetType());
                         this.WritePrinter(printer);
                         return;
                     }
@@ -206,40 +235,50 @@ namespace System
 
                 private void WriteEnumerable(IEnumerable array)
                 {
-                    var childObjectWalker = new ObjectWalker(
-                        this.Indent, this.Level + 2, this.Builder);
-
                     this.WriteTypeName(array.GetType());
 
-                    var coll = array as ICollection;
-                    if (coll != null && coll.Count == 0)
+                    var items = new List<object>(10);
+                    var itor = array.GetEnumerator();
+                    items.AddRange(from _ in Generater.Repeat(10) where itor.MoveNext() select itor.Current);
+                    var hasNext = itor.MoveNext();
+
+                    if (items.Count == 0)
                     {
                         this.Builder.Append(" []");
                         return;
                     }
 
-                    this.WriteIndent();
+                    var childObjectWalker = new ObjectWalker(
+                        this.Indent, this.Level + 2, this.Builder);
+
+                    this.WriteNewLine();
                     this.Builder.Append("[");
-                    this.WriteIndent();
-                    foreach (var o in array)
+                    this.WriteNewLine();
+                    foreach (var o in items)
                     {
-                        this.Builder.Append(' '.Repeat(this.Indent));
+                        this.Builder.Append(' ', this.Indent);
                         childObjectWalker.Walk(o);
                         this.Builder.Append(",");
-                        this.WriteIndent();
+                        this.WriteNewLine();
+                    }
+                    this.WriteNewLine();
+                    if (hasNext)
+                    {
+                        this.Builder.Append("... MORE");
+                        this.WriteNewLine();
                     }
                     this.Builder.Append("]");
                 }
 
-                private void WritePrinter(IPrint print)
+                private void WritePrinter(IPrintable printable)
                 {
-                    var type = print.GetType();
+                    var type = printable.GetType();
                     var childObjectWalker = new ObjectWalker(
                         this.Indent, this.Level + 2, this.Builder);
 
                     bool unAttr = type.GetTypeInfo().GetCustomAttribute<PrintAttribute>() == null;
 
-                    this.WriteIndent();
+                    this.WriteNewLine();
                     this.Builder.Append("{");
 
                     foreach (var f in type.GetRuntimeFields().Where(f =>
@@ -249,7 +288,7 @@ namespace System
                     {
                         var fieldWalker = new FieldWalker(f, childObjectWalker,
                             this.Indent, this.Level + 1, this.Builder);
-                        fieldWalker.Walk(print);
+                        fieldWalker.Walk(printable);
                     }
 
                     foreach (var p in type.GetRuntimeProperties())
@@ -258,47 +297,38 @@ namespace System
                         {
                             var propertyWalker = new PropertyWalker(p, childObjectWalker,
                                 this.Indent, this.Level + 1, this.Builder);
-                            propertyWalker.Walk(print);
+                            propertyWalker.Walk(printable);
                         }
                     }
 
-                    this.WriteIndent();
+                    this.WriteNewLine();
                     this.Builder.Append("}");
                 }
 
                 private void WriteString(string text)
-                    => this.Builder.Append("\"")
-                           .Append(text.Replace("\r\n", "<\\r\\n>").Replace("\n", "<\\n>"))
-                           .Append("\"");
+                {
+                    text = text
+                        .Replace("\\", "\\\\")
+                        .Replace("\"", "\\\"")
+                        .Replace("\n", "\\n")
+                        .Replace("\r", "\\r");
+
+                    this.Builder.Append("\"");
+                    if (text.Length > 128)
+                    {
+                        this.Builder.Append(text, 0, 128);
+                    }
+                    else
+                    {
+                        this.Builder.Append(text);
+                    }
+                    this.Builder.Append("\"");
+                }
 
                 private void WriteNull() => this.Builder.Append("null");
 
                 private void WriteEnd() => this.Builder.Append(";");
             }
-        }
-
-        private static void WriteIndent(this IWalker walker)
-        {
-            walker.Builder.AppendLine();
-            if (walker.Level > 0 && walker.Indent > 0)
-            {
-                walker.Builder.Append(' '.Repeat(walker.Indent * walker.Level));
-            }
-        }
-
-        private static void WriteTypeName(this IWalker walker, Type type)
-            => walker.Builder.AppendFormat("new {0}()", type.GetCSharpName());
-
-        /// <summary>
-        /// print class or struct's member value.
-        /// <para>if use Print attribute on class or struct, only print it's member which has Print attribute.</para>
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="indent"></param>
-        /// <returns></returns>
-        public static string Print(this IPrint obj, int indent = 2)
-        {
-            return new PrintObjectWalker(obj, indent).Build();
         }
     }
 }

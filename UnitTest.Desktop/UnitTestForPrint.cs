@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Attributes;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -21,7 +20,7 @@ namespace UnitTest.Desktop
     }
 
 
-    public class Parent : IPrint
+    public class Parent : IPrintable
     {
         public IObserver<Tuple<List<D>, List<D>, List<D>>> ZNN; 
 
@@ -66,7 +65,7 @@ namespace UnitTest.Desktop
         };
     }
 
-    public class D : IPrint
+    public class D : IPrintable
     {
         public string Z { get; set; }
 

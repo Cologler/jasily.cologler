@@ -34,6 +34,7 @@ namespace System.Linq
 
         public static IEnumerable<int> Forever()
         {
+            // int is value type, is better then object.
             while (true) yield return 0;
         }
     }
