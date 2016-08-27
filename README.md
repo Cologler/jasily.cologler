@@ -1,4 +1,5 @@
 # jasily.cologler
+
 a C# extend library for myself
 
 ### how to use
@@ -15,4 +16,13 @@ Jasily.Core.WP81|windows phone 8.1|link from Jasily.Core.CSShard
 
 ### when use `throw new ArgumentNullException();`
 
-only for path safe.
+For path safe.
+
+e.g.1
+
+``` cs
+public static IReadOnlyList<T> AsReadOnly<T>([NotNull] this IList<T> list)
+    => new ReadOnlyCollection<T>(list);
+```
+
+Do not check `null` because of `ReadOnlyCollection<T>()` will check it.
