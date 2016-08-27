@@ -64,7 +64,7 @@
     <Compile Include="DelegateExtensions.cs" />
     <Compile Include="Attributes\PrintAttribute.cs" />
     <Compile Include="Collections\Generic\TryGetValueExtensions.cs" />
-    <Compile Include="Collections\Generic\TryGetVauleDelegate.cs" />
+    <Compile Include="Collections\Generic\TryGetValueDelegate.cs" />
     <Compile Include="Collections\Interval.cs" />
     <Compile Include="Empty.cs" />
     <Compile Include="EventArgses\ChangingEventArgs.cs" />
