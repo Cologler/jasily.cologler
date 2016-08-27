@@ -19,26 +19,28 @@ namespace System.Collections.Generic
             for (var i = startIndex; i < array.Length; i++) yield return From(array, i);
         }
 
-        public static IEnumerable<IndexValuePair<T>> EnumerateIndexValuePair<T>(this T[] array, int startIndex, int count)
+        public static IEnumerable<IndexValuePair<T>> EnumerateIndexValuePair<T>([NotNull] this T[] array, int startIndex, int count)
         {
             array.CheckRange(startIndex, count);
             for (var i = 0; i < count; i++) yield return From(array, i + startIndex);
         }
 
-        public static IEnumerable<IndexValuePair<T>> EnumerateIndexValuePair<T>(this IList<T> list, int startIndex = 0)
+        public static IEnumerable<IndexValuePair<T>> EnumerateIndexValuePair<T>([NotNull] this IList<T> source, int startIndex = 0)
         {
-            for (var i = startIndex; i < list.Count; i++) yield return From(list, i);
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            for (var i = startIndex; i < source.Count; i++) yield return From(source, i);
         }
 
-        public static IEnumerable<IndexValuePair<T>> EnumerateIndexValuePair<T>(this IList<T> source, int startIndex, int count)
+        public static IEnumerable<IndexValuePair<T>> EnumerateIndexValuePair<T>([NotNull] this IList<T> source, int startIndex, int count)
         {
+            if (source == null) throw new ArgumentNullException(nameof(source));
             for (var i = 0; i < count; i++) yield return From(source, i + startIndex);
         }
 
-        public static IEnumerable<IndexValuePair<T>> EnumerateIndexValuePair<T>(this IEnumerable<T> list, int startIndex = 0)
-            => list.Skip(startIndex).Select((z, i) => From(i + startIndex, z));
+        public static IEnumerable<IndexValuePair<T>> EnumerateIndexValuePair<T>([NotNull] this IEnumerable<T> source, int startIndex = 0)
+            => source.Skip(startIndex).Select((z, i) => From(i + startIndex, z));
 
-        public static IEnumerable<IndexValuePair<T>> EnumerateIndexValuePair<T>(this IEnumerable<T> source, int startIndex, int count)
+        public static IEnumerable<IndexValuePair<T>> EnumerateIndexValuePair<T>([NotNull] this IEnumerable<T> source, int startIndex, int count)
             => source.Skip(startIndex).Take(count).Select((z, i) => From(i + startIndex, z));
     }
 

@@ -12,11 +12,7 @@ namespace System.Collections.Generic
 
         #region wrapper
 
-        public static IReadOnlyList<T> AsReadOnly<T>([NotNull] this IList<T> source)
-        {
-            if (source == null) throw new ArgumentNullException(nameof(source));
-            return new ReadOnlyCollection<T>(source);
-        }
+        public static IReadOnlyList<T> AsReadOnly<T>([NotNull] this IList<T> list) => new ReadOnlyCollection<T>(list);
 
         /// <summary>
         /// return a simple synchronized list which copy from http://referencesource.microsoft.com/.
