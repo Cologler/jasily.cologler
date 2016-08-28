@@ -89,17 +89,33 @@ namespace Jasily.ComponentModel
         public RefreshPropertiesMapper PropertiesMapper { get; set; }
 
         [NotifyPropertyChangedInvocator]
-        protected void NotifyPropertyChanged<T>(Expression<Func<T, object>> propertySelector)
+        protected void NotifyPropertyChanged<T>([NotNull] Expression<Func<T, object>> propertySelector)
         {
+            if (propertySelector == null) throw new ArgumentNullException(nameof(propertySelector));
             var propertyName = PropertySelector<T>.Start(propertySelector);
             this.PropertyChanged.Fire(this, propertyName);
         }
+
         [NotifyPropertyChangedInvocator]
-        protected void NotifyPropertyChanged(string propertyName) => this.PropertyChanged.Fire(this, propertyName);
+        protected void NotifyPropertyChanged([NotNull] string propertyName)
+        {
+            if (propertyName == null) throw new ArgumentNullException(nameof(propertyName));
+            this.PropertyChanged.Fire(this, propertyName);
+        }
+
         [NotifyPropertyChangedInvocator]
-        protected void NotifyPropertyChanged(params string[] propertyNames) => this.PropertyChanged.Fire(this, propertyNames);
+        protected void NotifyPropertyChanged([NotNull] params string[] propertyNames)
+        {
+            if (propertyNames == null) throw new ArgumentNullException(nameof(propertyNames));
+            this.PropertyChanged.Fire(this, propertyNames);
+        }
+
         [NotifyPropertyChangedInvocator]
-        protected void NotifyPropertyChanged(IEnumerable<string> propertyNames) => this.PropertyChanged.Fire(this, propertyNames);
+        protected void NotifyPropertyChanged([NotNull] IEnumerable<string> propertyNames)
+        {
+            if (propertyNames == null) throw new ArgumentNullException(nameof(propertyNames));
+            this.PropertyChanged.Fire(this, propertyNames);
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event EventHandler PropertiesRefreshed;
