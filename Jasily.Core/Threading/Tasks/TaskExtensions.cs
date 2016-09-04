@@ -1,16 +1,9 @@
-﻿using System.Collections.Generic;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 
 namespace System.Threading.Tasks
 {
     public static class TaskExtensions
     {
-        #region for static
-
-        public static async Task<T[]> WhenAllAsync<T>([NotNull] this IEnumerable<Task<T>> tasks) => await Task.WhenAll(tasks);
-
-        #endregion
-
         public static T StartIfAllowed<T>([NotNull] this T task, TaskScheduler scheduler = null) where T : Task
         {
             if (task == null) throw new ArgumentNullException(nameof(task));
@@ -27,6 +20,14 @@ namespace System.Threading.Tasks
                 }
             }
             return task;
+        }
+
+        public static async Task<TTo> SelectAsync<TFrom, TTo>([NotNull] this Task<TFrom> task,
+            [NotNull] Func<TFrom, TTo> selector)
+        {
+            if (task == null) throw new ArgumentNullException(nameof(task));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
+            return await Task.Run(async () => selector(await task));
         }
     }
 }

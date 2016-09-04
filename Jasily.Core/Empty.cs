@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using JetBrains.Annotations;
 
 namespace System
 {
@@ -67,10 +68,30 @@ namespace System
 
     public static class Empty
     {
+        #region null -> []
+
         public static T[] EmptyIfNull<T>(this T[] array) => array ?? Empty<T>.Array;
 
-        public static IEnumerable<T> EmptyIfNull<T>(this IEnumerable<T> enumerable) => enumerable ?? Empty<T>.Enumerable;
+        public static IEnumerable<T> EmptyIfNull<T>(this IEnumerable<T> enumerable)
+            => enumerable ?? Empty<T>.Enumerable;
 
         public static string EmptyIfNull<T>(this string str) => str ?? string.Empty;
+
+        #endregion
+
+        #region [] -> null
+
+        [CanBeNull]
+        public static List<T> NullIfEmpty<T>([CanBeNull] this List<T> item) => NullIfEmpty<List<T>, T>(item);
+
+        [CanBeNull]
+        public static T[] NullIfEmpty<T>([CanBeNull] this T[] item) => NullIfEmpty<T[], T>(item);
+
+        [CanBeNull]
+        public static TCollection NullIfEmpty<TCollection, T>([CanBeNull] TCollection item)
+            where TCollection : class, ICollection<T>
+            => item == null || item.Count == 0 ? null : item;
+
+        #endregion
     }
 }

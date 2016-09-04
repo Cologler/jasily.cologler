@@ -8,6 +8,35 @@ namespace System.Collections.Generic
 {
     public static class List
     {
+        public static List<T> Append<T>([NotNull] this List<T> list, T item)
+        {
+            if (list == null) throw new ArgumentNullException(nameof(list));
+            list.Add(item);
+            return list;
+        }
+
+        public static List<T> AppendIfNotNull<T>([NotNull] this List<T> list, T item)
+        {
+            if (list == null) throw new ArgumentNullException(nameof(list));
+            if (item != null) list.Add(item);
+            return list;
+        }
+
+        public static List<T> AppendRange<T>([NotNull] this List<T> list, [NotNull] IEnumerable<T> items)
+        {
+            if (list == null) throw new ArgumentNullException(nameof(list));
+            if (items == null) throw new ArgumentNullException(nameof(items));
+            list.AddRange(items);
+            return list;
+        }
+
+        public static List<T> AppendRangeIfNotNull<T>([NotNull] this List<T> list, [CanBeNull] IEnumerable<T> items)
+        {
+            if (list == null) throw new ArgumentNullException(nameof(list));
+            if (items != null) list.AddRange(items);
+            return list;
+        }
+
         #region IList
 
         #region wrapper
