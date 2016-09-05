@@ -60,7 +60,7 @@
     <Compile Include="IO\ForJasilyStringReader.cs" />
     <Compile Include="IO\UnitTestForFileSystemTest.cs" />
     <Compile Include="Linq\Expressions\UnitTestForJasilyExpression.cs" />
-    <Compile Include="Linq\UnitTestForJasilyExpression.cs" />
+    <Compile Include="Linq\UnitTestForEnumerableExtensions.cs" />
     <Compile Include="Performance\UnitTestForCodeTimer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reflection\UnitTestForGetterAndSetter.cs" />

@@ -7,7 +7,10 @@ using JetBrains.Annotations;
 
 namespace System.Linq
 {
-    public static class EnumerableExtensions
+    /// <summary>
+    /// extend for linq Enumerable
+    /// </summary>
+    public static partial class EnumerableExtensions
     {
         public static IEnumerable<T> EnumerateWith<T>([NotNull] this IEnumerable<T> source,
             CancellationToken token, uint checkCycle = 30)
@@ -100,13 +103,33 @@ namespace System.Linq
             }
         }
 
-        public static Tuple<IEnumerable<T>, IEnumerable<T>> Split<T>([NotNull] this IEnumerable<T> source, Func<T, bool> trueToLeft)
+        /// <summary>
+        /// use selector to split source to two enumerable
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="selector"></param>
+        /// <returns></returns>
+        public static Tuple<IEnumerable<T>, IEnumerable<T>> Split<T>([NotNull] this IEnumerable<T> source, Func<T, bool> selector)
         {
             if (source == null) throw new ArgumentNullException(nameof(source));
-            if (trueToLeft == null) throw new ArgumentNullException(nameof(trueToLeft));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
-            var array = source as T[] ?? source.ToArray();
-            return Tuple.Create(array.Where(trueToLeft), array.Where(z => !trueToLeft(z)));
+            var left = new List<T>();
+            var right = new List<T>();
+
+            foreach (var item in source)
+            {
+                if (selector(item))
+                {
+                    left.Add(item);
+                }
+                else
+                {
+                    right.Add(item);
+                }
+            }
+            return Tuple.Create<IEnumerable<T>, IEnumerable<T>>(left.AsReadOnly(), right.AsReadOnly());
         }
 
         #endregion
@@ -365,105 +388,6 @@ namespace System.Linq
             while (itor.MoveNext()) count++;
             return count;
         }
-
-        #endregion
-
-        #region modify enumerable
-
-        #region insert
-
-        [PublicAPI]
-        public static IEnumerable<T> Insert<T>([NotNull] this IEnumerable<T> source, int index, T item)
-        {
-            if (source == null) throw new ArgumentNullException(nameof(source));
-            var i = 0;
-            using (var itor = source.GetEnumerator())
-            {
-                while (i < index && itor.MoveNext())
-                {
-                    yield return itor.Current;
-                    i++;
-                }
-
-                if (i == index)
-                {
-                    yield return item;
-                }
-                else
-                {
-                    throw new IndexOutOfRangeException();
-                }
-
-                while (itor.MoveNext())
-                {
-                    yield return itor.Current;
-                }
-            }
-        }
-
-        [PublicAPI]
-        public static IEnumerable<T> InsertToEnd<T>([NotNull] this IEnumerable<T> source, T next)
-        {
-            if (source == null) throw new ArgumentNullException(nameof(source));
-            foreach (var item in source) yield return item;
-            yield return next;
-        }
-
-        [PublicAPI]
-        public static IEnumerable<T> InsertToStart<T>([NotNull] this IEnumerable<T> source, T next)
-        {
-            if (source == null) throw new ArgumentNullException(nameof(source));
-            yield return next;
-            foreach (var item in source) yield return item;
-        }
-
-        #endregion
-
-        #region join
-
-        public static IEnumerable<T> JoinWith<T>(this IEnumerable<T> source, T spliter)
-        {
-            using (var itor = source.GetEnumerator())
-            {
-                if (!itor.MoveNext()) yield break;
-                while (true)
-                {
-                    yield return itor.Current;
-                    if (!itor.MoveNext()) yield break;
-                    yield return spliter;
-                }
-            }
-        }
-
-        public static IEnumerable<T> JoinWith<T>(this IEnumerable<T> source, Func<T> spliterFunc)
-        {
-            using (var itor = source.GetEnumerator())
-            {
-                if (!itor.MoveNext()) yield break;
-                while (true)
-                {
-                    yield return itor.Current;
-                    if (!itor.MoveNext()) yield break;
-                    yield return spliterFunc();
-                }
-            }
-        }
-
-        public static IEnumerable<T> JoinWith<T>(this IEnumerable<T> source, Action action)
-        {
-            using (var itor = source.GetEnumerator())
-            {
-                if (!itor.MoveNext()) yield break;
-                while (true)
-                {
-                    yield return itor.Current;
-                    if (!itor.MoveNext()) yield break;
-                    action();
-                }
-            }
-        }
-
-        #endregion
 
         #endregion
 

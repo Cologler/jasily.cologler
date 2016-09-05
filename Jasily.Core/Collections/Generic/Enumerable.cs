@@ -2,7 +2,7 @@ using JetBrains.Annotations;
 
 namespace System.Collections.Generic
 {
-    public static class Enumerable
+    public static class Enumerable2
     {
         public static void ForEach<T>([NotNull] this IEnumerable<T> source, Action<T> action)
         {
