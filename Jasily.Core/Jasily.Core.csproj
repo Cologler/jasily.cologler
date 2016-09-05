@@ -38,6 +38,7 @@
     <Compile Include="ArgumentWhiteSpaceException.cs" />
     <Compile Include="ArrayExtensions.cs" />
     <Compile Include="ArraySegmentExtensions.cs" />
+    <Compile Include="Collections\Generic\Enumerable.cs" />
     <Compile Include="Collections\ObjectModel\CollectionChangedAction.cs" />
     <Compile Include="Diagnostics\DataCheck.cs" />
     <Compile Include="Diagnostics\IPrintable.cs" />

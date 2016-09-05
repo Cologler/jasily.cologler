@@ -144,25 +144,6 @@ namespace System.Linq
 
         #endregion
 
-        #region Foreach
-
-        public static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
-        {
-            if (action == null) throw new ArgumentNullException(nameof(action));
-
-            foreach (var item in source) action(item);
-        }
-
-        public static void ForEach<T>(this IEnumerable<T> source, Action<int, T> action)
-        {
-            if (action == null) throw new ArgumentNullException(nameof(action));
-
-            var index = 0;
-            foreach (var item in source) action(index++, item);
-        }
-
-        #endregion
-
         #region all or any
 
         public static bool All<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate, bool continueOnFailed)
@@ -183,29 +164,54 @@ namespace System.Linq
 
         #region orderby
 
-        public static IOrderedEnumerable<T> OrderBy<T>([NotNull]
-            this IEnumerable<T> source, IComparer<T> comparer)
-            => source.OrderBy(z => z, comparer);
+        public static IOrderedEnumerable<T> OrderBy<T>([NotNull] this IEnumerable<T> source, IComparer<T> comparer)
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            return source.OrderBy(z => z, comparer);
+        }
 
-        public static IOrderedEnumerable<T> OrderBy<T>([NotNull]
-            this IEnumerable<T> source, Comparison<T> comparison)
-            => source.OrderBy(z => z, Comparer<T>.Create(comparison));
+        public static IOrderedEnumerable<T> OrderBy<T>([NotNull] this IEnumerable<T> source,
+            [NotNull] Comparison<T> comparison)
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            if (comparison == null) throw new ArgumentNullException(nameof(comparison));
+            return source.OrderBy(z => z, Comparer<T>.Create(comparison));
+        }
 
-        public static IOrderedEnumerable<TSource> OrderBy<TSource, TKey>([NotNull]
-            this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, Comparison<TKey> comparison)
-            => source.OrderBy(keySelector, Comparer<TKey>.Create(comparison));
+        public static IOrderedEnumerable<TSource> OrderBy<TSource, TKey>([NotNull] this IEnumerable<TSource> source,
+            [NotNull] Func<TSource, TKey> keySelector, [NotNull] Comparison<TKey> comparison)
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            if (keySelector == null) throw new ArgumentNullException(nameof(keySelector));
+            if (comparison == null) throw new ArgumentNullException(nameof(comparison));
+            return source.OrderBy(keySelector, Comparer<TKey>.Create(comparison));
+        }
 
-        public static IOrderedEnumerable<T> OrderByDescending<T>([NotNull]
-            this IEnumerable<T> source, IComparer<T> comparer)
-            => source.OrderByDescending(z => z, comparer);
+        public static IOrderedEnumerable<T> OrderByDescending<T>([NotNull] this IEnumerable<T> source,
+            [NotNull] IComparer<T> comparer)
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            if (comparer == null) throw new ArgumentNullException(nameof(comparer));
+            return source.OrderByDescending(z => z, comparer);
+        }
 
-        public static IOrderedEnumerable<T> OrderByDescending<T>([NotNull]
-            this IEnumerable<T> source, Comparison<T> comparison)
-            => source.OrderByDescending(z => z, Comparer<T>.Create(comparison));
+        public static IOrderedEnumerable<T> OrderByDescending<T>([NotNull] this IEnumerable<T> source,
+            [NotNull] Comparison<T> comparison)
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            if (comparison == null) throw new ArgumentNullException(nameof(comparison));
+            return source.OrderByDescending(z => z, Comparer<T>.Create(comparison));
+        }
 
-        public static IOrderedEnumerable<TSource> OrderByDescending<TSource, TKey>([NotNull]
-            this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, Comparison<TKey> comparison)
-            => source.OrderByDescending(keySelector, Comparer<TKey>.Create(comparison));
+        public static IOrderedEnumerable<TSource> OrderByDescending<TSource, TKey>(
+            [NotNull] this IEnumerable<TSource> source, [NotNull] Func<TSource, TKey> keySelector,
+            [NotNull] Comparison<TKey> comparison)
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            if (keySelector == null) throw new ArgumentNullException(nameof(keySelector));
+            if (comparison == null) throw new ArgumentNullException(nameof(comparison));
+            return source.OrderByDescending(keySelector, Comparer<TKey>.Create(comparison));
+        }
 
         #endregion
 
