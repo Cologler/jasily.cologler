@@ -22,7 +22,7 @@ namespace System.Threading.Tasks
             return task;
         }
 
-        public static async Task<TTo> SelectAsync<TFrom, TTo>([NotNull] this Task<TFrom> task,
+        public static async Task<TTo> AsyncSelect<TFrom, TTo>([NotNull] this Task<TFrom> task,
             [NotNull] Func<TFrom, TTo> selector)
         {
             if (task == null) throw new ArgumentNullException(nameof(task));
