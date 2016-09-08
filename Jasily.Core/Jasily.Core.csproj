@@ -51,6 +51,7 @@
     <Compile Include="Linq\Generater.cs" />
     <Compile Include="ObjectContainer.cs" />
     <Compile Include="ReachableException.cs" />
+    <Compile Include="Threading\InterlockedBoolean.cs" />
     <Compile Include="Threading\SynchronizationContextExtensions.cs" />
     <Compile Include="Threading\Tasks\TaskFactory2.cs" />
     <Compile Include="ValueReference.cs" />
