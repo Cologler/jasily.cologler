@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
@@ -97,22 +96,25 @@ namespace System.IO
         public static async Task WriteAsync(this Stream stream, JasilyBuffer buffer)
             => await stream.WriteAsync(buffer.Buffer, buffer.Offset, buffer.Count);
 
-        public static IEnumerable<byte[]> ReadAsEnumerable(this Stream stream, int maxCount, bool reuseBuffer = false)
+        public static IEnumerable<byte[]> ReadAsEnumerable([NotNull] this Stream stream, int maxCount, bool reuseBuffer = false)
         {
+            if (stream == null) throw new ArgumentNullException(nameof(stream));
+            if (maxCount < 1) throw new ArgumentOutOfRangeException(nameof(maxCount));
+
             var buffer = new byte[maxCount];
             int readed;
             if (reuseBuffer)
             {
                 while ((readed = stream.Read(buffer, 0, maxCount)) != 0)
                 {
-                    yield return readed != maxCount ? buffer.Take(readed).ToArray() : buffer;
+                    yield return readed != maxCount ? buffer.ToArray(readed) : buffer;
                 }
             }
             else
             {
                 while ((readed = stream.Read(buffer, 0, maxCount)) != 0)
                 {
-                    yield return readed != maxCount ? buffer.Take(readed).ToArray() : buffer.ToArray();
+                    yield return readed != maxCount ? buffer.ToArray(readed) : buffer.ToArray();
                 }
             }
         }
