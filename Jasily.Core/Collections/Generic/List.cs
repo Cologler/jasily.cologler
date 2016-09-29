@@ -247,38 +247,59 @@ namespace System.Collections.Generic
 
         #endregion
 
-        #region sort
-
-        // ReSharper disable once SuggestBaseTypeForParameter
-        private static void EndOfSort<T>(IList<T> source, List<T> list)
+        public static void SetRangeValue<T>([NotNull] this IList<T> source, int startIndex, [NotNull] IEnumerable<T> dest,
+            Func<T, T, bool> setValuePredicate = null)
         {
-            Debug.Assert(!ReferenceEquals(source, list));
-            Debug.Assert(source.Count == list.Count);
-            for (var i = 0; i < list.Count; i++)
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            if (dest == null) throw new ArgumentNullException(nameof(dest));
+            InternalSetRangeValue(source, startIndex, dest, setValuePredicate);
+        }
+
+        private static void InternalSetRangeValue<T>([NotNull] IList<T> source, int startIndex, [NotNull] IEnumerable<T> dest,
+            [CanBeNull] Func<T, T, bool> setValuePredicate)
+        {
+            Debug.Assert(source != null);
+            Debug.Assert(dest != null);
+
+            var index = 0;
+            if (setValuePredicate == null)
             {
-                if (!ReferenceEquals(source[i], list[i]))
+                foreach (var item in dest)
                 {
-                    source[i] = list[i];
+                    source[startIndex + index] = item;
+                    index++;
+                }
+            }
+            else
+            {
+                foreach (var item in dest)
+                {
+                    if (setValuePredicate(source[startIndex + index], item))
+                    {
+                        source[startIndex + index] = item;
+                    }
+                    index++;
                 }
             }
         }
 
-        public static void Sort<T>([NotNull] this IList<T> source)
-            where T : class
+        #region sort
+        
+        private static void EndOfSort<T>(IList<T> source, List<T> list)
         {
-            if (source == null) throw new ArgumentNullException(nameof(source));
-            var list = new List<T>(source);
-            list.Sort();
-            EndOfSort(source, list);
+            Debug.Assert(!ReferenceEquals(source, list));
+            Debug.Assert(source.Count == list.Count);
+            var comparer = EqualityComparer<T>.Default;
+            InternalSetRangeValue(source, 0, list, (a, b) => !comparer.Equals(a, b));
         }
 
-        public static void Sort<T>([NotNull] this IList<T> source, [NotNull] IComparer<T> comparer)
+        public static void Sort<T>([NotNull] this IList<T> source, [CanBeNull] IComparer<T> comparer = null)
             where T : class
         {
             if (source == null) throw new ArgumentNullException(nameof(source));
-            if (comparer == null) throw new ArgumentNullException(nameof(comparer));
+
             var list = new List<T>(source);
-            list.Sort(comparer);
+            list.Sort(comparer ?? Comparer<T>.Default);
             EndOfSort(source, list);
         }
 
@@ -286,17 +307,18 @@ namespace System.Collections.Generic
         {
             if (source == null) throw new ArgumentNullException(nameof(source));
             if (comparison == null) throw new ArgumentNullException(nameof(comparison));
+
             var list = new List<T>(source);
             list.Sort(comparison);
             EndOfSort(source, list);
         }
 
-        public static void Sort<T>([NotNull] this IList<T> source, int index, int count, [NotNull] IComparer<T> comparer)
+        public static void Sort<T>([NotNull] this IList<T> source, int index, int count, [CanBeNull] IComparer<T> comparer = null)
         {
             if (source == null) throw new ArgumentNullException(nameof(source));
-            if (comparer == null) throw new ArgumentNullException(nameof(comparer));
+
             var list = new List<T>(source);
-            list.Sort(index, count, comparer);
+            list.Sort(index, count, comparer ?? Comparer<T>.Default);
             EndOfSort(source, list);
         }
 
@@ -305,6 +327,7 @@ namespace System.Collections.Generic
         {
             if (source == null) throw new ArgumentNullException(nameof(source));
             if (keySelector == null) throw new ArgumentNullException(nameof(keySelector));
+
             var list = source.OrderBy(keySelector).ToList();
             EndOfSort(source, list);
         }

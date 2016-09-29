@@ -53,6 +53,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Attributes\UnitTestForCloneableAttribute.cs" />
+    <Compile Include="Collections\Generic\UnitTestForList.cs" />
     <Compile Include="Collections\Generic\UnitTestForRangeDictionary.cs" />
     <Compile Include="ComponentModel\UnitTestForNotifyPropertyChangedObject.cs" />
     <Compile Include="IO\ForJasilyStringReader.cs" />

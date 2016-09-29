@@ -8,10 +8,18 @@ using JetBrains.Annotations;
 namespace System.Linq
 {
     /// <summary>
-    /// extend for linq Enumerable
+    /// extensions for linq Enumerable
     /// </summary>
     public static partial class EnumerableExtensions
     {
+        /// <summary>
+        /// CancellationToken support for enumerable.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="token"></param>
+        /// <param name="checkCycle"></param>
+        /// <returns></returns>
         public static IEnumerable<T> EnumerateWith<T>([NotNull] this IEnumerable<T> source,
             CancellationToken token, uint checkCycle = 30)
         {
@@ -66,6 +74,7 @@ namespace System.Linq
         public static int CopyToArray<T>([NotNull] this IEnumerable<T> source, [NotNull] T[] array, int arrayIndex, int count)
         {
             if (source == null) throw new ArgumentNullException(nameof(source));
+
             if (array == null) throw new ArgumentNullException(nameof(array));
             if (arrayIndex < 0) throw new ArgumentOutOfRangeException(nameof(arrayIndex));
             if (count < 0) throw new ArgumentOutOfRangeException(nameof(count));
@@ -141,25 +150,39 @@ namespace System.Linq
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="source"></param>
-        /// <param name="giveup"></param>
+        /// <param name="count"></param>
         /// <returns></returns>
         [SuppressMessage("ReSharper", "PossibleMultipleEnumeration")]
-        public static IEnumerable<T> GiveUp<T>([NotNull] this IEnumerable<T> source, uint giveup)
+        public static IEnumerable<T> GiveUp<T>([NotNull] this IEnumerable<T> source, int count)
         {
             if (source == null) throw new ArgumentNullException(nameof(source));
+            if (count < 0) throw new ArgumentOutOfRangeException(nameof(count));
 
-            using (var itorMove = source.GetEnumerator())
+            var collection = source as ICollection<T>;
+            if (collection != null)
             {
-                while (giveup-- > 0)
+                return count > collection.Count ? Enumerable.Empty<T>() : collection.Take(collection.Count - count);
+            }
+
+            return GiveUpIterator(source, count);
+        }
+
+        private static IEnumerable<T> GiveUpIterator<T>([NotNull] IEnumerable<T> source, int count)
+        {
+            Debug.Assert(source != null);
+
+            using (var mover = source.GetEnumerator())
+            {
+                while (count-- > 0)
                 {
-                    if (!itorMove.MoveNext()) yield break;
+                    if (!mover.MoveNext()) yield break;
                 }
 
-                using (var itorTake = source.GetEnumerator())
+                using (var taker = source.GetEnumerator())
                 {
-                    while (itorMove.MoveNext() && itorTake.MoveNext())
+                    while (mover.MoveNext() && taker.MoveNext())
                     {
-                        yield return itorTake.Current;
+                        yield return taker.Current;
                     }
                 }
             }

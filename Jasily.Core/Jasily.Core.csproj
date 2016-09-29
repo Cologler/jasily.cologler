@@ -49,6 +49,7 @@
     <Compile Include="Linq\EnumerableExtensions_Modifier.cs" />
     <Compile Include="Linq\Enumerator.cs" />
     <Compile Include="Linq\Generater.cs" />
+    <Compile Include="Linq\EnumerableOverride.cs" />
     <Compile Include="ObjectContainer.cs" />
     <Compile Include="ReachableException.cs" />
     <Compile Include="Threading\InterlockedBoolean.cs" />
