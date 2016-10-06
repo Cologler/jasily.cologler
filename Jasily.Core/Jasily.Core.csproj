@@ -52,6 +52,7 @@
     <Compile Include="Linq\EnumerableOverride.cs" />
     <Compile Include="ObjectContainer.cs" />
     <Compile Include="ReachableException.cs" />
+    <Compile Include="StringComparisonExtensions.cs" />
     <Compile Include="Threading\InterlockedBoolean.cs" />
     <Compile Include="Threading\SynchronizationContextExtensions.cs" />
     <Compile Include="Threading\Tasks\TaskFactory2.cs" />

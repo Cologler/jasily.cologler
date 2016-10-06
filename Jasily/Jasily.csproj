@@ -85,6 +85,7 @@
     <Compile Include="Diagnostics\Logger\Provider\StreamWriterLoggerProvider.cs" />
     <Compile Include="EnumCache.cs" />
     <Compile Include="CachedHashCode.cs" />
+    <Compile Include="GlobalEvent.cs" />
     <Compile Include="IConverter.cs" />
     <Compile Include="JasilyActivator.cs" />
     <Compile Include="JasilyDayOfWeek.cs" />
@@ -110,7 +111,6 @@
     <Compile Include="IO\MemoryTributary.cs" />
     <Compile Include="JasilyEnum.cs" />
     <Compile Include="JasilyNullable.cs" />
-    <Compile Include="JasilyComparer.cs" />
     <Compile Include="Net\HttpUriBuilder.cs" />
     <Compile Include="Net\Http\RangeHeader.cs" />
     <Compile Include="Net\JasilyUri.cs" />

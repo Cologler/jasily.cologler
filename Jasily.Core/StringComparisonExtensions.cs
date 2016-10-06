@@ -1,10 +1,13 @@
-﻿using System;
-
-namespace Jasily
+namespace System
 {
-    public static class JasilyComparer
+    public static class StringComparisonExtensions
     {
-        public static StringComparer GetStringComparer(StringComparison comparison)
+        /// <summary>
+        /// get comparer for StringComparison
+        /// </summary>
+        /// <param name="comparison"></param>
+        /// <returns></returns>
+        public static StringComparer GetStringComparer(this StringComparison comparison)
         {
             switch (comparison)
             {

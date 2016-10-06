@@ -38,4 +38,13 @@ namespace System
 
         #endregion
     }
+
+    public static class Singleton<T>
+    {
+        public static T Instance;
+
+        [ThreadStatic]
+        // ReSharper disable once InconsistentNaming
+        public static T ThreadStaticInstance;
+    }
 }
