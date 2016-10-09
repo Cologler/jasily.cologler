@@ -12,6 +12,10 @@ namespace System.Linq
     /// </summary>
     public static partial class EnumerableExtensions
     {
+        [NotNull]
+        public static IEnumerable<T> EmptyIfNull<T>([CanBeNull] this IEnumerable<T> enumerable)
+            => enumerable ?? Empty<T>.Enumerable;
+
         /// <summary>
         /// CancellationToken support for enumerable.
         /// </summary>

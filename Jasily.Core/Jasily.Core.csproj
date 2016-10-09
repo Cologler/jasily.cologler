@@ -47,9 +47,11 @@
     <Compile Include="Linq\AsyncEnumerableExtensions.cs" />
     <Compile Include="Linq\EnumerableExtensions.cs" />
     <Compile Include="Linq\EnumerableExtensions_Modifier.cs" />
+    <Compile Include="Linq\EnumerableOverride_List.cs" />
+    <Compile Include="Linq\EnumerableOverride_String.cs" />
     <Compile Include="Linq\Enumerator.cs" />
     <Compile Include="Linq\Generater.cs" />
-    <Compile Include="Linq\EnumerableOverride.cs" />
+    <Compile Include="Linq\EnumerableOverride_Array.cs" />
     <Compile Include="ObjectContainer.cs" />
     <Compile Include="ReachableException.cs" />
     <Compile Include="StringComparisonExtensions.cs" />
