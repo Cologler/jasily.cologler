@@ -6,22 +6,43 @@ namespace System
 {
     public static class RandomExtensions
     {
-        public static bool NextBoolean([NotNull] this Random random) => random.Next(2) == 0;
+        public static bool NextBoolean([NotNull] this Random random)
+        {
+            if (random == null) throw new ArgumentNullException(nameof(random));
+            return random.Next(2) == 0;
+        }
 
         public static byte[] NextBytes([NotNull] this Random random, int byteCount)
         {
+            if (random == null) throw new ArgumentNullException(nameof(random));
             var buffer = new byte[byteCount];
             random.NextBytes(buffer);
             return buffer;
         }
 
-        public static int NextInt32([NotNull] this Random random) => BitConverter.ToInt32(random.NextBytes(4), 0);
+        public static int NextInt32([NotNull] this Random random)
+        {
+            if (random == null) throw new ArgumentNullException(nameof(random));
+            return BitConverter.ToInt32(random.NextBytes(4), 0);
+        }
 
-        public static uint NextUInt32([NotNull] this Random random) => BitConverter.ToUInt32(random.NextBytes(4), 0);
+        public static uint NextUInt32([NotNull] this Random random)
+        {
+            if (random == null) throw new ArgumentNullException(nameof(random));
+            return BitConverter.ToUInt32(random.NextBytes(4), 0);
+        }
 
-        public static long NextInt64([NotNull] this Random random) => BitConverter.ToInt64(random.NextBytes(8), 0);
+        public static long NextInt64([NotNull] this Random random)
+        {
+            if (random == null) throw new ArgumentNullException(nameof(random));
+            return BitConverter.ToInt64(random.NextBytes(8), 0);
+        }
 
-        public static ulong NextUInt64([NotNull] this Random random) => BitConverter.ToUInt64(random.NextBytes(8), 0);
+        public static ulong NextUInt64([NotNull] this Random random)
+        {
+            if (random == null) throw new ArgumentNullException(nameof(random));
+            return BitConverter.ToUInt64(random.NextBytes(8), 0);
+        }
 
         /// <summary>
         /// 根据权重返回索引。
@@ -30,8 +51,10 @@ namespace System
         /// <param name="random"></param>
         /// <param name="elements"></param>
         /// <returns></returns>
-        public static int Fall([NotNull] this Random random, [NotNull]  IReadOnlyList<int> elements)
+        public static int Fall([NotNull] this Random random, [NotNull] IReadOnlyList<int> elements)
         {
+            if (random == null) throw new ArgumentNullException(nameof(random));
+            if (elements == null) throw new ArgumentNullException(nameof(elements));
             if (elements.Count == 0) return -1;
             var sum = elements.Sum();
             if (sum == 0) return -1;

@@ -267,37 +267,39 @@ namespace System.Linq
 
         #region random
 
-        public static T RandomTake<T>([NotNull] this List<T> source, Random random = null)
-            => RandomTake(source as IList<T>, random);
-
-        public static T RandomTake<T>([NotNull] this IList<T> source, Random random = null)
+        public static T RandomTake<T>([NotNull] this IList<T> source, [NotNull] Random random, bool throwIfEmpty = false)
         {
             if (source == null) throw new ArgumentNullException(nameof(source));
+            if (random == null) throw new ArgumentNullException(nameof(random));
             switch (source.Count)
             {
-                case 0: return default(T);
+                case 0:
+                    if (throwIfEmpty) throw new InvalidOperationException();
+                    return default(T);
                 case 1: return source[0];
             }
-            random = random ?? Singleton.ThreadStaticInstance<Random>();
             return source[random.Next(source.Count)];
         }
 
-        public static T RandomTake<T>([NotNull] this IReadOnlyList<T> source, Random random = null)
+        public static T RandomTake<T>([NotNull] this IReadOnlyList<T> source, [NotNull] Random random, bool throwIfEmpty = false)
         {
             if (source == null) throw new ArgumentNullException(nameof(source));
+            if (random == null) throw new ArgumentNullException(nameof(random));
             switch (source.Count)
             {
-                case 0: return default(T);
+                case 0:
+                    if (throwIfEmpty) throw new InvalidOperationException();
+                    return default(T);
                 case 1: return source[0];
             }
-            random = random ?? Singleton.ThreadStaticInstance<Random>();
             return source[random.Next(source.Count)];
         }
 
         [SuppressMessage("ReSharper", "PossibleMultipleEnumeration")]
-        public static T RandomTake<T>([NotNull] this IEnumerable<T> source, Random random = null)
+        public static T RandomTake<T>([NotNull] this IEnumerable<T> source, [NotNull] Random random, bool throwIfEmpty = false)
         {
             if (source == null) throw new ArgumentNullException(nameof(source));
+            if (random == null) throw new ArgumentNullException(nameof(random));
 
             var list = source as IList<T>;
             if (list != null) return list.RandomTake(random);
@@ -308,36 +310,43 @@ namespace System.Linq
             var c = source.TryGetCount();
             if (c < 0)
             {
-                return ((IList<T>)source.ToArray()).RandomTake(random);
+                return source.ToArray().RandomTake(random);
             }
 
             switch (c)
             {
                 case 0:
+                    if (throwIfEmpty) throw new InvalidOperationException();
                     return default(T);
                 case 1:
                     return source.First();
                 default:
-                    return source.Skip((random ?? Singleton.ThreadStaticInstance<Random>()).Next(c)).First();
+                    return source.Skip(random.Next(c)).First();
             }
         }
 
-        public static IEnumerable<T> RandomSort<T>([NotNull] this IEnumerable<T> source, Random random = null)
+        public static IEnumerable<T> RandomSort<T>([NotNull] this IEnumerable<T> source, [NotNull] Random random)
         {
             if (source == null) throw new ArgumentNullException(nameof(source));
+            if (random == null) throw new ArgumentNullException(nameof(random));
             return (source as IList<T>)?.RandomSort(random) ??
                    (source as ICollection<T>)?.RandomSort(random) ??
                    (source.ToArray()).RandomSort(random);
         }
 
-        public static IEnumerable<T> RandomSort<T>([NotNull] this ICollection<T> source, Random random = null)
+        public static IEnumerable<T> RandomSort<T>([NotNull] this ICollection<T> source, [NotNull] Random random)
         {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            if (random == null) throw new ArgumentNullException(nameof(random));
             var count = source.Count;
             if (count == 0) yield break;
-            if (count == 1) yield return source.First();
+            if (count == 1)
+            {
+                yield return source.First();
+                yield break;
+            }
             var array = Enumerable.Range(0, count).ToArray();
             var cache = new List<T>(count);
-            random = random ?? Singleton.ThreadStaticInstance<Random>();
             using (var itor = source.GetEnumerator())
             {
                 while (count > 0)
@@ -345,7 +354,7 @@ namespace System.Linq
                     var index = random.Next(count);
                     while (index >= cache.Count)
                     {
-                        if (!itor.MoveNext()) throw new InvalidOperationException("collection was changed");
+                        if (!itor.MoveNext()) throw new InvalidOperationException("source was changed");
                         cache.Add(itor.Current);
                     }
                     yield return cache[array[index]];
@@ -355,13 +364,18 @@ namespace System.Linq
             }
         }
 
-        public static IEnumerable<T> RandomSort<T>([NotNull] this IList<T> source, Random random = null)
+        public static IEnumerable<T> RandomSort<T>([NotNull] this IList<T> source, [NotNull] Random random)
         {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            if (random == null) throw new ArgumentNullException(nameof(random));
             var count = source.Count;
             if (count == 0) yield break;
-            if (count == 1) yield return source[0];
+            if (count == 1)
+            {
+                yield return source[0];
+                yield break;
+            }
             var array = Enumerable.Range(0, count).ToArray();
-            random = random ?? Singleton.ThreadStaticInstance<Random>();
             while (count > 0)
             {
                 var index = random.Next(count);
